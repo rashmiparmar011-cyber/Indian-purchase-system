@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>India Purchase System - Stock Management</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-section">
+                <div class="logo-custom">
+                    <div class="logo-pill">
+                        <div class="pill-left">B</div>
+                        <div class="pill-right">&amp; S</div>
+                    </div>
+                    <div class="logo-text">
+                        <div class="logo-group-text">GROUP</div>
+                        <div class="logo-tagline-text">"Believe in us"</div>
+                    </div>
+                </div>
+            </div>
+            <div class="title-section">
+                <h1>India Purchase System</h1>
+            </div>
+            <div class="user-section">
+                <div class="user-info">
+                    <span class="welcome-text">Welcome,</span>
+                    <span class="username">ANISH <i class="fas fa-caret-down"></i></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Layout -->
+        <div class="main-wrapper">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active">
+                                <i class="fas fa-list"></i> Purchase Masters <i class="fas fa-chevron-down arrow"></i>
+                            </a>
+                            <ul class="sub-nav-list">
+                                <li><a href="#" class="sub-nav-link">Item Master</a></li>
+                                <li><a href="#" class="sub-nav-link">Supplier Master</a></li>
+                                <li><a href="index.html" class="sub-nav-link">
+                                    Project Master
+                                </a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-exchange-alt"></i> Purchase Transactions <i
+                                    class="fas fa-chevron-down arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-file-invoice"></i> Purchase Reports <i
+                                    class="fas fa-chevron-down arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item active">
+                            <a href="stock_management.html" class="nav-link active">
+                                <i class="fas fa-cubes"></i> Stock Management
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="sidebar-collapse">
+                    <i class="fas fa-angle-double-left"></i>
+                </div>
+            </aside>
+
+            <!-- Content Area -->
+            <main class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i> Stock Management <i class="fas fa-chevron-right"></i> <span
+                        class="current">Stock Entry</span>
+                </div>
+
+                <!-- Form -->
+                <div class="form-container">
+                    <form id="projectForm">
+                        <div class="form-grid">
+                            <div class="form-group"><label>SR NO.</label><input type="text" name="srNo"></div>
+                            <div class="form-group"><label>PO NO.</label><input type="text" name="poNo"></div>
+                            <div class="form-group"><label>PO DATE</label><input type="date" name="poDate"></div>
+                            
+                            <div class="form-group"><label>Delivery Period</label><input type="text" name="deliveryPeriod"></div>
+                            <div class="form-group"><label>SUPPLIER NAME</label><input type="text" name="supplierName"></div>
+                            <div class="form-group"><label>MATERIAL NAME</label><input type="text" name="materialName"></div>
+                            
+                            <div class="form-group"><label>PO QTY</label><input type="number" name="poQty"></div>
+                            <div class="form-group"><label>UOM</label><input type="text" name="poUom"></div>
+                            <div class="form-group"><label>RECEIVED QTY</label><input type="number" name="receivedQty"></div>
+                            
+                            <div class="form-group"><label>UOM</label><input type="text" name="receivedUom"></div>
+                            <div class="form-group"><label>BALANCE QTY</label><input type="number" name="balanceQty"></div>
+                            <div class="form-group"><label>UOM</label><input type="text" name="balanceUom"></div>
+                            
+                            <div class="form-group"><label>REC DATE</label><input type="date" name="recDate"></div>
+                            <div class="form-group"><label>INVOICE NO</label><input type="text" name="invoiceNo"></div>
+                            <div class="form-group"><label>INVOICE DATE</label><input type="date" name="invoiceDate"></div>
+                            
+                            <div class="form-group"><label>TOTAL AMOUNT</label><input type="number" name="totalAmount" step="0.01"></div>
+                            <div class="form-group"><label>DEPARTMENT</label><input type="text" name="department"></div>
+                            <div class="form-group"><label>RECEIVED BY</label><input type="text" name="receivedBy"></div>
+                            
+                            <div class="form-group"><label>ACCEPTANCE DATE</label><input type="date" name="acceptanceDate"></div>
+                            <div class="form-group"><label>SUBMITTED TO ACCTS</label><input type="text" name="submittedToAccounts"></div>
+                            <div class="form-group"><label>REMARKS</label><input type="text" name="remarks"></div>
+                            
+                            <div class="form-group"><label>Attachment</label><input type="file" name="attachment" style="padding-top: 5px;"></div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-save" onclick="saveProject()"><i
+                                    class="fas fa-save"></i> Save</button>
+                            <button type="button" class="btn btn-update" disabled><i class="fas fa-file-alt"></i>
+                                Update</button>
+                            <button type="reset" class="btn btn-reset"><i class="fas fa-sync-alt"></i> Reset</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Data Table -->
+                <div class="table-container">
+                    <table class="data-table" id="stockTable">
+                        <thead>
+                            <tr>
+                                <th>SR NO.</th>
+                                <th>PO NO.</th>
+                                <th>PO DATE</th>
+                                <th>Delivery Period</th>
+                                <th>SUPPLIER NAME</th>
+                                <th>MATERIAL NAME</th>
+                                <th>PO QTY</th>
+                                <th>UOM</th>
+                                <th>RECEIVED QTY</th>
+                                <th>UOM</th>
+                                <th>BALANCE QTY</th>
+                                <th>UOM</th>
+                                <th>REC DATE</th>
+                                <th>INVOICE NO</th>
+                                <th>INVOICE DATE</th>
+                                <th>TOTAL AMOUNT</th>
+                                <th>DEPARTMENT</th>
+                                <th>RECEIVED BY</th>
+                                <th>ACCEPTANCE DATE</th>
+                                <th>SUBMITTED TO ACCTS</th>
+                                <th>REMARKS</th>
+                                <th>Attachment</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>PO-1001</td>
+                                <td>2023-01-15</td>
+                                <td>30 Days</td>
+                                <td>ABC Tech Solutions</td>
+                                <td>Laptop</td>
+                                <td>50</td>
+                                <td>Nos</td>
+                                <td>50</td>
+                                <td>Nos</td>
+                                <td>0</td>
+                                <td>Nos</td>
+                                <td>2023-02-10</td>
+                                <td>INV-001</td>
+                                <td>2023-02-10</td>
+                                <td>2500000.00</td>
+                                <td>IT</td>
+                                <td>John Doe</td>
+                                <td>2023-02-12</td>
+                                <td>2023-02-15</td>
+                                <td>Fully Delivered</td>
+                                <td><a href="#" style="color:var(--primary-blue);"><i class="fas fa-paperclip"></i> View</a></td>
+                                <td>
+                                    <div class="action-icons">
+                                        <i class="fas fa-edit icon-edit" title="Edit"></i>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>PO-1002</td>
+                                <td>2023-03-01</td>
+                                <td>15 Days</td>
+                                <td>Office Supplies Co.</td>
+                                <td>Printer Paper</td>
+                                <td>100</td>
+                                <td>Boxes</td>
+                                <td>80</td>
+                                <td>Boxes</td>
+                                <td>20</td>
+                                <td>Boxes</td>
+                                <td>2023-03-10</td>
+                                <td>CHL-992</td>
+                                <td>2023-03-09</td>
+                                <td>16000.00</td>
+                                <td>Operations</td>
+                                <td>Jane Smith</td>
+                                <td>2023-03-11</td>
+                                <td>2023-03-12</td>
+                                <td>Partial Delivery</td>
+                                <td>-</td>
+                                <td>
+                                    <div class="action-icons">
+                                        <i class="fas fa-edit icon-edit" title="Edit"></i>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
