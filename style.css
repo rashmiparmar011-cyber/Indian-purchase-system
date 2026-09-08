@@ -407,22 +407,31 @@ body {
 
 .action-icons {
     display: flex;
-    gap: 10px;
+    gap: 8px;
+    justify-content: center;
 }
 
 .action-icons i {
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
+    padding: 5px 8px;
+    border-radius: 3px;
+    transition: opacity 0.2s;
+    color: white;
+}
+
+.action-icons i:hover {
+    opacity: 0.8;
 }
 
 .icon-view {
-    color: #17a2b8;
+    background-color: #17a2b8;
 }
 
 .icon-edit {
-    color: #ffc107;
+    background-color: #1b5b9f;
 }
 
 .icon-delete {
-    color: #dc3545;
+    background-color: #dc3545;
 }

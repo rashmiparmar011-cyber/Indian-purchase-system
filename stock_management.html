@@ -71,6 +71,16 @@
                                 <i class="fas fa-cubes"></i> Stock Management
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="finance_management.html" class="nav-link">
+                                <i class="fas fa-coins"></i> Finance Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="acceptance_material.html" class="nav-link">
+                                <i class="fas fa-clipboard-check"></i> Acceptance Material
+                            </a>
+                        </li>
                     </ul>
                 </nav>
                 <div class="sidebar-collapse">
@@ -122,11 +132,12 @@
 
                         <!-- Actions -->
                         <div class="form-actions">
-                            <button type="button" class="btn btn-save" onclick="saveProject()"><i
+                            <button type="button" id="btnSaveStock" class="btn btn-save" onclick="saveStock()"><i
                                     class="fas fa-save"></i> Save</button>
-                            <button type="button" class="btn btn-update" disabled><i class="fas fa-file-alt"></i>
+                            <button type="button" id="btnUpdateStock" class="btn btn-update" disabled onclick="updateStock()"><i class="fas fa-file-alt"></i>
                                 Update</button>
-                            <button type="reset" class="btn btn-reset"><i class="fas fa-sync-alt"></i> Reset</button>
+                            <button type="button" id="btnCancelStock" class="btn btn-reset" style="display:none; background-color:#6c757d; border-color:#5a6268;" onclick="cancelEditStock()"><i class="fas fa-times"></i> Cancel</button>
+                            <button type="reset" class="btn btn-reset" onclick="cancelEditStock()"><i class="fas fa-sync-alt"></i> Reset</button>
                         </div>
                     </form>
                 </div>
@@ -187,7 +198,7 @@
                                 <td><a href="#" style="color:var(--primary-blue);"><i class="fas fa-paperclip"></i> View</a></td>
                                 <td>
                                     <div class="action-icons">
-                                        <i class="fas fa-edit icon-edit" title="Edit"></i>
+                                        <i class="fas fa-edit icon-edit" title="Edit" onclick="editStock(this)"></i>
                                     </div>
                                 </td>
                             </tr>
@@ -216,7 +227,7 @@
                                 <td>-</td>
                                 <td>
                                     <div class="action-icons">
-                                        <i class="fas fa-edit icon-edit" title="Edit"></i>
+                                        <i class="fas fa-edit icon-edit" title="Edit" onclick="editStock(this)"></i>
                                     </div>
                                 </td>
                             </tr>
@@ -229,6 +240,119 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+        let editingStockRow = null;
+
+        function editStock(iconEl) {
+            const row = iconEl.closest('tr');
+            const cells = row.querySelectorAll('td');
+            editingStockRow = row;
+
+            const form = document.getElementById('projectForm');
+            form.srNo.value = cells[0].textContent.trim();
+            form.poNo.value = cells[1].textContent.trim();
+            form.poDate.value = cells[2].textContent.trim();
+            form.deliveryPeriod.value = cells[3].textContent.trim();
+            form.supplierName.value = cells[4].textContent.trim();
+            form.materialName.value = cells[5].textContent.trim();
+            form.poQty.value = cells[6].textContent.trim();
+            form.poUom.value = cells[7].textContent.trim();
+            form.receivedQty.value = cells[8].textContent.trim();
+            form.receivedUom.value = cells[9].textContent.trim();
+            form.balanceQty.value = cells[10].textContent.trim();
+            form.balanceUom.value = cells[11].textContent.trim();
+            form.recDate.value = cells[12].textContent.trim();
+            form.invoiceNo.value = cells[13].textContent.trim();
+            form.invoiceDate.value = cells[14].textContent.trim();
+            form.totalAmount.value = cells[15].textContent.trim();
+            form.department.value = cells[16].textContent.trim();
+            form.receivedBy.value = cells[17].textContent.trim();
+            form.acceptanceDate.value = cells[18].textContent.trim();
+            form.submittedToAccounts.value = cells[19].textContent.trim();
+            form.remarks.value = cells[20].textContent.trim();
+
+            // Switch to edit mode
+            document.getElementById('btnSaveStock').style.display = 'none';
+            document.getElementById('btnUpdateStock').disabled = false;
+            document.getElementById('btnUpdateStock').style.backgroundColor = '#f0ad4e';
+            document.getElementById('btnUpdateStock').style.borderColor = '#eea236';
+            document.getElementById('btnUpdateStock').style.cursor = 'pointer';
+            document.getElementById('btnCancelStock').style.display = 'inline-flex';
+
+            // Scroll to form
+            document.getElementById('projectForm').scrollIntoView({ behavior: 'smooth' });
+
+            // Highlight the row being edited
+            document.querySelectorAll('#stockTable tbody tr').forEach(r => r.style.backgroundColor = '');
+            row.style.backgroundColor = '#fff8e1';
+        }
+
+        function updateStock() {
+            if (!editingStockRow) return;
+
+            const form = document.getElementById('projectForm');
+            if (!form.srNo.value || !form.poNo.value) {
+                alert('SR NO. and PO NO. are required!');
+                return;
+            }
+
+            editingStockRow.innerHTML = `
+                <td>${form.srNo.value}</td>
+                <td>${form.poNo.value}</td>
+                <td>${form.poDate.value}</td>
+                <td>${form.deliveryPeriod.value}</td>
+                <td>${form.supplierName.value}</td>
+                <td>${form.materialName.value}</td>
+                <td>${form.poQty.value}</td>
+                <td>${form.poUom.value}</td>
+                <td>${form.receivedQty.value}</td>
+                <td>${form.receivedUom.value}</td>
+                <td>${form.balanceQty.value}</td>
+                <td>${form.balanceUom.value}</td>
+                <td>${form.recDate.value}</td>
+                <td>${form.invoiceNo.value}</td>
+                <td>${form.invoiceDate.value}</td>
+                <td>${parseFloat(form.totalAmount.value || 0).toFixed(2)}</td>
+                <td>${form.department.value}</td>
+                <td>${form.receivedBy.value}</td>
+                <td>${form.acceptanceDate.value}</td>
+                <td>${form.submittedToAccounts.value}</td>
+                <td>${form.remarks.value}</td>
+                <td><a href="#" style="color:var(--primary-blue);"><i class="fas fa-paperclip"></i> View</a></td>
+                <td>
+                    <div class="action-icons">
+                        <i class="fas fa-edit icon-edit" title="Edit" onclick="editStock(this)"></i>
+                    </div>
+                </td>
+            `;
+            editingStockRow.style.backgroundColor = '';
+
+            alert('Stock entry updated successfully!');
+            cancelEditStock();
+        }
+
+        function cancelEditStock() {
+            editingStockRow = null;
+            const form = document.getElementById('projectForm');
+            form.reset();
+
+            // Switch back to save mode
+            document.getElementById('btnSaveStock').style.display = 'inline-flex';
+            document.getElementById('btnUpdateStock').disabled = true;
+            document.getElementById('btnUpdateStock').style.backgroundColor = '#92a9c3';
+            document.getElementById('btnUpdateStock').style.borderColor = '#7b91a9';
+            document.getElementById('btnUpdateStock').style.cursor = 'not-allowed';
+            document.getElementById('btnCancelStock').style.display = 'none';
+
+            // Remove row highlight
+            document.querySelectorAll('#stockTable tbody tr').forEach(r => r.style.backgroundColor = '');
+        }
+
+        function saveStock() {
+            alert('Stock entry saved successfully!');
+            document.getElementById('projectForm').reset();
+        }
+    </script>
 </body>
 
 </html>

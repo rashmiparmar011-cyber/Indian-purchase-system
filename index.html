@@ -415,24 +415,33 @@ body {
 
 .action-icons {
     display: flex;
-    gap: 10px;
+    gap: 8px;
+    justify-content: center;
 }
 
 .action-icons i {
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
+    padding: 5px 8px;
+    border-radius: 3px;
+    transition: opacity 0.2s;
+    color: white;
+}
+
+.action-icons i:hover {
+    opacity: 0.8;
 }
 
 .icon-view {
-    color: #17a2b8;
+    background-color: #17a2b8;
 }
 
 .icon-edit {
-    color: #ffc107;
+    background-color: #1b5b9f;
 }
 
 .icon-delete {
-    color: #dc3545;
+    background-color: #dc3545;
 }
 </style>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -498,6 +507,16 @@ body {
                         <li class="nav-item">
                             <a href="#" id="nav-stock-management" class="nav-link" onclick="switchView('stock-management-view'); return false;">
                                 <i class="fas fa-cubes"></i> Stock Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="finance_management.html" class="nav-link">
+                                <i class="fas fa-coins"></i> Finance Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="acceptance_material.html" class="nav-link">
+                                <i class="fas fa-clipboard-check"></i> Acceptance Material
                             </a>
                         </li>
                     </ul>
@@ -579,11 +598,12 @@ body {
 
                         <!-- Actions -->
                         <div class="form-actions">
-                            <button type="button" class="btn btn-save" onclick="saveProject()"><i
+                            <button type="button" id="btnSave" class="btn btn-save" onclick="saveProject()"><i
                                     class="fas fa-save"></i> Save</button>
-                            <button type="button" class="btn btn-update" disabled><i class="fas fa-file-alt"></i>
+                            <button type="button" id="btnUpdate" class="btn btn-update" disabled onclick="updateProject()"><i class="fas fa-file-alt"></i>
                                 Update</button>
-                            <button type="reset" class="btn btn-reset"><i class="fas fa-sync-alt"></i> Reset</button>
+                            <button type="button" id="btnCancel" class="btn btn-reset" style="display:none; background-color:#6c757d; border-color:#5a6268;" onclick="cancelEdit()"><i class="fas fa-times"></i> Cancel</button>
+                            <button type="reset" class="btn btn-reset" onclick="cancelEdit()"><i class="fas fa-sync-alt"></i> Reset</button>
                         </div>
                     </form>
                 </div>
@@ -798,6 +818,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function addProjectToTable(proj) {
     const tbody = document.querySelector('#projectTable tbody');
     const row = document.createElement('tr');
+    row.setAttribute('data-code', proj.code);
     row.innerHTML = `
         <td>${proj.code}</td>
         <td>${proj.name}</td>
@@ -811,7 +832,7 @@ function addProjectToTable(proj) {
         <td><span class="badge ${proj.status.toLowerCase()}">${proj.status}</span></td>
         <td>
             <div class="action-icons">
-                <i class="fas fa-edit icon-edit" title="Edit"></i>
+                <i class="fas fa-edit icon-edit" title="Edit" onclick="editProject(this)"></i>
             </div>
         </td>
     `;
@@ -844,6 +865,93 @@ function saveProject() {
     form.reset();
     document.getElementById('available').value = '';
     alert("Project saved successfully!");
+}
+
+let editingRow = null;
+
+function editProject(iconEl) {
+    const row = iconEl.closest('tr');
+    const cells = row.querySelectorAll('td');
+    editingRow = row;
+
+    const form = document.getElementById('projectForm');
+    form.projectCode.value = cells[0].textContent.trim();
+    form.projectName.value = cells[1].textContent.trim();
+    form.department.value = cells[2].textContent.trim();
+    form.projectManager.value = cells[3].textContent.trim();
+    form.startDate.value = cells[4].textContent.trim();
+    form.endDate.value = cells[5].textContent.trim();
+    form.budget.value = cells[6].textContent.trim();
+    form.utilized.value = cells[7].textContent.trim();
+    document.getElementById('available').value = cells[8].textContent.trim();
+    form.status.value = cells[9].textContent.trim();
+
+    // Switch to edit mode
+    document.getElementById('btnSave').style.display = 'none';
+    document.getElementById('btnUpdate').disabled = false;
+    document.getElementById('btnUpdate').style.backgroundColor = '#f0ad4e';
+    document.getElementById('btnUpdate').style.borderColor = '#eea236';
+    document.getElementById('btnUpdate').style.cursor = 'pointer';
+    document.getElementById('btnCancel').style.display = 'inline-flex';
+
+    // Scroll to form
+    document.getElementById('projectForm').scrollIntoView({ behavior: 'smooth' });
+
+    // Highlight the row being edited
+    document.querySelectorAll('#projectTable tbody tr').forEach(r => r.style.backgroundColor = '');
+    row.style.backgroundColor = '#fff8e1';
+}
+
+function updateProject() {
+    if (!editingRow) return;
+
+    const form = document.getElementById('projectForm');
+    if (!form.projectCode.value || !form.projectName.value) {
+        alert('Project Code and Name are required!');
+        return;
+    }
+
+    const statusVal = form.status.value;
+    editingRow.innerHTML = `
+        <td>${form.projectCode.value}</td>
+        <td>${form.projectName.value}</td>
+        <td>${form.department.value}</td>
+        <td>${form.projectManager.value}</td>
+        <td>${form.startDate.value}</td>
+        <td>${form.endDate.value}</td>
+        <td>${parseFloat(form.budget.value || 0).toFixed(2)}</td>
+        <td>${parseFloat(form.utilized.value || 0).toFixed(2)}</td>
+        <td>${parseFloat(form.available.value || 0).toFixed(2)}</td>
+        <td><span class="badge ${statusVal.toLowerCase()}">${statusVal}</span></td>
+        <td>
+            <div class="action-icons">
+                <i class="fas fa-edit icon-edit" title="Edit" onclick="editProject(this)"></i>
+            </div>
+        </td>
+    `;
+    editingRow.setAttribute('data-code', form.projectCode.value);
+    editingRow.style.backgroundColor = '';
+
+    alert('Project updated successfully!');
+    cancelEdit();
+}
+
+function cancelEdit() {
+    editingRow = null;
+    const form = document.getElementById('projectForm');
+    form.reset();
+    document.getElementById('available').value = '';
+
+    // Switch back to save mode
+    document.getElementById('btnSave').style.display = 'inline-flex';
+    document.getElementById('btnUpdate').disabled = true;
+    document.getElementById('btnUpdate').style.backgroundColor = '#92a9c3';
+    document.getElementById('btnUpdate').style.borderColor = '#7b91a9';
+    document.getElementById('btnUpdate').style.cursor = 'not-allowed';
+    document.getElementById('btnCancel').style.display = 'none';
+
+    // Remove row highlight
+    document.querySelectorAll('#projectTable tbody tr').forEach(r => r.style.backgroundColor = '');
 }
 
 function switchView(viewId) {

@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>India Purchase System - Acceptance Material</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Acceptance Module Specific Styles */
+        .acceptance-filters {
+            background-color: #f9fbfd;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .acceptance-filters h3 {
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: var(--header-blue);
+        }
+        .filter-actions {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        /* Table enhancements */
+        .data-table th.sortable {
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+        .data-table th.sortable:hover {
+            background-color: #1a6a7a;
+        }
+        .data-table th.sortable::after {
+            content: ' \25B2\25BC';
+            font-size: 8px;
+            opacity: 0.5;
+            margin-left: 3px;
+        }
+        .data-table th.sortable.asc::after {
+            content: ' \25B2';
+            opacity: 1;
+        }
+        .data-table th.sortable.desc::after {
+            content: ' \25BC';
+            opacity: 1;
+        }
+
+        /* Status Badges */
+        .badge.pending { background-color: #ffc107; color: #212529; }
+        .badge.accepted { background-color: #28a745; }
+        .badge.rejected { background-color: #dc3545; }
+        .badge.partially-accepted { background-color: #17a2b8; }
+        .badge.under-review { background-color: #6f42c1; }
+        .badge.completed { background-color: #007bff; }
+        .badge.inward { background-color: #28a745; }
+        .badge.partial { background-color: #fd7e14; }
+        .badge.open { background-color: #28a745; }
+        .badge.closed { background-color: #6c757d; }
+        .badge.overdue { background-color: #dc3545; }
+
+        /* Action Buttons in table */
+        .action-btn-group {
+            display: flex;
+            gap: 4px;
+            flex-wrap: nowrap;
+        }
+        .action-btn {
+            padding: 3px 7px;
+            font-size: 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            color: white;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+        }
+        .action-btn:hover { opacity: 0.85; }
+        .action-btn-view { background-color: #17a2b8; }
+        .action-btn-accept { background-color: #28a745; }
+        .action-btn-reject { background-color: #dc3545; }
+        .action-btn-history { background-color: #6c757d; }
+
+        /* Pagination */
+        .pagination-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            font-size: 12px;
+            color: #555;
+        }
+        .pagination-controls {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+        .pagination-controls button {
+            padding: 4px 10px;
+            font-size: 11px;
+            border: 1px solid #ccc;
+            background: white;
+            cursor: pointer;
+            border-radius: 3px;
+            color: #333;
+        }
+        .pagination-controls button.active-page {
+            background-color: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+        .pagination-controls button:hover:not(.active-page) {
+            background-color: #f0f0f0;
+        }
+        .pagination-controls button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Detail View */
+        .detail-section {
+            display: none;
+        }
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-blue);
+        }
+        .detail-header h3 {
+            color: var(--header-blue);
+            font-size: 15px;
+        }
+        .detail-header-badges {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .detail-header-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .info-card {
+            border: 1px solid var(--border-color);
+            border-top: 3px solid var(--primary-blue);
+            padding: 15px;
+            border-radius: 0 0 4px 4px;
+            margin-bottom: 20px;
+            background: white;
+        }
+        .info-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .info-card-header h4 {
+            font-size: 13px;
+            color: #555;
+            text-transform: uppercase;
+            font-weight: bold;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin: 0;
+        }
+
+        /* Btn styles */
+        .btn-success { background-color: #28a745; border-color: #1e7e34; }
+        .btn-success:hover { background-color: #1e7e34; }
+        .btn-danger { background-color: #dc3545; border-color: #c82333; }
+        .btn-danger:hover { background-color: #c82333; }
+        .btn-secondary { background-color: #6c757d; border-color: #5a6268; }
+        .btn-secondary:hover { background-color: #5a6268; }
+        .btn-info { background-color: #17a2b8; border-color: #138496; }
+        .btn-info:hover { background-color: #138496; }
+        .btn-export { background-color: #28a745; border-color: #1e7e34; }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-box {
+            background: white;
+            padding: 25px;
+            border-radius: 5px;
+            width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        }
+        .modal-box h3 {
+            margin-bottom: 15px;
+            color: var(--header-blue);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+        .modal-box textarea {
+            width: 100%;
+            border: 1px solid #ccc;
+            padding: 8px;
+            margin-bottom: 15px;
+            font-size: 12px;
+            border-radius: 3px;
+            font-family: inherit;
+            resize: none;
+        }
+        .modal-actions {
+            text-align: right;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        /* History timeline */
+        .history-item {
+            padding: 8px 10px;
+            border-left: 3px solid var(--primary-blue);
+            background: #f9fbfd;
+            margin-bottom: 8px;
+            border-radius: 0 3px 3px 0;
+            font-size: 12px;
+        }
+        .history-item .history-meta {
+            font-size: 10px;
+            color: #888;
+            margin-bottom: 3px;
+        }
+        .history-item .history-text {
+            color: #444;
+        }
+
+        /* Acceptance action area */
+        .acceptance-action-area {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 4px;
+            background: #f9fbfd;
+            margin-top: 15px;
+        }
+        .acceptance-action-area h4 {
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: var(--header-blue);
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        /* Search bar */
+        .search-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .search-bar input {
+            flex: 1;
+            padding: 7px 12px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        .form-group textarea {
+            flex: 1;
+            border: none;
+            padding: 6px 8px;
+            font-size: 12px;
+            outline: none;
+            background-color: #f6fafd;
+            color: #333;
+            font-family: inherit;
+            resize: none;
+        }
+        .form-group textarea:focus {
+            background-color: #fff;
+            box-shadow: inset 0 0 4px rgba(59, 138, 178, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-section">
+                <div class="logo-custom">
+                    <div class="logo-pill">
+                        <div class="pill-left">B</div>
+                        <div class="pill-right">&amp; S</div>
+                    </div>
+                    <div class="logo-text">
+                        <div class="logo-group-text">GROUP</div>
+                        <div class="logo-tagline-text">"Believe in us"</div>
+                    </div>
+                </div>
+            </div>
+            <div class="title-section">
+                <h1>India Purchase System</h1>
+            </div>
+            <div class="user-section">
+                <div class="user-info">
+                    <span class="welcome-text">Welcome,</span>
+                    <span class="username">ANISH <i class="fas fa-caret-down"></i></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Layout -->
+        <div class="main-wrapper">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active">
+                                <i class="fas fa-list"></i> Purchase Masters <i class="fas fa-chevron-down arrow"></i>
+                            </a>
+                            <ul class="sub-nav-list">
+                                <li><a href="#" class="sub-nav-link">Item Master</a></li>
+                                <li><a href="#" class="sub-nav-link">Supplier Master</a></li>
+                                <li><a href="index.html" class="sub-nav-link">Project Master</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-exchange-alt"></i> Purchase Transactions <i class="fas fa-chevron-down arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-file-invoice"></i> Purchase Reports <i class="fas fa-chevron-down arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="stock_management.html" class="nav-link">
+                                <i class="fas fa-cubes"></i> Stock Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="finance_management.html" class="nav-link">
+                                <i class="fas fa-coins"></i> Finance Management
+                            </a>
+                        </li>
+                        <li class="nav-item active">
+                            <a href="acceptance_material.html" class="nav-link active">
+                                <i class="fas fa-clipboard-check"></i> Acceptance Material
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="sidebar-collapse">
+                    <i class="fas fa-angle-double-left"></i>
+                </div>
+            </aside>
+
+            <!-- Content Area -->
+            <main class="content">
+                <!-- ========== LIST VIEW ========== -->
+                <div id="listView">
+                    <div class="breadcrumb">
+                        <i class="fas fa-home"></i> Acceptance Material <i class="fas fa-chevron-right"></i> <span class="current">User Material Acceptance</span>
+                    </div>
+
+                    <!-- Search Bar -->
+                    <div class="search-bar">
+                        <input type="text" id="globalSearch" placeholder="Quick search by PO, GRN, Material, Vendor..." oninput="applyFilters()">
+                        <button class="btn btn-save" onclick="applyFilters()"><i class="fas fa-search"></i> Search</button>
+                        <button class="btn btn-reset" onclick="clearFilters()"><i class="fas fa-times"></i> Reset Filters</button>
+                        <button class="btn btn-export" onclick="exportData()"><i class="fas fa-file-export"></i> Export</button>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="acceptance-filters">
+                        <h3><i class="fas fa-filter"></i> Advanced Filters</h3>
+                        <div class="form-grid" style="grid-template-columns: repeat(4, 1fr);">
+                            <div class="form-group"><label>PO Number</label><input type="text" id="f-poNo" placeholder="Search PO..."></div>
+                            <div class="form-group"><label>PR Number</label><input type="text" id="f-prNo" placeholder="Search PR..."></div>
+                            <div class="form-group"><label>GRN Number</label><input type="text" id="f-grnNo" placeholder="Search GRN..."></div>
+                            <div class="form-group"><label>Vendor</label><input type="text" id="f-vendor" placeholder="Search Vendor..."></div>
+                            <div class="form-group"><label>Project</label><input type="text" id="f-project" placeholder="Search Project..."></div>
+                            <div class="form-group"><label>Department</label><input type="text" id="f-dept" placeholder="Search Department..."></div>
+                            <div class="form-group"><label>Requesting User</label><input type="text" id="f-reqUser" placeholder="Search User..."></div>
+                            <div class="form-group"><label>Material</label><input type="text" id="f-material" placeholder="Search Material..."></div>
+                            <div class="form-group"><label>Item Code</label><input type="text" id="f-itemCode" placeholder="Search Item Code..."></div>
+                            <div class="form-group">
+                                <label>Acceptance Status</label>
+                                <select id="f-status">
+                                    <option value="">All</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Accepted">Accepted</option>
+                                    <option value="Rejected">Rejected</option>
+                                    <option value="Partially Accepted">Partially Accepted</option>
+                                    <option value="Under Review">Under Review</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><label>GRN Date From</label><input type="date" id="f-grnDateFrom"></div>
+                            <div class="form-group"><label>GRN Date To</label><input type="date" id="f-grnDateTo"></div>
+                            <div class="form-group"><label>Acceptance Date From</label><input type="date" id="f-accDateFrom"></div>
+                            <div class="form-group"><label>Acceptance Date To</label><input type="date" id="f-accDateTo"></div>
+                            <div class="form-group">
+                                <label>Pending / Overdue</label>
+                                <select id="f-pendingOverdue">
+                                    <option value="">All</option>
+                                    <option value="Pending">Pending Only</option>
+                                    <option value="Overdue">Overdue Only</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><label>Store Location</label><input type="text" id="f-storeLocation" placeholder="Search Location..."></div>
+                        </div>
+                        <div class="filter-actions">
+                            <button class="btn btn-save" onclick="applyFilters()"><i class="fas fa-search"></i> Apply Filters</button>
+                            <button class="btn btn-reset" onclick="clearFilters()"><i class="fas fa-times"></i> Clear</button>
+                        </div>
+                    </div>
+
+                    <!-- Data Table -->
+                    <div class="table-container">
+                        <table class="data-table" id="acceptanceTable">
+                            <thead>
+                                <tr>
+                                    <th class="sortable" data-col="accId">Acceptance ID</th>
+                                    <th class="sortable" data-col="poNo">PO Number</th>
+                                    <th class="sortable" data-col="poDate">PO Date</th>
+                                    <th class="sortable" data-col="prNo">PR Number</th>
+                                    <th class="sortable" data-col="project">Project</th>
+                                    <th class="sortable" data-col="department">Department</th>
+                                    <th class="sortable" data-col="reqUser">Requesting User</th>
+                                    <th class="sortable" data-col="vendor">Vendor</th>
+                                    <th class="sortable" data-col="itemCode">Item Code</th>
+                                    <th class="sortable" data-col="materialName">Material Name</th>
+                                    <th>Ordered Qty</th>
+                                    <th>Received Qty</th>
+                                    <th>UOM</th>
+                                    <th class="sortable" data-col="grnNo">GRN Number</th>
+                                    <th class="sortable" data-col="grnDate">GRN Date</th>
+                                    <th>Stock Inward</th>
+                                    <th class="sortable" data-col="accStatus">Acceptance Status</th>
+                                    <th class="sortable" data-col="accDueDate">Acceptance Due Date</th>
+                                    <th>Accepted/Rejected By</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="acceptanceTableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination-bar">
+                        <span id="paginationInfo">Showing 0 of 0 records</span>
+                        <div class="pagination-controls" id="paginationControls"></div>
+                    </div>
+                </div>
+
+                <!-- ========== DETAIL VIEW ========== -->
+                <div id="detailView" class="detail-section">
+                    <!-- Header -->
+                    <div class="detail-header">
+                        <h3><i class="fas fa-clipboard-check"></i> User Material Acceptance</h3>
+                        <div class="detail-header-actions">
+                            <button class="btn btn-secondary" onclick="backToList()"><i class="fas fa-arrow-left"></i> Back to List</button>
+                        </div>
+                    </div>
+
+                    <!-- Acceptance Summary -->
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <h4><i class="fas fa-id-badge"></i> Acceptance Summary</h4>
+                            <div class="detail-header-badges">
+                                <span id="detAccStatusBadge" class="badge"></span>
+                            </div>
+                        </div>
+                        <div class="form-grid" style="grid-template-columns: repeat(5, 1fr);">
+                            <div class="form-group"><label>Acceptance ID</label><input type="text" id="det-accId" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>PO Number</label><input type="text" id="det-poNo" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>GRN Number</label><input type="text" id="det-grnNo" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>PR Number</label><input type="text" id="det-prNo" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>Acceptance Status</label><input type="text" id="det-accStatus" class="readonly-field" readonly></div>
+                        </div>
+                    </div>
+
+                    <!-- PO Information -->
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <h4><i class="fas fa-file-invoice"></i> PO Information</h4>
+                            <button class="btn btn-info" style="padding: 4px 10px; font-size: 11px;" onclick="viewFullPO()"><i class="fas fa-external-link-alt"></i> View PO</button>
+                        </div>
+                        <div class="form-grid" style="grid-template-columns: repeat(4, 1fr);">
+                            <div class="form-group"><label>PO Number</label><input type="text" id="det-po-poNo" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>PO Date</label><input type="text" id="det-po-poDate" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>PO Status</label><input type="text" id="det-po-poStatus" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>Vendor Name</label><input type="text" id="det-po-vendorName" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>Vendor Code</label><input type="text" id="det-po-vendorCode" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>Project</label><input type="text" id="det-po-project" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>Department</label><input type="text" id="det-po-department" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>Requested By</label><input type="text" id="det-po-reqBy" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>Cost Centre</label><input type="text" id="det-po-costCentre" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>Delivery Location</label><input type="text" id="det-po-deliveryLoc" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>Payment Terms</label><input type="text" id="det-po-payTerms" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>PO Total Value</label><input type="text" id="det-po-totalValue" class="readonly-field" readonly></div>
+                        </div>
+                    </div>
+
+                    <!-- Material Information -->
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <h4><i class="fas fa-boxes"></i> Material Information (Received)</h4>
+                        </div>
+                        <div class="table-container" style="margin: 0;">
+                            <table class="data-table" id="materialInfoTable">
+                                <thead>
+                                    <tr>
+                                        <th>Item Code</th>
+                                        <th>Material Name</th>
+                                        <th>Description</th>
+                                        <th>Specification</th>
+                                        <th>Ordered Qty</th>
+                                        <th>Prev Received Qty</th>
+                                        <th>Current Received Qty</th>
+                                        <th>Total Received Qty</th>
+                                        <th>Pending Qty</th>
+                                        <th>UOM</th>
+                                        <th>Batch No.</th>
+                                        <th>Mfg Date</th>
+                                        <th>Expiry Date</th>
+                                        <th>Store Location</th>
+                                        <th>GRN Number</th>
+                                        <th>GRN Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="materialInfoBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Acceptance Action Area -->
+                    <div class="acceptance-action-area" id="acceptanceActionArea">
+                        <h4><i class="fas fa-check-double"></i> Acceptance Decision</h4>
+                        <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
+                            <div class="form-group">
+                                <label>Accepted Quantity</label>
+                                <input type="number" id="det-acceptedQty" step="1" min="0" placeholder="Enter accepted quantity...">
+                            </div>
+                            <div class="form-group">
+                                <label>Rejection Reason (if any)</label>
+                                <select id="det-rejectReason">
+                                    <option value="">Select Reason...</option>
+                                    <option value="Quality Issue">Quality Issue</option>
+                                    <option value="Specification Mismatch">Specification Mismatch</option>
+                                    <option value="Damaged Goods">Damaged Goods</option>
+                                    <option value="Wrong Item">Wrong Item</option>
+                                    <option value="Expired Material">Expired Material</option>
+                                    <option value="Short Quantity">Short Quantity</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-grid" style="grid-template-columns: 1fr; margin-top: 8px;">
+                            <div class="form-group" style="height: auto;">
+                                <label>Remarks / Comments</label>
+                                <textarea id="det-remarks" rows="2" placeholder="Enter remarks or comments..."></textarea>
+                            </div>
+                        </div>
+                        <div class="form-actions" style="margin-top: 10px;">
+                            <button class="btn btn-success" onclick="acceptMaterial()"><i class="fas fa-check-circle"></i> Accept</button>
+                            <button class="btn btn-danger" onclick="rejectMaterial()"><i class="fas fa-times-circle"></i> Reject</button>
+                            <button class="btn btn-secondary" onclick="markUnderReview()"><i class="fas fa-search"></i> Mark Under Review</button>
+                        </div>
+                    </div>
+
+                    <!-- History -->
+                    <div class="info-card" style="margin-top: 20px;">
+                        <div class="info-card-header">
+                            <h4><i class="fas fa-history"></i> Acceptance History / Audit Trail</h4>
+                        </div>
+                        <div id="detHistoryList" style="max-height: 300px; overflow-y: auto; padding: 5px;"></div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- ========== HISTORY MODAL ========== -->
+    <div class="modal-overlay" id="historyModal">
+        <div class="modal-box">
+            <h3><i class="fas fa-history"></i> Acceptance History — <span id="histModalTitle"></span></h3>
+            <div id="histModalBody" style="max-height: 400px; overflow-y: auto;"></div>
+            <div class="modal-actions" style="margin-top: 15px;">
+                <button class="btn btn-secondary" onclick="closeHistoryModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== PO DETAIL MODAL ========== -->
+    <div class="modal-overlay" id="poDetailModal">
+        <div class="modal-box" style="width: 600px;">
+            <h3><i class="fas fa-file-invoice"></i> Full PO Details — <span id="poModalTitle"></span></h3>
+            <div id="poModalBody"></div>
+            <div class="modal-actions" style="margin-top: 15px;">
+                <button class="btn btn-secondary" onclick="closePoModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ==================== DATA ====================
+    const acceptanceData = [
+        {
+            accId: 'ACC-001', poNo: 'PO-1001', poDate: '2023-01-15', prNo: 'PR-501',
+            project: 'ERP Implementation', department: 'IT', reqUser: 'John Doe',
+            vendor: 'ABC Tech Solutions', vendorCode: 'V-1001',
+            itemCode: 'ITM-101', materialName: 'Laptop', description: 'Dell Latitude 5530',
+            specification: 'i7, 16GB RAM, 512GB SSD', orderedQty: 50, receivedQty: 50,
+            prevReceivedQty: 0, uom: 'Nos', grnNo: 'GRN-001', grnDate: '2023-02-10',
+            stockInwardStatus: 'Completed', accStatus: 'Accepted', accDueDate: '2023-02-17',
+            acceptedRejectedBy: 'John Doe', acceptedQty: 50,
+            batchNo: 'BATCH-2023-001', mfgDate: '2023-01-01', expiryDate: '2026-01-01',
+            storeLocation: 'Warehouse A - Rack 1',
+            poStatus: 'Closed', costCentre: 'CC-IT-01', deliveryLoc: 'Head Office - IT Dept',
+            payTerms: 'Net 30', poTotalValue: 2500000,
+            history: [
+                { date: '10/02/2023, 10:00 AM', action: 'Material Received', by: 'Store Keeper', detail: 'GRN-001 created. 50 Nos received.' },
+                { date: '12/02/2023, 02:30 PM', action: 'Accepted', by: 'John Doe', detail: 'All 50 units accepted. Quality verified.' }
+            ]
+        },
+        {
+            accId: 'ACC-002', poNo: 'PO-1002', poDate: '2023-03-01', prNo: 'PR-502',
+            project: 'Office Renovation', department: 'Operations', reqUser: 'Jane Smith',
+            vendor: 'Office Supplies Co.', vendorCode: 'V-1002',
+            itemCode: 'ITM-202', materialName: 'Printer Paper', description: 'A4 Paper 80 GSM',
+            specification: '500 Sheets per Ream', orderedQty: 100, receivedQty: 80,
+            prevReceivedQty: 0, uom: 'Boxes', grnNo: 'GRN-002', grnDate: '2023-03-10',
+            stockInwardStatus: 'Partial', accStatus: 'Partially Accepted', accDueDate: '2023-03-17',
+            acceptedRejectedBy: 'Jane Smith', acceptedQty: 75,
+            batchNo: 'BATCH-2023-002', mfgDate: '2023-02-15', expiryDate: '2025-02-15',
+            storeLocation: 'Warehouse B - Rack 3',
+            poStatus: 'Open', costCentre: 'CC-OPS-02', deliveryLoc: 'Main Office - Store Room',
+            payTerms: 'Net 45', poTotalValue: 16000,
+            history: [
+                { date: '10/03/2023, 09:00 AM', action: 'Material Received', by: 'Store Keeper', detail: 'GRN-002 created. 80 Boxes received (ordered 100).' },
+                { date: '12/03/2023, 11:00 AM', action: 'Partially Accepted', by: 'Jane Smith', detail: '75 Boxes accepted, 5 Boxes rejected due to damage.' }
+            ]
+        },
+        {
+            accId: 'ACC-003', poNo: 'PO-1003', poDate: '2023-04-20', prNo: 'PR-503',
+            project: 'Server Infrastructure', department: 'IT', reqUser: 'Rahul Kumar',
+            vendor: 'CloudNet India Pvt Ltd', vendorCode: 'V-1003',
+            itemCode: 'ITM-303', materialName: 'Server Rack', description: '42U Server Rack',
+            specification: '42U, 600mm x 1000mm, with PDU', orderedQty: 5, receivedQty: 5,
+            prevReceivedQty: 0, uom: 'Nos', grnNo: 'GRN-003', grnDate: '2023-05-15',
+            stockInwardStatus: 'Completed', accStatus: 'Pending', accDueDate: '2023-05-22',
+            acceptedRejectedBy: '-', acceptedQty: 0,
+            batchNo: 'BATCH-2023-003', mfgDate: '2023-04-01', expiryDate: '-',
+            storeLocation: 'Data Centre - Floor 2',
+            poStatus: 'Open', costCentre: 'CC-IT-03', deliveryLoc: 'Data Centre Building',
+            payTerms: 'Net 60', poTotalValue: 500000,
+            history: [
+                { date: '15/05/2023, 03:00 PM', action: 'Material Received', by: 'Store Keeper', detail: 'GRN-003 created. 5 Nos received.' }
+            ]
+        },
+        {
+            accId: 'ACC-004', poNo: 'PO-1004', poDate: '2023-06-05', prNo: 'PR-504',
+            project: 'Security System', department: 'Admin', reqUser: 'Priya Sharma',
+            vendor: 'SafeGuard Technologies', vendorCode: 'V-1004',
+            itemCode: 'ITM-404', materialName: 'CCTV Camera', description: 'IP Camera 4MP Dome',
+            specification: '4MP, IR Night Vision, IP67', orderedQty: 20, receivedQty: 20,
+            prevReceivedQty: 0, uom: 'Nos', grnNo: 'GRN-004', grnDate: '2023-07-01',
+            stockInwardStatus: 'Completed', accStatus: 'Rejected', accDueDate: '2023-07-08',
+            acceptedRejectedBy: 'Priya Sharma', acceptedQty: 0,
+            batchNo: 'BATCH-2023-004', mfgDate: '2023-03-01', expiryDate: '-',
+            storeLocation: 'Warehouse A - Rack 5',
+            poStatus: 'Open', costCentre: 'CC-ADM-04', deliveryLoc: 'Head Office - Admin Dept',
+            payTerms: 'Net 30', poTotalValue: 75000,
+            history: [
+                { date: '01/07/2023, 10:00 AM', action: 'Material Received', by: 'Store Keeper', detail: 'GRN-004 created. 20 Nos received.' },
+                { date: '03/07/2023, 04:00 PM', action: 'Rejected', by: 'Priya Sharma', detail: 'All 20 units rejected. Reason: Specification Mismatch - Wrong model delivered.' }
+            ]
+        },
+        {
+            accId: 'ACC-005', poNo: 'PO-1005', poDate: '2023-08-10', prNo: 'PR-505',
+            project: 'ERP Implementation', department: 'IT', reqUser: 'Anish',
+            vendor: 'TechSoft Global', vendorCode: 'V-1005',
+            itemCode: 'ITM-505', materialName: 'Software License', description: 'Microsoft 365 E3',
+            specification: 'Annual License, Per User', orderedQty: 100, receivedQty: 100,
+            prevReceivedQty: 0, uom: 'Licenses', grnNo: 'GRN-005', grnDate: '2023-08-20',
+            stockInwardStatus: 'Completed', accStatus: 'Under Review', accDueDate: '2023-08-27',
+            acceptedRejectedBy: '-', acceptedQty: 0,
+            batchNo: '-', mfgDate: '-', expiryDate: '2024-08-20',
+            storeLocation: 'Digital - License Server',
+            poStatus: 'Open', costCentre: 'CC-IT-05', deliveryLoc: 'IT Dept - License Admin',
+            payTerms: 'Advance Payment', poTotalValue: 120000,
+            history: [
+                { date: '20/08/2023, 09:30 AM', action: 'Material Received', by: 'License Admin', detail: 'GRN-005 created. 100 Licenses received.' },
+                { date: '22/08/2023, 11:00 AM', action: 'Under Review', by: 'Anish', detail: 'License keys verification in progress.' }
+            ]
+        },
+        {
+            accId: 'ACC-006', poNo: 'PO-1003', poDate: '2023-04-20', prNo: 'PR-506',
+            project: 'Server Infrastructure', department: 'IT', reqUser: 'Rahul Kumar',
+            vendor: 'CloudNet India Pvt Ltd', vendorCode: 'V-1003',
+            itemCode: 'ITM-306', materialName: 'Network Switch', description: '48-Port Managed Switch',
+            specification: 'Gigabit, Layer 3, PoE+', orderedQty: 10, receivedQty: 10,
+            prevReceivedQty: 0, uom: 'Nos', grnNo: 'GRN-006', grnDate: '2023-05-18',
+            stockInwardStatus: 'Completed', accStatus: 'Pending', accDueDate: '2023-05-25',
+            acceptedRejectedBy: '-', acceptedQty: 0,
+            batchNo: 'BATCH-2023-006', mfgDate: '2023-03-15', expiryDate: '-',
+            storeLocation: 'Data Centre - Floor 1',
+            poStatus: 'Open', costCentre: 'CC-IT-03', deliveryLoc: 'Data Centre Building',
+            payTerms: 'Net 60', poTotalValue: 500000,
+            history: [
+                { date: '18/05/2023, 02:00 PM', action: 'Material Received', by: 'Store Keeper', detail: 'GRN-006 created. 10 Nos received.' }
+            ]
+        }
+    ];
+
+    let filteredData = [...acceptanceData];
+    let currentPage = 1;
+    const pageSize = 10;
+    let currentSort = { col: null, dir: null };
+    let currentDetailItem = null;
+
+    // ==================== FORMATTING ====================
+    function formatCurrency(val) {
+        return '₹' + Number(val).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function getStatusClass(status) {
+        return status.toLowerCase().replace(/\s+/g, '-');
+    }
+
+    function getCurrentDateTime() {
+        const now = new Date();
+        const dd = String(now.getDate()).padStart(2, '0');
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const yyyy = now.getFullYear();
+        let hh = now.getHours();
+        const min = String(now.getMinutes()).padStart(2, '0');
+        const ampm = hh >= 12 ? 'PM' : 'AM';
+        hh = hh % 12 || 12;
+        return `${dd}/${mm}/${yyyy}, ${String(hh).padStart(2, '0')}:${min} ${ampm}`;
+    }
+
+    // ==================== SORTING ====================
+    document.querySelectorAll('.data-table th.sortable').forEach(th => {
+        th.addEventListener('click', () => {
+            const col = th.dataset.col;
+            let dir = 'asc';
+            if (currentSort.col === col && currentSort.dir === 'asc') dir = 'desc';
+            else if (currentSort.col === col && currentSort.dir === 'desc') { dir = null; }
+
+            currentSort = { col: dir ? col : null, dir };
+
+            document.querySelectorAll('.data-table th.sortable').forEach(h => h.classList.remove('asc', 'desc'));
+            if (dir) th.classList.add(dir);
+
+            sortData();
+            renderTable();
+        });
+    });
+
+    function sortData() {
+        if (!currentSort.col || !currentSort.dir) return;
+        const col = currentSort.col;
+        const dir = currentSort.dir === 'asc' ? 1 : -1;
+        filteredData.sort((a, b) => {
+            let va = a[col] || '';
+            let vb = b[col] || '';
+            if (typeof va === 'number') return (va - vb) * dir;
+            return String(va).localeCompare(String(vb)) * dir;
+        });
+    }
+
+    // ==================== FILTERS ====================
+    function applyFilters() {
+        const globalSearch = document.getElementById('globalSearch').value.toLowerCase().trim();
+        const fPoNo = document.getElementById('f-poNo').value.toLowerCase().trim();
+        const fPrNo = document.getElementById('f-prNo').value.toLowerCase().trim();
+        const fGrnNo = document.getElementById('f-grnNo').value.toLowerCase().trim();
+        const fVendor = document.getElementById('f-vendor').value.toLowerCase().trim();
+        const fProject = document.getElementById('f-project').value.toLowerCase().trim();
+        const fDept = document.getElementById('f-dept').value.toLowerCase().trim();
+        const fReqUser = document.getElementById('f-reqUser').value.toLowerCase().trim();
+        const fMaterial = document.getElementById('f-material').value.toLowerCase().trim();
+        const fItemCode = document.getElementById('f-itemCode').value.toLowerCase().trim();
+        const fStatus = document.getElementById('f-status').value;
+        const fGrnDateFrom = document.getElementById('f-grnDateFrom').value;
+        const fGrnDateTo = document.getElementById('f-grnDateTo').value;
+        const fAccDateFrom = document.getElementById('f-accDateFrom').value;
+        const fAccDateTo = document.getElementById('f-accDateTo').value;
+        const fPendingOverdue = document.getElementById('f-pendingOverdue').value;
+        const fStoreLoc = document.getElementById('f-storeLocation').value.toLowerCase().trim();
+
+        filteredData = acceptanceData.filter(item => {
+            // Global search
+            if (globalSearch) {
+                const searchStr = [item.poNo, item.grnNo, item.materialName, item.vendor, item.prNo, item.itemCode, item.accId].join(' ').toLowerCase();
+                if (!searchStr.includes(globalSearch)) return false;
+            }
+            if (fPoNo && !item.poNo.toLowerCase().includes(fPoNo)) return false;
+            if (fPrNo && !item.prNo.toLowerCase().includes(fPrNo)) return false;
+            if (fGrnNo && !item.grnNo.toLowerCase().includes(fGrnNo)) return false;
+            if (fVendor && !item.vendor.toLowerCase().includes(fVendor)) return false;
+            if (fProject && !item.project.toLowerCase().includes(fProject)) return false;
+            if (fDept && !item.department.toLowerCase().includes(fDept)) return false;
+            if (fReqUser && !item.reqUser.toLowerCase().includes(fReqUser)) return false;
+            if (fMaterial && !item.materialName.toLowerCase().includes(fMaterial)) return false;
+            if (fItemCode && !item.itemCode.toLowerCase().includes(fItemCode)) return false;
+            if (fStatus && item.accStatus !== fStatus) return false;
+            if (fGrnDateFrom && item.grnDate < fGrnDateFrom) return false;
+            if (fGrnDateTo && item.grnDate > fGrnDateTo) return false;
+            if (fAccDateFrom && item.accDueDate < fAccDateFrom) return false;
+            if (fAccDateTo && item.accDueDate > fAccDateTo) return false;
+            if (fStoreLoc && !item.storeLocation.toLowerCase().includes(fStoreLoc)) return false;
+            if (fPendingOverdue === 'Pending' && item.accStatus !== 'Pending') return false;
+            if (fPendingOverdue === 'Overdue') {
+                const today = new Date().toISOString().split('T')[0];
+                if (item.accStatus !== 'Pending' || item.accDueDate >= today) return false;
+            }
+            return true;
+        });
+
+        sortData();
+        currentPage = 1;
+        renderTable();
+    }
+
+    function clearFilters() {
+        document.getElementById('globalSearch').value = '';
+        document.getElementById('f-poNo').value = '';
+        document.getElementById('f-prNo').value = '';
+        document.getElementById('f-grnNo').value = '';
+        document.getElementById('f-vendor').value = '';
+        document.getElementById('f-project').value = '';
+        document.getElementById('f-dept').value = '';
+        document.getElementById('f-reqUser').value = '';
+        document.getElementById('f-material').value = '';
+        document.getElementById('f-itemCode').value = '';
+        document.getElementById('f-status').value = '';
+        document.getElementById('f-grnDateFrom').value = '';
+        document.getElementById('f-grnDateTo').value = '';
+        document.getElementById('f-accDateFrom').value = '';
+        document.getElementById('f-accDateTo').value = '';
+        document.getElementById('f-pendingOverdue').value = '';
+        document.getElementById('f-storeLocation').value = '';
+        filteredData = [...acceptanceData];
+        currentPage = 1;
+        renderTable();
+    }
+
+    // ==================== RENDER TABLE ====================
+    function renderTable() {
+        const tbody = document.getElementById('acceptanceTableBody');
+        tbody.innerHTML = '';
+
+        const totalRecords = filteredData.length;
+        const totalPages = Math.ceil(totalRecords / pageSize) || 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        const start = (currentPage - 1) * pageSize;
+        const end = Math.min(start + pageSize, totalRecords);
+        const pageData = filteredData.slice(start, end);
+
+        if (pageData.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="20" style="text-align:center; padding:25px; color:#888;">No records found.</td></tr>';
+        } else {
+            pageData.forEach(item => {
+                const isOverdue = item.accStatus === 'Pending' && item.accDueDate < new Date().toISOString().split('T')[0];
+                const tr = document.createElement('tr');
+                if (isOverdue) tr.style.backgroundColor = '#fff5f5';
+                tr.innerHTML = `
+                    <td><strong>${item.accId}</strong></td>
+                    <td>${item.poNo}</td>
+                    <td>${item.poDate}</td>
+                    <td>${item.prNo}</td>
+                    <td>${item.project}</td>
+                    <td>${item.department}</td>
+                    <td>${item.reqUser}</td>
+                    <td>${item.vendor}</td>
+                    <td>${item.itemCode}</td>
+                    <td>${item.materialName}</td>
+                    <td style="text-align:right;">${item.orderedQty}</td>
+                    <td style="text-align:right;">${item.receivedQty}</td>
+                    <td>${item.uom}</td>
+                    <td>${item.grnNo}</td>
+                    <td>${item.grnDate}</td>
+                    <td><span class="badge ${getStatusClass(item.stockInwardStatus)}">${item.stockInwardStatus}</span></td>
+                    <td><span class="badge ${getStatusClass(item.accStatus)}">${item.accStatus}</span>${isOverdue ? ' <span class="badge overdue" style="font-size:9px;">OVERDUE</span>' : ''}</td>
+                    <td>${item.accDueDate}</td>
+                    <td>${item.acceptedRejectedBy}</td>
+                    <td>
+                        <div class="action-btn-group">
+                            <button class="action-btn action-btn-view" onclick="viewDetail('${item.accId}')" title="View"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn action-btn-accept" onclick="quickAccept('${item.accId}')" title="Accept" ${item.accStatus === 'Accepted' || item.accStatus === 'Rejected' ? 'disabled style="opacity:0.4;"' : ''}><i class="fas fa-check"></i></button>
+                            <button class="action-btn action-btn-reject" onclick="quickReject('${item.accId}')" title="Reject" ${item.accStatus === 'Accepted' || item.accStatus === 'Rejected' ? 'disabled style="opacity:0.4;"' : ''}><i class="fas fa-times"></i></button>
+                            <button class="action-btn action-btn-history" onclick="showHistory('${item.accId}')" title="History"><i class="fas fa-history"></i></button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Pagination info
+        document.getElementById('paginationInfo').textContent = totalRecords === 0
+            ? 'No records found'
+            : `Showing ${start + 1} to ${end} of ${totalRecords} records`;
+
+        // Pagination controls
+        const pagCtrl = document.getElementById('paginationControls');
+        pagCtrl.innerHTML = '';
+        const prevBtn = document.createElement('button');
+        prevBtn.innerHTML = '&laquo; Prev';
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.onclick = () => { currentPage--; renderTable(); };
+        pagCtrl.appendChild(prevBtn);
+
+        for (let i = 1; i <= totalPages; i++) {
+            const btn = document.createElement('button');
+            btn.textContent = i;
+            if (i === currentPage) btn.classList.add('active-page');
+            btn.onclick = () => { currentPage = i; renderTable(); };
+            pagCtrl.appendChild(btn);
+        }
+
+        const nextBtn = document.createElement('button');
+        nextBtn.innerHTML = 'Next &raquo;';
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.onclick = () => { currentPage++; renderTable(); };
+        pagCtrl.appendChild(nextBtn);
+    }
+
+    // ==================== QUICK ACTIONS ====================
+    function quickAccept(accId) {
+        const item = acceptanceData.find(i => i.accId === accId);
+        if (!item || item.accStatus === 'Accepted' || item.accStatus === 'Rejected') return;
+        if (!confirm(`Accept all ${item.receivedQty} ${item.uom} of "${item.materialName}" for ${accId}?`)) return;
+
+        item.accStatus = 'Accepted';
+        item.acceptedQty = item.receivedQty;
+        item.acceptedRejectedBy = 'Anish';
+        item.history.push({
+            date: getCurrentDateTime(),
+            action: 'Accepted',
+            by: 'Anish',
+            detail: `All ${item.receivedQty} ${item.uom} accepted via quick action.`
+        });
+        alert(`${accId} — Material accepted successfully!`);
+        applyFilters();
+    }
+
+    function quickReject(accId) {
+        const item = acceptanceData.find(i => i.accId === accId);
+        if (!item || item.accStatus === 'Accepted' || item.accStatus === 'Rejected') return;
+        const reason = prompt(`Enter rejection reason for ${accId}:`);
+        if (!reason) return;
+
+        item.accStatus = 'Rejected';
+        item.acceptedQty = 0;
+        item.acceptedRejectedBy = 'Anish';
+        item.history.push({
+            date: getCurrentDateTime(),
+            action: 'Rejected',
+            by: 'Anish',
+            detail: `All ${item.receivedQty} ${item.uom} rejected. Reason: ${reason}`
+        });
+        alert(`${accId} — Material rejected.`);
+        applyFilters();
+    }
+
+    // ==================== VIEW DETAIL ====================
+    function viewDetail(accId) {
+        const item = acceptanceData.find(i => i.accId === accId);
+        if (!item) return;
+        currentDetailItem = item;
+
+        document.getElementById('listView').style.display = 'none';
+        document.getElementById('detailView').style.display = 'block';
+
+        // Acceptance Summary
+        document.getElementById('det-accId').value = item.accId;
+        document.getElementById('det-poNo').value = item.poNo;
+        document.getElementById('det-grnNo').value = item.grnNo;
+        document.getElementById('det-prNo').value = item.prNo;
+        document.getElementById('det-accStatus').value = item.accStatus;
+        const badge = document.getElementById('detAccStatusBadge');
+        badge.textContent = item.accStatus;
+        badge.className = 'badge ' + getStatusClass(item.accStatus);
+
+        // PO Information
+        document.getElementById('det-po-poNo').value = item.poNo;
+        document.getElementById('det-po-poDate').value = item.poDate;
+        document.getElementById('det-po-poStatus').value = item.poStatus;
+        document.getElementById('det-po-vendorName').value = item.vendor;
+        document.getElementById('det-po-vendorCode').value = item.vendorCode;
+        document.getElementById('det-po-project').value = item.project;
+        document.getElementById('det-po-department').value = item.department;
+        document.getElementById('det-po-reqBy').value = item.reqUser;
+        document.getElementById('det-po-costCentre').value = item.costCentre;
+        document.getElementById('det-po-deliveryLoc').value = item.deliveryLoc;
+        document.getElementById('det-po-payTerms').value = item.payTerms;
+        document.getElementById('det-po-totalValue').value = formatCurrency(item.poTotalValue);
+
+        // Material Information Table
+        const matBody = document.getElementById('materialInfoBody');
+        const totalReceived = item.prevReceivedQty + item.receivedQty;
+        const pending = item.orderedQty - totalReceived;
+        matBody.innerHTML = `
+            <tr>
+                <td>${item.itemCode}</td>
+                <td>${item.materialName}</td>
+                <td>${item.description}</td>
+                <td>${item.specification}</td>
+                <td style="text-align:right;">${item.orderedQty}</td>
+                <td style="text-align:right;">${item.prevReceivedQty}</td>
+                <td style="text-align:right;">${item.receivedQty}</td>
+                <td style="text-align:right;">${totalReceived}</td>
+                <td style="text-align:right;">${pending < 0 ? 0 : pending}</td>
+                <td>${item.uom}</td>
+                <td>${item.batchNo}</td>
+                <td>${item.mfgDate}</td>
+                <td>${item.expiryDate}</td>
+                <td>${item.storeLocation}</td>
+                <td>${item.grnNo}</td>
+                <td>${item.grnDate}</td>
+            </tr>
+        `;
+
+        // Acceptance Action Area
+        const actionArea = document.getElementById('acceptanceActionArea');
+        if (item.accStatus === 'Accepted' || item.accStatus === 'Rejected') {
+            actionArea.style.display = 'none';
+        } else {
+            actionArea.style.display = 'block';
+            document.getElementById('det-acceptedQty').value = '';
+            document.getElementById('det-acceptedQty').max = item.receivedQty;
+            document.getElementById('det-acceptedQty').placeholder = `Max: ${item.receivedQty}`;
+            document.getElementById('det-rejectReason').value = '';
+            document.getElementById('det-remarks').value = '';
+        }
+
+        // History
+        renderDetailHistory();
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderDetailHistory() {
+        if (!currentDetailItem) return;
+        const container = document.getElementById('detHistoryList');
+        container.innerHTML = '';
+        if (currentDetailItem.history.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color:#aaa; padding:15px; font-size:12px;">No history records.</p>';
+            return;
+        }
+        currentDetailItem.history.forEach(h => {
+            const div = document.createElement('div');
+            div.className = 'history-item';
+            div.innerHTML = `
+                <div class="history-meta"><strong>${h.by}</strong> — ${h.action} — ${h.date}</div>
+                <div class="history-text">${h.detail}</div>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    function backToList() {
+        document.getElementById('detailView').style.display = 'none';
+        document.getElementById('listView').style.display = 'block';
+        currentDetailItem = null;
+        applyFilters();
+    }
+
+    // ==================== DETAIL ACTIONS ====================
+    function acceptMaterial() {
+        if (!currentDetailItem) return;
+        const qty = parseInt(document.getElementById('det-acceptedQty').value);
+        const remarks = document.getElementById('det-remarks').value.trim();
+
+        if (!qty || qty <= 0) {
+            alert('Please enter a valid accepted quantity.');
+            return;
+        }
+        if (qty > currentDetailItem.receivedQty) {
+            alert(`Accepted quantity cannot exceed received quantity (${currentDetailItem.receivedQty}).`);
+            return;
+        }
+
+        if (qty === currentDetailItem.receivedQty) {
+            currentDetailItem.accStatus = 'Accepted';
+        } else {
+            currentDetailItem.accStatus = 'Partially Accepted';
+        }
+        currentDetailItem.acceptedQty = qty;
+        currentDetailItem.acceptedRejectedBy = 'Anish';
+
+        let detail = `${qty} ${currentDetailItem.uom} accepted out of ${currentDetailItem.receivedQty} received.`;
+        if (remarks) detail += ` Remarks: ${remarks}`;
+        currentDetailItem.history.push({
+            date: getCurrentDateTime(), action: currentDetailItem.accStatus,
+            by: 'Anish', detail: detail
+        });
+
+        alert(`Material ${currentDetailItem.accStatus.toLowerCase()} successfully!`);
+        viewDetail(currentDetailItem.accId);
+    }
+
+    function rejectMaterial() {
+        if (!currentDetailItem) return;
+        const reason = document.getElementById('det-rejectReason').value;
+        const remarks = document.getElementById('det-remarks').value.trim();
+
+        if (!reason) {
+            alert('Please select a rejection reason.');
+            return;
+        }
+
+        currentDetailItem.accStatus = 'Rejected';
+        currentDetailItem.acceptedQty = 0;
+        currentDetailItem.acceptedRejectedBy = 'Anish';
+
+        let detail = `All ${currentDetailItem.receivedQty} ${currentDetailItem.uom} rejected. Reason: ${reason}.`;
+        if (remarks) detail += ` Remarks: ${remarks}`;
+        currentDetailItem.history.push({
+            date: getCurrentDateTime(), action: 'Rejected',
+            by: 'Anish', detail: detail
+        });
+
+        alert('Material rejected.');
+        viewDetail(currentDetailItem.accId);
+    }
+
+    function markUnderReview() {
+        if (!currentDetailItem) return;
+        const remarks = document.getElementById('det-remarks').value.trim();
+        if (!remarks) {
+            alert('Please enter remarks explaining why this is under review.');
+            return;
+        }
+
+        currentDetailItem.accStatus = 'Under Review';
+        currentDetailItem.acceptedRejectedBy = '-';
+
+        currentDetailItem.history.push({
+            date: getCurrentDateTime(), action: 'Under Review',
+            by: 'Anish', detail: `Marked for review. Remarks: ${remarks}`
+        });
+
+        alert('Material marked as Under Review.');
+        viewDetail(currentDetailItem.accId);
+    }
+
+    // ==================== HISTORY MODAL ====================
+    function showHistory(accId) {
+        const item = acceptanceData.find(i => i.accId === accId);
+        if (!item) return;
+
+        document.getElementById('histModalTitle').textContent = accId;
+        const body = document.getElementById('histModalBody');
+        body.innerHTML = '';
+
+        if (item.history.length === 0) {
+            body.innerHTML = '<p style="text-align:center; color:#aaa; padding:15px;">No history records.</p>';
+        } else {
+            item.history.forEach(h => {
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                div.innerHTML = `
+                    <div class="history-meta"><strong>${h.by}</strong> — ${h.action} — ${h.date}</div>
+                    <div class="history-text">${h.detail}</div>
+                `;
+                body.appendChild(div);
+            });
+        }
+
+        document.getElementById('historyModal').style.display = 'flex';
+    }
+
+    function closeHistoryModal() {
+        document.getElementById('historyModal').style.display = 'none';
+    }
+
+    // ==================== PO MODAL ====================
+    function viewFullPO() {
+        if (!currentDetailItem) return;
+        const item = currentDetailItem;
+        document.getElementById('poModalTitle').textContent = item.poNo;
+
+        document.getElementById('poModalBody').innerHTML = `
+            <div style="font-size: 12px; line-height: 1.8;">
+                <table style="width:100%; border-collapse: collapse;">
+                    <tr><td style="padding:4px 8px; font-weight:bold; color:#555; width:40%;">PO Number</td><td style="padding:4px 8px;">${item.poNo}</td></tr>
+                    <tr style="background:#f9f9f9;"><td style="padding:4px 8px; font-weight:bold; color:#555;">PO Date</td><td style="padding:4px 8px;">${item.poDate}</td></tr>
+                    <tr><td style="padding:4px 8px; font-weight:bold; color:#555;">PO Status</td><td style="padding:4px 8px;"><span class="badge ${getStatusClass(item.poStatus)}">${item.poStatus}</span></td></tr>
+                    <tr style="background:#f9f9f9;"><td style="padding:4px 8px; font-weight:bold; color:#555;">Vendor Name</td><td style="padding:4px 8px;">${item.vendor}</td></tr>
+                    <tr><td style="padding:4px 8px; font-weight:bold; color:#555;">Vendor Code</td><td style="padding:4px 8px;">${item.vendorCode}</td></tr>
+                    <tr style="background:#f9f9f9;"><td style="padding:4px 8px; font-weight:bold; color:#555;">Project</td><td style="padding:4px 8px;">${item.project}</td></tr>
+                    <tr><td style="padding:4px 8px; font-weight:bold; color:#555;">Department</td><td style="padding:4px 8px;">${item.department}</td></tr>
+                    <tr style="background:#f9f9f9;"><td style="padding:4px 8px; font-weight:bold; color:#555;">Requested By</td><td style="padding:4px 8px;">${item.reqUser}</td></tr>
+                    <tr><td style="padding:4px 8px; font-weight:bold; color:#555;">Cost Centre</td><td style="padding:4px 8px;">${item.costCentre}</td></tr>
+                    <tr style="background:#f9f9f9;"><td style="padding:4px 8px; font-weight:bold; color:#555;">Delivery Location</td><td style="padding:4px 8px;">${item.deliveryLoc}</td></tr>
+                    <tr><td style="padding:4px 8px; font-weight:bold; color:#555;">Payment Terms</td><td style="padding:4px 8px;">${item.payTerms}</td></tr>
+                    <tr style="background:#f9f9f9;"><td style="padding:4px 8px; font-weight:bold; color:#555;">PO Total Value</td><td style="padding:4px 8px; font-weight:bold; color:#28a745;">${formatCurrency(item.poTotalValue)}</td></tr>
+                </table>
+                <hr style="margin: 15px 0;">
+                <h4 style="font-size: 12px; color: #555; margin-bottom: 8px;">Line Items</h4>
+                <table style="width:100%; border-collapse: collapse; border: 1px solid #ddd;">
+                    <thead>
+                        <tr style="background: var(--label-bg); color: white;">
+                            <th style="padding: 5px 8px; font-size: 11px;">Item Code</th>
+                            <th style="padding: 5px 8px; font-size: 11px;">Material</th>
+                            <th style="padding: 5px 8px; font-size: 11px;">Qty</th>
+                            <th style="padding: 5px 8px; font-size: 11px;">UOM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 5px 8px; border: 1px solid #eee;">${item.itemCode}</td>
+                            <td style="padding: 5px 8px; border: 1px solid #eee;">${item.materialName}</td>
+                            <td style="padding: 5px 8px; border: 1px solid #eee; text-align:right;">${item.orderedQty}</td>
+                            <td style="padding: 5px 8px; border: 1px solid #eee;">${item.uom}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        `;
+
+        document.getElementById('poDetailModal').style.display = 'flex';
+    }
+
+    function closePoModal() {
+        document.getElementById('poDetailModal').style.display = 'none';
+    }
+
+    // ==================== EXPORT ====================
+    function exportData() {
+        let csv = 'Acceptance ID,PO Number,PO Date,PR Number,Project,Department,Requesting User,Vendor,Item Code,Material Name,Ordered Qty,Received Qty,UOM,GRN Number,GRN Date,Stock Inward Status,Acceptance Status,Acceptance Due Date,Accepted/Rejected By\n';
+        filteredData.forEach(item => {
+            csv += `${item.accId},${item.poNo},${item.poDate},${item.prNo},${item.project},${item.department},${item.reqUser},${item.vendor},${item.itemCode},${item.materialName},${item.orderedQty},${item.receivedQty},${item.uom},${item.grnNo},${item.grnDate},${item.stockInwardStatus},${item.accStatus},${item.accDueDate},${item.acceptedRejectedBy}\n`;
+        });
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'acceptance_material_export.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    // ==================== INIT ====================
+    document.addEventListener('DOMContentLoaded', () => {
+        renderTable();
+    });
+    </script>
+</body>
+</html>
