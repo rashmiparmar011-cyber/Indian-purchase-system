@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>India Purchase System - Acceptance Material</title>
+    <title>India Purchase System - User Acceptance Material</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -357,7 +357,7 @@
                         </li>
                         <li class="nav-item active">
                             <a href="acceptance_material.html" class="nav-link active">
-                                <i class="fas fa-clipboard-check"></i> Acceptance Material
+                                <i class="fas fa-clipboard-check"></i> User Acceptance Material
                             </a>
                         </li>
                     </ul>
@@ -372,26 +372,18 @@
                 <!-- ========== LIST VIEW ========== -->
                 <div id="listView">
                     <div class="breadcrumb">
-                        <i class="fas fa-home"></i> Acceptance Material <i class="fas fa-chevron-right"></i> <span class="current">User Material Acceptance</span>
-                    </div>
-
-                    <!-- Search Bar -->
-                    <div class="search-bar">
-                        <input type="text" id="globalSearch" placeholder="Quick search by PO, GRN, Material, Vendor..." oninput="applyFilters()">
-                        <button class="btn btn-save" onclick="applyFilters()"><i class="fas fa-search"></i> Search</button>
-                        <button class="btn btn-reset" onclick="clearFilters()"><i class="fas fa-times"></i> Reset Filters</button>
-                        <button class="btn btn-export" onclick="exportData()"><i class="fas fa-file-export"></i> Export</button>
+                        <i class="fas fa-home"></i> User Acceptance Material <i class="fas fa-chevron-right"></i> <span class="current">User Acceptance Material</span>
                     </div>
 
                     <!-- Filters -->
                     <div class="acceptance-filters">
-                        <h3><i class="fas fa-filter"></i> Advanced Filters</h3>
+                        <h3><i class="fas fa-filter"></i> Filters</h3>
                         <div class="form-grid" style="grid-template-columns: repeat(4, 1fr);">
                             <div class="form-group"><label>PO Number</label><input type="text" id="f-poNo" placeholder="Search PO..."></div>
                             <div class="form-group"><label>PR Number</label><input type="text" id="f-prNo" placeholder="Search PR..."></div>
                             <div class="form-group"><label>GRN Number</label><input type="text" id="f-grnNo" placeholder="Search GRN..."></div>
                             <div class="form-group"><label>Vendor</label><input type="text" id="f-vendor" placeholder="Search Vendor..."></div>
-                            <div class="form-group"><label>Project</label><input type="text" id="f-project" placeholder="Search Project..."></div>
+                            <div class="form-group"><label>Project Code</label><input type="text" id="f-project" placeholder="Search Project Code..."></div>
                             <div class="form-group"><label>Department</label><input type="text" id="f-dept" placeholder="Search Department..."></div>
                             <div class="form-group"><label>Requesting User</label><input type="text" id="f-reqUser" placeholder="Search User..."></div>
                             <div class="form-group"><label>Material</label><input type="text" id="f-material" placeholder="Search Material..."></div>
@@ -422,9 +414,14 @@
                             <div class="form-group"><label>Store Location</label><input type="text" id="f-storeLocation" placeholder="Search Location..."></div>
                         </div>
                         <div class="filter-actions">
-                            <button class="btn btn-save" onclick="applyFilters()"><i class="fas fa-search"></i> Apply Filters</button>
+                            <button class="btn btn-save" onclick="applyFilters()"><i class="fas fa-search"></i> Apply</button>
                             <button class="btn btn-reset" onclick="clearFilters()"><i class="fas fa-times"></i> Clear</button>
                         </div>
+                    </div>
+
+                    <!-- Table Actions Bar -->
+                    <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+                        <button class="btn btn-export" onclick="exportData()"><i class="fas fa-file-export"></i> Export</button>
                     </div>
 
                     <!-- Data Table -->
@@ -436,7 +433,7 @@
                                     <th class="sortable" data-col="poNo">PO Number</th>
                                     <th class="sortable" data-col="poDate">PO Date</th>
                                     <th class="sortable" data-col="prNo">PR Number</th>
-                                    <th class="sortable" data-col="project">Project</th>
+                                    <th class="sortable" data-col="projectCode">Project Code</th>
                                     <th class="sortable" data-col="department">Department</th>
                                     <th class="sortable" data-col="reqUser">Requesting User</th>
                                     <th class="sortable" data-col="vendor">Vendor</th>
@@ -469,7 +466,7 @@
                 <div id="detailView" class="detail-section">
                     <!-- Header -->
                     <div class="detail-header">
-                        <h3><i class="fas fa-clipboard-check"></i> User Material Acceptance</h3>
+                        <h3><i class="fas fa-clipboard-check"></i> User Acceptance Material</h3>
                         <div class="detail-header-actions">
                             <button class="btn btn-secondary" onclick="backToList()"><i class="fas fa-arrow-left"></i> Back to List</button>
                         </div>
@@ -504,7 +501,7 @@
                             <div class="form-group"><label>PO Status</label><input type="text" id="det-po-poStatus" class="readonly-field" readonly></div>
                             <div class="form-group"><label>Vendor Name</label><input type="text" id="det-po-vendorName" class="readonly-field" readonly></div>
                             <div class="form-group"><label>Vendor Code</label><input type="text" id="det-po-vendorCode" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Project</label><input type="text" id="det-po-project" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>Project Code</label><input type="text" id="det-po-project" class="readonly-field" readonly></div>
                             <div class="form-group"><label>Department</label><input type="text" id="det-po-department" class="readonly-field" readonly></div>
                             <div class="form-group"><label>Requested By</label><input type="text" id="det-po-reqBy" class="readonly-field" readonly></div>
                             <div class="form-group"><label>Cost Centre</label><input type="text" id="det-po-costCentre" class="readonly-field" readonly></div>
@@ -620,7 +617,7 @@
     const acceptanceData = [
         {
             accId: 'ACC-001', poNo: 'PO-1001', poDate: '2023-01-15', prNo: 'PR-501',
-            project: 'ERP Implementation', department: 'IT', reqUser: 'John Doe',
+            projectCode: 'PRJ-001', project: 'ERP Implementation', department: 'IT', reqUser: 'John Doe',
             vendor: 'ABC Tech Solutions', vendorCode: 'V-1001',
             itemCode: 'ITM-101', materialName: 'Laptop', description: 'Dell Latitude 5530',
             specification: 'i7, 16GB RAM, 512GB SSD', orderedQty: 50, receivedQty: 50,
@@ -638,7 +635,7 @@
         },
         {
             accId: 'ACC-002', poNo: 'PO-1002', poDate: '2023-03-01', prNo: 'PR-502',
-            project: 'Office Renovation', department: 'Operations', reqUser: 'Jane Smith',
+            projectCode: 'PRJ-002', project: 'Office Renovation', department: 'Operations', reqUser: 'Jane Smith',
             vendor: 'Office Supplies Co.', vendorCode: 'V-1002',
             itemCode: 'ITM-202', materialName: 'Printer Paper', description: 'A4 Paper 80 GSM',
             specification: '500 Sheets per Ream', orderedQty: 100, receivedQty: 80,
@@ -656,7 +653,7 @@
         },
         {
             accId: 'ACC-003', poNo: 'PO-1003', poDate: '2023-04-20', prNo: 'PR-503',
-            project: 'Server Infrastructure', department: 'IT', reqUser: 'Rahul Kumar',
+            projectCode: 'PRJ-003', project: 'Server Infrastructure', department: 'IT', reqUser: 'Rahul Kumar',
             vendor: 'CloudNet India Pvt Ltd', vendorCode: 'V-1003',
             itemCode: 'ITM-303', materialName: 'Server Rack', description: '42U Server Rack',
             specification: '42U, 600mm x 1000mm, with PDU', orderedQty: 5, receivedQty: 5,
@@ -673,7 +670,7 @@
         },
         {
             accId: 'ACC-004', poNo: 'PO-1004', poDate: '2023-06-05', prNo: 'PR-504',
-            project: 'Security System', department: 'Admin', reqUser: 'Priya Sharma',
+            projectCode: 'PRJ-004', project: 'Security System', department: 'Admin', reqUser: 'Priya Sharma',
             vendor: 'SafeGuard Technologies', vendorCode: 'V-1004',
             itemCode: 'ITM-404', materialName: 'CCTV Camera', description: 'IP Camera 4MP Dome',
             specification: '4MP, IR Night Vision, IP67', orderedQty: 20, receivedQty: 20,
@@ -691,7 +688,7 @@
         },
         {
             accId: 'ACC-005', poNo: 'PO-1005', poDate: '2023-08-10', prNo: 'PR-505',
-            project: 'ERP Implementation', department: 'IT', reqUser: 'Anish',
+            projectCode: 'PRJ-005', project: 'ERP Implementation', department: 'IT', reqUser: 'Anish',
             vendor: 'TechSoft Global', vendorCode: 'V-1005',
             itemCode: 'ITM-505', materialName: 'Software License', description: 'Microsoft 365 E3',
             specification: 'Annual License, Per User', orderedQty: 100, receivedQty: 100,
@@ -709,7 +706,7 @@
         },
         {
             accId: 'ACC-006', poNo: 'PO-1003', poDate: '2023-04-20', prNo: 'PR-506',
-            project: 'Server Infrastructure', department: 'IT', reqUser: 'Rahul Kumar',
+            projectCode: 'PRJ-003', project: 'Server Infrastructure', department: 'IT', reqUser: 'Rahul Kumar',
             vendor: 'CloudNet India Pvt Ltd', vendorCode: 'V-1003',
             itemCode: 'ITM-306', materialName: 'Network Switch', description: '48-Port Managed Switch',
             specification: 'Gigabit, Layer 3, PoE+', orderedQty: 10, receivedQty: 10,
@@ -785,7 +782,8 @@
 
     // ==================== FILTERS ====================
     function applyFilters() {
-        const globalSearch = document.getElementById('globalSearch').value.toLowerCase().trim();
+        const globalSearchEl = document.getElementById('globalSearch');
+        const globalSearch = globalSearchEl ? globalSearchEl.value.toLowerCase().trim() : '';
         const fPoNo = document.getElementById('f-poNo').value.toLowerCase().trim();
         const fPrNo = document.getElementById('f-prNo').value.toLowerCase().trim();
         const fGrnNo = document.getElementById('f-grnNo').value.toLowerCase().trim();
@@ -813,7 +811,7 @@
             if (fPrNo && !item.prNo.toLowerCase().includes(fPrNo)) return false;
             if (fGrnNo && !item.grnNo.toLowerCase().includes(fGrnNo)) return false;
             if (fVendor && !item.vendor.toLowerCase().includes(fVendor)) return false;
-            if (fProject && !item.project.toLowerCase().includes(fProject)) return false;
+            if (fProject && !(item.projectCode && item.projectCode.toLowerCase().includes(fProject)) && !(item.project && item.project.toLowerCase().includes(fProject))) return false;
             if (fDept && !item.department.toLowerCase().includes(fDept)) return false;
             if (fReqUser && !item.reqUser.toLowerCase().includes(fReqUser)) return false;
             if (fMaterial && !item.materialName.toLowerCase().includes(fMaterial)) return false;
@@ -838,7 +836,8 @@
     }
 
     function clearFilters() {
-        document.getElementById('globalSearch').value = '';
+        const globalSearchEl = document.getElementById('globalSearch');
+        if (globalSearchEl) globalSearchEl.value = '';
         document.getElementById('f-poNo').value = '';
         document.getElementById('f-prNo').value = '';
         document.getElementById('f-grnNo').value = '';
@@ -885,7 +884,7 @@
                     <td>${item.poNo}</td>
                     <td>${item.poDate}</td>
                     <td>${item.prNo}</td>
-                    <td>${item.project}</td>
+                    <td>${item.projectCode || item.project}</td>
                     <td>${item.department}</td>
                     <td>${item.reqUser}</td>
                     <td>${item.vendor}</td>
@@ -1005,7 +1004,7 @@
         document.getElementById('det-po-poStatus').value = item.poStatus;
         document.getElementById('det-po-vendorName').value = item.vendor;
         document.getElementById('det-po-vendorCode').value = item.vendorCode;
-        document.getElementById('det-po-project').value = item.project;
+        document.getElementById('det-po-project').value = item.projectCode || item.project;
         document.getElementById('det-po-department').value = item.department;
         document.getElementById('det-po-reqBy').value = item.reqUser;
         document.getElementById('det-po-costCentre').value = item.costCentre;
@@ -1246,9 +1245,9 @@
 
     // ==================== EXPORT ====================
     function exportData() {
-        let csv = 'Acceptance ID,PO Number,PO Date,PR Number,Project,Department,Requesting User,Vendor,Item Code,Material Name,Ordered Qty,Received Qty,UOM,GRN Number,GRN Date,Stock Inward Status,Acceptance Status,Acceptance Due Date,Accepted/Rejected By\n';
+        let csv = 'Acceptance ID,PO Number,PO Date,PR Number,Project Code,Department,Requesting User,Vendor,Item Code,Material Name,Ordered Qty,Received Qty,UOM,GRN Number,GRN Date,Stock Inward Status,Acceptance Status,Acceptance Due Date,Accepted/Rejected By\n';
         filteredData.forEach(item => {
-            csv += `${item.accId},${item.poNo},${item.poDate},${item.prNo},${item.project},${item.department},${item.reqUser},${item.vendor},${item.itemCode},${item.materialName},${item.orderedQty},${item.receivedQty},${item.uom},${item.grnNo},${item.grnDate},${item.stockInwardStatus},${item.accStatus},${item.accDueDate},${item.acceptedRejectedBy}\n`;
+            csv += `${item.accId},${item.poNo},${item.poDate},${item.prNo},${item.projectCode || item.project},${item.department},${item.reqUser},${item.vendor},${item.itemCode},${item.materialName},${item.orderedQty},${item.receivedQty},${item.uom},${item.grnNo},${item.grnDate},${item.stockInwardStatus},${item.accStatus},${item.accDueDate},${item.acceptedRejectedBy}\n`;
         });
         const blob = new Blob([csv], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);

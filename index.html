@@ -516,7 +516,7 @@ body {
                         </li>
                         <li class="nav-item">
                             <a href="acceptance_material.html" class="nav-link">
-                                <i class="fas fa-clipboard-check"></i> Acceptance Material
+                                <i class="fas fa-clipboard-check"></i> User Acceptance Material
                             </a>
                         </li>
                     </ul>
@@ -547,13 +547,15 @@ body {
                                 <input type="text" id="projectName" name="projectName" placeholder="Enter Project Name">
                             </div>
                             <div class="form-group">
-                                <label for="department">Department</label>
-                                <select id="department" name="department">
-                                    <option value="">Select Department</option>
-                                    <option value="IT">IT</option>
-                                    <option value="HR">HR</option>
-                                    <option value="Finance">Finance</option>
-                                    <option value="Operations">Operations</option>
+                                <label for="budgetYear">Budget Year</label>
+                                <select id="budgetYear" name="budgetYear">
+                                    <option value="">Select Budget Year</option>
+                                    <option value="2021-2022">2021-2022</option>
+                                    <option value="2022-2023">2022-2023</option>
+                                    <option value="2023-2024">2023-2024</option>
+                                    <option value="2024-2025">2024-2025</option>
+                                    <option value="2025-2026">2025-2026</option>
+                                    <option value="2026-2027">2026-2027</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -566,23 +568,23 @@ body {
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="startDate">Start Date</label>
+                                <label for="startDate">Budget Start Date</label>
                                 <input type="date" id="startDate" name="startDate">
                             </div>
                             <div class="form-group">
-                                <label for="endDate">End Date</label>
+                                <label for="endDate">Budget End Date</label>
                                 <input type="date" id="endDate" name="endDate">
                             </div>
                             <div class="form-group">
-                                <label for="budget">Budget</label>
+                                <label for="budget">Annual Budget</label>
                                 <input type="number" id="budget" name="budget" placeholder="0.00" step="0.01">
                             </div>
                             <div class="form-group">
-                                <label for="utilized">Utilized</label>
+                                <label for="utilized">Utilized Budget</label>
                                 <input type="number" id="utilized" name="utilized" placeholder="0.00" step="0.01">
                             </div>
                             <div class="form-group">
-                                <label for="available">Available</label>
+                                <label for="available">Available Budget</label>
                                 <input type="number" id="available" name="available" placeholder="0.00" readonly
                                     class="readonly-field">
                             </div>
@@ -599,7 +601,7 @@ body {
                         <!-- Actions -->
                         <div class="form-actions">
                             <button type="button" id="btnSave" class="btn btn-save" onclick="saveProject()"><i
-                                    class="fas fa-save"></i> Save</button>
+                                     class="fas fa-save"></i> Save</button>
                             <button type="button" id="btnUpdate" class="btn btn-update" disabled onclick="updateProject()"><i class="fas fa-file-alt"></i>
                                 Update</button>
                             <button type="button" id="btnCancel" class="btn btn-reset" style="display:none; background-color:#6c757d; border-color:#5a6268;" onclick="cancelEdit()"><i class="fas fa-times"></i> Cancel</button>
@@ -615,13 +617,13 @@ body {
                             <tr>
                                 <th>Project Code</th>
                                 <th>Project Name</th>
-                                <th>Department</th>
+                                <th>Budget Year</th>
                                 <th>Project Manager</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Budget</th>
-                                <th>Utilized</th>
-                                <th>Available</th>
+                                <th>Budget Start Date</th>
+                                <th>Budget End Date</th>
+                                <th>Annual Budget</th>
+                                <th>Utilized Budget</th>
+                                <th>Available Budget</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -651,12 +653,8 @@ body {
                             <div class="form-group"><label>MATERIAL NAME</label><input type="text" name="materialName"></div>
                             
                             <div class="form-group"><label>PO QTY</label><input type="number" name="poQty"></div>
-                            <div class="form-group"><label>UOM</label><input type="text" name="poUom"></div>
                             <div class="form-group"><label>RECEIVED QTY</label><input type="number" name="receivedQty"></div>
-                            
-                            <div class="form-group"><label>UOM</label><input type="text" name="receivedUom"></div>
                             <div class="form-group"><label>BALANCE QTY</label><input type="number" name="balanceQty"></div>
-                            <div class="form-group"><label>UOM</label><input type="text" name="balanceUom"></div>
                             
                             <div class="form-group"><label>REC DATE</label><input type="date" name="recDate"></div>
                             <div class="form-group"><label>INVOICE NO</label><input type="text" name="invoiceNo"></div>
@@ -696,11 +694,8 @@ body {
                                 <th>SUPPLIER NAME</th>
                                 <th>MATERIAL NAME</th>
                                 <th>PO QTY</th>
-                                <th>UOM</th>
                                 <th>RECEIVED QTY</th>
-                                <th>UOM</th>
                                 <th>BALANCE QTY</th>
-                                <th>UOM</th>
                                 <th>REC DATE</th>
                                 <th>INVOICE NO</th>
                                 <th>INVOICE DATE</th>
@@ -723,11 +718,8 @@ body {
                                 <td>ABC Tech Solutions</td>
                                 <td>Laptop</td>
                                 <td>50</td>
-                                <td>Nos</td>
                                 <td>50</td>
-                                <td>Nos</td>
                                 <td>0</td>
-                                <td>Nos</td>
                                 <td>2023-02-10</td>
                                 <td>INV-001</td>
                                 <td>2023-02-10</td>
@@ -752,11 +744,8 @@ body {
                                 <td>Office Supplies Co.</td>
                                 <td>Printer Paper</td>
                                 <td>100</td>
-                                <td>Boxes</td>
                                 <td>80</td>
-                                <td>Boxes</td>
                                 <td>20</td>
-                                <td>Boxes</td>
                                 <td>2023-03-10</td>
                                 <td>CHL-992</td>
                                 <td>2023-03-09</td>
@@ -801,12 +790,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial dummy data for the table
     const dummyData = [
         {
-            code: 'PRJ-001', name: 'ERP Implementation', dept: 'IT',
+            code: 'PRJ-001', name: 'ERP Implementation',
+            budgetYear: '2023-2024',
             manager: 'John Doe', start: '2023-01-10', end: '2023-12-31',
             budget: '50000.00', utilized: '20000.00', available: '30000.00', status: 'Active'
         },
         {
-            code: 'PRJ-002', name: 'Office Renovation', dept: 'Operations',
+            code: 'PRJ-002', name: 'Office Renovation',
+            budgetYear: '2023-2024',
             manager: 'Jane Smith', start: '2023-05-01', end: '2023-08-15',
             budget: '15000.00', utilized: '15000.00', available: '0.00', status: 'Completed'
         }
@@ -822,7 +813,7 @@ function addProjectToTable(proj) {
     row.innerHTML = `
         <td>${proj.code}</td>
         <td>${proj.name}</td>
-        <td>${proj.dept}</td>
+        <td>${proj.budgetYear || '-'}</td>
         <td>${proj.manager}</td>
         <td>${proj.start}</td>
         <td>${proj.end}</td>
@@ -851,7 +842,7 @@ function saveProject() {
     const proj = {
         code: form.projectCode.value,
         name: form.projectName.value,
-        dept: form.department.value,
+        budgetYear: form.budgetYear ? form.budgetYear.value : '',
         manager: form.projectManager.value,
         start: form.startDate.value,
         end: form.endDate.value,
@@ -877,7 +868,16 @@ function editProject(iconEl) {
     const form = document.getElementById('projectForm');
     form.projectCode.value = cells[0].textContent.trim();
     form.projectName.value = cells[1].textContent.trim();
-    form.department.value = cells[2].textContent.trim();
+    
+    const bYear = cells[2].textContent.trim();
+    if (form.budgetYear) {
+        const optExists = Array.from(form.budgetYear.options).some(o => o.value === bYear);
+        if (!optExists && bYear && bYear !== '-') {
+            form.budgetYear.add(new Option(bYear, bYear));
+        }
+        form.budgetYear.value = bYear === '-' ? '' : bYear;
+    }
+
     form.projectManager.value = cells[3].textContent.trim();
     form.startDate.value = cells[4].textContent.trim();
     form.endDate.value = cells[5].textContent.trim();
@@ -915,7 +915,7 @@ function updateProject() {
     editingRow.innerHTML = `
         <td>${form.projectCode.value}</td>
         <td>${form.projectName.value}</td>
-        <td>${form.department.value}</td>
+        <td>${form.budgetYear.value || '-'}</td>
         <td>${form.projectManager.value}</td>
         <td>${form.startDate.value}</td>
         <td>${form.endDate.value}</td>

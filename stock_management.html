@@ -7,6 +7,32 @@
     <title>India Purchase System - Stock Management</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .section-title {
+            font-size: 16px;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+            margin-top: 20px;
+        }
+        .section-title:first-child {
+            margin-top: 0;
+        }
+        .readonly-input {
+            background-color: #e9ecef !important;
+            cursor: not-allowed;
+            color: #6c757d;
+        }
+        .btn-export {
+            background-color: #28a745;
+            border-color: #1e7e34;
+            color: white;
+        }
+        .btn-export:hover {
+            background-color: #1e7e34;
+        }
+    </style>
 </head>
 
 <body>
@@ -78,7 +104,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="acceptance_material.html" class="nav-link">
-                                <i class="fas fa-clipboard-check"></i> Acceptance Material
+                                <i class="fas fa-clipboard-check"></i> User Acceptance Material
                             </a>
                         </li>
                     </ul>
@@ -98,35 +124,45 @@
                 <!-- Form -->
                 <div class="form-container">
                     <form id="projectForm">
+                        <h3 class="section-title">PO Details (Auto-populated)</h3>
                         <div class="form-grid">
-                            <div class="form-group"><label>SR NO.</label><input type="text" name="srNo"></div>
-                            <div class="form-group"><label>PO NO.</label><input type="text" name="poNo"></div>
-                            <div class="form-group"><label>PO DATE</label><input type="date" name="poDate"></div>
+                            <div class="form-group">
+                                <label>PO NO.</label>
+                                <select name="poNo" id="poNoSelect" onchange="populatePODetails()">
+                                    <option value="">Select PO...</option>
+                                    <option value="5655">5655</option>
+                                    <option value="PO-1001">PO-1001</option>
+                                    <option value="PO-1002">PO-1002</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><label>PO DATE</label><input type="date" name="poDate" readonly class="readonly-input"></div>
+                            <div class="form-group"><label>Delivery Period</label><input type="text" name="deliveryPeriod" readonly class="readonly-input"></div>
                             
-                            <div class="form-group"><label>Delivery Period</label><input type="text" name="deliveryPeriod"></div>
-                            <div class="form-group"><label>SUPPLIER NAME</label><input type="text" name="supplierName"></div>
-                            <div class="form-group"><label>MATERIAL NAME</label><input type="text" name="materialName"></div>
+                            <div class="form-group"><label>SUPPLIER NAME</label><input type="text" name="supplierName" readonly class="readonly-input"></div>
+                            <div class="form-group"><label>MATERIAL NAME</label><input type="text" name="materialName" readonly class="readonly-input"></div>
+                            <div class="form-group"><label>PO QTY</label><input type="number" name="poQty" readonly class="readonly-input"></div>
                             
-                            <div class="form-group"><label>PO QTY</label><input type="number" name="poQty"></div>
-                            <div class="form-group"><label>UOM</label><input type="text" name="poUom"></div>
-                            <div class="form-group"><label>RECEIVED QTY</label><input type="number" name="receivedQty"></div>
+                            <div class="form-group"><label>INVOICE NO</label><input type="text" name="invoiceNo" readonly class="readonly-input"></div>
+                            <div class="form-group"><label>TOTAL AMOUNT</label><input type="number" name="totalAmount" step="0.01" readonly class="readonly-input"></div>
+                            <div class="form-group"><label>DEPARTMENT</label><input type="text" name="department" readonly class="readonly-input"></div>
+                        </div>
+
+                        <h3 class="section-title">Stock Entry (Manual)</h3>
+                        <div class="form-grid">
+                            <div class="form-group"><label>RECEIVED QTY</label><input type="number" name="receivedQty" oninput="calculateBalanceQty()"></div>
+                            <div class="form-group"><label>BALANCE QTY</label><input type="number" name="balanceQty" readonly class="readonly-input"></div>
+                            <div class="form-group"><label>UOM</label><input type="text" name="uom"></div>
                             
-                            <div class="form-group"><label>UOM</label><input type="text" name="receivedUom"></div>
-                            <div class="form-group"><label>BALANCE QTY</label><input type="number" name="balanceQty"></div>
-                            <div class="form-group"><label>UOM</label><input type="text" name="balanceUom"></div>
-                            
+                            <div class="form-group"><label>BATCH NUMBER</label><input type="text" name="batchNumber"></div>
+                            <div class="form-group"><label>EXPIRY DATE</label><input type="date" name="expiryDate"></div>
                             <div class="form-group"><label>REC DATE</label><input type="date" name="recDate"></div>
-                            <div class="form-group"><label>INVOICE NO</label><input type="text" name="invoiceNo"></div>
+                            
                             <div class="form-group"><label>INVOICE DATE</label><input type="date" name="invoiceDate"></div>
-                            
-                            <div class="form-group"><label>TOTAL AMOUNT</label><input type="number" name="totalAmount" step="0.01"></div>
-                            <div class="form-group"><label>DEPARTMENT</label><input type="text" name="department"></div>
                             <div class="form-group"><label>RECEIVED BY</label><input type="text" name="receivedBy"></div>
-                            
                             <div class="form-group"><label>ACCEPTANCE DATE</label><input type="date" name="acceptanceDate"></div>
+                            
                             <div class="form-group"><label>SUBMITTED TO ACCTS</label><input type="text" name="submittedToAccounts"></div>
                             <div class="form-group"><label>REMARKS</label><input type="text" name="remarks"></div>
-                            
                             <div class="form-group"><label>Attachment</label><input type="file" name="attachment" style="padding-top: 5px;"></div>
                         </div>
 
@@ -142,23 +178,27 @@
                     </form>
                 </div>
 
+                <!-- Table Actions Bar -->
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+                    <button type="button" class="btn btn-export" onclick="exportStockData()"><i class="fas fa-file-export"></i> Export</button>
+                </div>
+
                 <!-- Data Table -->
                 <div class="table-container">
                     <table class="data-table" id="stockTable">
                         <thead>
                             <tr>
-                                <th>SR NO.</th>
                                 <th>PO NO.</th>
                                 <th>PO DATE</th>
                                 <th>Delivery Period</th>
                                 <th>SUPPLIER NAME</th>
                                 <th>MATERIAL NAME</th>
+                                <th>UOM</th>
+                                <th>BATCH NUMBER</th>
+                                <th>EXPIRY DATE</th>
                                 <th>PO QTY</th>
-                                <th>UOM</th>
                                 <th>RECEIVED QTY</th>
-                                <th>UOM</th>
                                 <th>BALANCE QTY</th>
-                                <th>UOM</th>
                                 <th>REC DATE</th>
                                 <th>INVOICE NO</th>
                                 <th>INVOICE DATE</th>
@@ -174,18 +214,17 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>1</td>
                                 <td>PO-1001</td>
                                 <td>2023-01-15</td>
                                 <td>30 Days</td>
                                 <td>ABC Tech Solutions</td>
                                 <td>Laptop</td>
-                                <td>50</td>
                                 <td>Nos</td>
+                                <td>BN-1001</td>
+                                <td>2025-12-31</td>
                                 <td>50</td>
-                                <td>Nos</td>
+                                <td>50</td>
                                 <td>0</td>
-                                <td>Nos</td>
                                 <td>2023-02-10</td>
                                 <td>INV-001</td>
                                 <td>2023-02-10</td>
@@ -195,7 +234,7 @@
                                 <td>2023-02-12</td>
                                 <td>2023-02-15</td>
                                 <td>Fully Delivered</td>
-                                <td><a href="#" style="color:var(--primary-blue);"><i class="fas fa-paperclip"></i> View</a></td>
+                                <td><a href="#" download style="color:var(--primary-blue); white-space: nowrap;"><i class="fas fa-download"></i> Download</a></td>
                                 <td>
                                     <div class="action-icons">
                                         <i class="fas fa-edit icon-edit" title="Edit" onclick="editStock(this)"></i>
@@ -203,18 +242,17 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>2</td>
                                 <td>PO-1002</td>
                                 <td>2023-03-01</td>
                                 <td>15 Days</td>
                                 <td>Office Supplies Co.</td>
                                 <td>Printer Paper</td>
+                                <td>Reams</td>
+                                <td>BN-1002</td>
+                                <td>2024-06-30</td>
                                 <td>100</td>
-                                <td>Boxes</td>
                                 <td>80</td>
-                                <td>Boxes</td>
                                 <td>20</td>
-                                <td>Boxes</td>
                                 <td>2023-03-10</td>
                                 <td>CHL-992</td>
                                 <td>2023-03-09</td>
@@ -241,6 +279,74 @@
 
     <script src="script.js"></script>
     <script>
+        // Mock Data for PO auto-population
+        const poDataMap = {
+            '5655': {
+                poDate: '2023-08-20',
+                deliveryPeriod: '45 Days',
+                supplierName: 'Global Enterprises',
+                materialName: 'Server Rack',
+                poQty: 10,
+                invoiceNo: 'GE-9901',
+                totalAmount: 150000.00,
+                department: 'Infrastructure'
+            },
+            'PO-1001': {
+                poDate: '2023-01-15',
+                deliveryPeriod: '30 Days',
+                supplierName: 'ABC Tech Solutions',
+                materialName: 'Laptop',
+                poQty: 50,
+                invoiceNo: 'INV-001',
+                totalAmount: 2500000.00,
+                department: 'IT'
+            },
+            'PO-1002': {
+                poDate: '2023-03-01',
+                deliveryPeriod: '15 Days',
+                supplierName: 'Office Supplies Co.',
+                materialName: 'Printer Paper',
+                poQty: 100,
+                invoiceNo: 'CHL-992',
+                totalAmount: 16000.00,
+                department: 'Operations'
+            }
+        };
+
+        function populatePODetails() {
+            const form = document.getElementById('projectForm');
+            const poNo = form.poNo.value;
+            if (poNo && poDataMap[poNo]) {
+                const data = poDataMap[poNo];
+                form.poDate.value = data.poDate;
+                form.deliveryPeriod.value = data.deliveryPeriod;
+                form.supplierName.value = data.supplierName;
+                form.materialName.value = data.materialName;
+                form.poQty.value = data.poQty;
+                form.invoiceNo.value = data.invoiceNo;
+                form.totalAmount.value = data.totalAmount;
+                form.department.value = data.department;
+                calculateBalanceQty();
+            } else {
+                form.poDate.value = '';
+                form.deliveryPeriod.value = '';
+                form.supplierName.value = '';
+                form.materialName.value = '';
+                form.poQty.value = '';
+                form.invoiceNo.value = '';
+                form.totalAmount.value = '';
+                form.department.value = '';
+                form.balanceQty.value = '';
+            }
+        }
+
+        function calculateBalanceQty() {
+            const form = document.getElementById('projectForm');
+            const poQty = parseFloat(form.poQty.value) || 0;
+            const receivedQty = parseFloat(form.receivedQty.value) || 0;
+            form.balanceQty.value = Math.max(0, poQty - receivedQty);
+        }
+
         let editingStockRow = null;
 
         function editStock(iconEl) {
@@ -249,27 +355,26 @@
             editingStockRow = row;
 
             const form = document.getElementById('projectForm');
-            form.srNo.value = cells[0].textContent.trim();
-            form.poNo.value = cells[1].textContent.trim();
-            form.poDate.value = cells[2].textContent.trim();
-            form.deliveryPeriod.value = cells[3].textContent.trim();
-            form.supplierName.value = cells[4].textContent.trim();
-            form.materialName.value = cells[5].textContent.trim();
-            form.poQty.value = cells[6].textContent.trim();
-            form.poUom.value = cells[7].textContent.trim();
-            form.receivedQty.value = cells[8].textContent.trim();
-            form.receivedUom.value = cells[9].textContent.trim();
+            form.poNo.value = cells[0].textContent.trim();
+            form.poDate.value = cells[1].textContent.trim();
+            form.deliveryPeriod.value = cells[2].textContent.trim();
+            form.supplierName.value = cells[3].textContent.trim();
+            form.materialName.value = cells[4].textContent.trim();
+            form.uom.value = cells[5].textContent.trim();
+            form.batchNumber.value = cells[6].textContent.trim();
+            form.expiryDate.value = cells[7].textContent.trim();
+            form.poQty.value = cells[8].textContent.trim();
+            form.receivedQty.value = cells[9].textContent.trim();
             form.balanceQty.value = cells[10].textContent.trim();
-            form.balanceUom.value = cells[11].textContent.trim();
-            form.recDate.value = cells[12].textContent.trim();
-            form.invoiceNo.value = cells[13].textContent.trim();
-            form.invoiceDate.value = cells[14].textContent.trim();
-            form.totalAmount.value = cells[15].textContent.trim();
-            form.department.value = cells[16].textContent.trim();
-            form.receivedBy.value = cells[17].textContent.trim();
-            form.acceptanceDate.value = cells[18].textContent.trim();
-            form.submittedToAccounts.value = cells[19].textContent.trim();
-            form.remarks.value = cells[20].textContent.trim();
+            form.recDate.value = cells[11].textContent.trim();
+            form.invoiceNo.value = cells[12].textContent.trim();
+            form.invoiceDate.value = cells[13].textContent.trim();
+            form.totalAmount.value = cells[14].textContent.trim();
+            form.department.value = cells[15].textContent.trim();
+            form.receivedBy.value = cells[16].textContent.trim();
+            form.acceptanceDate.value = cells[17].textContent.trim();
+            form.submittedToAccounts.value = cells[18].textContent.trim();
+            form.remarks.value = cells[19].textContent.trim();
 
             // Switch to edit mode
             document.getElementById('btnSaveStock').style.display = 'none';
@@ -291,24 +396,23 @@
             if (!editingStockRow) return;
 
             const form = document.getElementById('projectForm');
-            if (!form.srNo.value || !form.poNo.value) {
-                alert('SR NO. and PO NO. are required!');
+            if (!form.poNo.value) {
+                alert('PO NO. is required!');
                 return;
             }
 
             editingStockRow.innerHTML = `
-                <td>${form.srNo.value}</td>
                 <td>${form.poNo.value}</td>
                 <td>${form.poDate.value}</td>
                 <td>${form.deliveryPeriod.value}</td>
                 <td>${form.supplierName.value}</td>
                 <td>${form.materialName.value}</td>
+                <td>${form.uom.value}</td>
+                <td>${form.batchNumber.value}</td>
+                <td>${form.expiryDate.value}</td>
                 <td>${form.poQty.value}</td>
-                <td>${form.poUom.value}</td>
                 <td>${form.receivedQty.value}</td>
-                <td>${form.receivedUom.value}</td>
                 <td>${form.balanceQty.value}</td>
-                <td>${form.balanceUom.value}</td>
                 <td>${form.recDate.value}</td>
                 <td>${form.invoiceNo.value}</td>
                 <td>${form.invoiceDate.value}</td>
@@ -318,7 +422,7 @@
                 <td>${form.acceptanceDate.value}</td>
                 <td>${form.submittedToAccounts.value}</td>
                 <td>${form.remarks.value}</td>
-                <td><a href="#" style="color:var(--primary-blue);"><i class="fas fa-paperclip"></i> View</a></td>
+                <td><a href="#" download style="color:var(--primary-blue); white-space: nowrap;"><i class="fas fa-download"></i> Download</a></td>
                 <td>
                     <div class="action-icons">
                         <i class="fas fa-edit icon-edit" title="Edit" onclick="editStock(this)"></i>
@@ -351,6 +455,43 @@
         function saveStock() {
             alert('Stock entry saved successfully!');
             document.getElementById('projectForm').reset();
+        }
+
+        // ==================== EXPORT ====================
+        function exportStockData() {
+            const table = document.getElementById('stockTable');
+            const headers = [];
+            const headerCells = table.querySelectorAll('thead th');
+            headerCells.forEach((th, idx) => {
+                if (idx < headerCells.length - 1) { // exclude Action column
+                    headers.push(`"${th.textContent.trim()}"`);
+                }
+            });
+
+            let csv = headers.join(',') + '\n';
+            const rows = table.querySelectorAll('tbody tr');
+            rows.forEach(tr => {
+                const cells = tr.querySelectorAll('td');
+                const rowData = [];
+                cells.forEach((td, idx) => {
+                    if (idx < cells.length - 1) { // exclude Action column
+                        let text = td.textContent.trim().replace(/"/g, '""');
+                        if (idx === cells.length - 2) {
+                            text = text.replace(/Download/g, '').trim() || '-';
+                        }
+                        rowData.push(`"${text}"`);
+                    }
+                });
+                csv += rowData.join(',') + '\n';
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'stock_entry_export.csv';
+            a.click();
+            URL.revokeObjectURL(url);
         }
     </script>
 </body>

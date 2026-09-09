@@ -213,6 +213,13 @@
         .btn-secondary:hover {
             background-color: #5a6268;
         }
+        .btn-export {
+            background-color: #28a745;
+            border-color: #1e7e34;
+        }
+        .btn-export:hover {
+            background-color: #1e7e34;
+        }
 
         .badge.pending { background-color: #ffc107; color: #212529; }
         .badge.partially-paid { background-color: #17a2b8; }
@@ -319,7 +326,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="acceptance_material.html" class="nav-link">
-                                <i class="fas fa-clipboard-check"></i> Acceptance Material
+                                <i class="fas fa-clipboard-check"></i> User Acceptance Material
                             </a>
                         </li>
                     </ul>
@@ -340,9 +347,23 @@
                 <div class="finance-filters">
                     <h3><i class="fas fa-filter"></i> Filters</h3>
                     <div class="form-grid" style="grid-template-columns: repeat(4, 1fr);">
-                        <div class="form-group"><label>PO Number</label><input type="text" id="filter-po-no" placeholder="Search PO..."></div>
-                        <div class="form-group"><label>Project</label><input type="text" id="filter-project" placeholder="Search Project..."></div>
+                        <div class="form-group">
+                            <label>PO Number</label>
+                            <select id="filter-po-no" onchange="applyFilters()">
+                                <option value="">All</option>
+                                <option value="5655">5655</option>
+                                <option value="PO-1001">PO-1001</option>
+                                <option value="PO-1002">PO-1002</option>
+                                <option value="PO-1003">PO-1003</option>
+                                <option value="PO-1004">PO-1004</option>
+                                <option value="PO-1005">PO-1005</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Project Code</label><input type="text" id="filter-project-code" placeholder="Search Project Code..."></div>
+                        <div class="form-group"><label>Project Name</label><input type="text" id="filter-project-name" placeholder="Search Project Name..."></div>
                         <div class="form-group"><label>Supplier</label><input type="text" id="filter-supplier" placeholder="Search Supplier..."></div>
+                        <div class="form-group"><label>Item Code</label><input type="text" id="filter-item-code" placeholder="Search Item Code..."></div>
+                        <div class="form-group"><label>Item Name</label><input type="text" id="filter-item-name" placeholder="Search Item Name..."></div>
                         <div class="form-group">
                             <label>Payment Status</label>
                             <select id="filter-payment-status">
@@ -376,9 +397,14 @@
                         <div class="form-group"><label>Due Date To</label><input type="date" id="filter-date-to"></div>
                     </div>
                     <div class="filter-actions">
-                        <button class="btn btn-save" onclick="applyFilters()"><i class="fas fa-search"></i> Apply Filters</button>
+                        <button class="btn btn-save" onclick="applyFilters()"><i class="fas fa-search"></i> Apply</button>
                         <button class="btn btn-reset" onclick="clearFilters()"><i class="fas fa-times"></i> Clear</button>
                     </div>
+                </div>
+
+                <!-- Table Actions Bar -->
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+                    <button class="btn btn-export" onclick="exportFinanceData()"><i class="fas fa-file-export"></i> Export</button>
                 </div>
 
                 <!-- ========== PO LIST TABLE ========== -->
@@ -387,7 +413,10 @@
                         <thead>
                             <tr>
                                 <th>PO Number</th>
-                                <th>Project</th>
+                                <th>Project Code</th>
+                                <th>Project Name</th>
+                                <th>Item Code</th>
+                                <th>Item Name</th>
                                 <th>Supplier/Vendor</th>
                                 <th>PO Date</th>
                                 <th>PO Value (₹)</th>
@@ -423,7 +452,10 @@
                         <h4 class="form-section-heading"><i class="fas fa-info-circle"></i> PO Summary</h4>
                         <div class="form-grid" style="margin-bottom: 15px;">
                             <div class="form-group"><label>PO Number</label><input type="text" id="pmPoNo" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Project Name</label><input type="text" id="pmProject" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>Project Code</label><input type="text" id="pmProjectCode" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>Project Name</label><input type="text" id="pmProjectName" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>Item Code</label><input type="text" id="pmItemCode" class="readonly-field" readonly></div>
+                            <div class="form-group"><label>Item Name</label><input type="text" id="pmItemName" class="readonly-field" readonly></div>
                             <div class="form-group"><label>Supplier/Vendor</label><input type="text" id="pmSupplier" class="readonly-field" readonly></div>
                             <div class="form-group"><label>PO Date</label><input type="text" id="pmPoDate" class="readonly-field" readonly></div>
                             <div class="form-group"><label>Total PO Value</label><input type="text" id="pmTotalValue" class="readonly-field" readonly></div>
@@ -541,7 +573,18 @@
     // ==================== DATA ====================
     let financePOs = [
         {
-            poNo: 'PO-1001', project: 'ERP Implementation', supplier: 'ABC Tech Solutions',
+            poNo: '5655', projectCode: 'PRJ-006', projectName: 'Infrastructure Expansion', project: 'Infrastructure Expansion',
+            itemCode: 'ITM-606', itemName: 'Server Rack', supplier: 'Global Enterprises',
+            poDate: '20/08/2023', poValue: 150000, paymentTerm: 'Partial Payment',
+            amountPaid: 0, dueDate: '2023-09-20', paymentStatus: 'Pending', poStatus: 'OPEN',
+            closedBy: '', closedDate: '', closureReason: '',
+            reopenedBy: '', reopenedDate: '', reopenReason: '',
+            history: [],
+            notes: []
+        },
+        {
+            poNo: 'PO-1001', projectCode: 'PRJ-001', projectName: 'ERP Implementation', project: 'ERP Implementation',
+            itemCode: 'ITM-101', itemName: 'Laptop', supplier: 'ABC Tech Solutions',
             poDate: '15/01/2023', poValue: 2500000, paymentTerm: 'Full Payment',
             amountPaid: 0, dueDate: '2023-02-15', paymentStatus: 'Pending', poStatus: 'OPEN',
             closedBy: '', closedDate: '', closureReason: '',
@@ -550,7 +593,8 @@
             notes: []
         },
         {
-            poNo: 'PO-1002', project: 'Office Renovation', supplier: 'Office Supplies Co.',
+            poNo: 'PO-1002', projectCode: 'PRJ-002', projectName: 'Office Renovation', project: 'Office Renovation',
+            itemCode: 'ITM-202', itemName: 'Printer Paper', supplier: 'Office Supplies Co.',
             poDate: '01/03/2023', poValue: 100000, paymentTerm: '50% Payment',
             amountPaid: 50000, dueDate: '2023-03-15', paymentStatus: 'Partially Paid', poStatus: 'OPEN',
             closedBy: '', closedDate: '', closureReason: '',
@@ -563,7 +607,8 @@
             ]
         },
         {
-            poNo: 'PO-1003', project: 'Server Infrastructure', supplier: 'CloudNet India Pvt Ltd',
+            poNo: 'PO-1003', projectCode: 'PRJ-003', projectName: 'Server Infrastructure', project: 'Server Infrastructure',
+            itemCode: 'ITM-303', itemName: 'Server Rack', supplier: 'CloudNet India Pvt Ltd',
             poDate: '20/04/2023', poValue: 500000, paymentTerm: 'Partial Payment',
             amountPaid: 0, dueDate: '2023-05-20', paymentStatus: 'Overdue', poStatus: 'OPEN',
             closedBy: '', closedDate: '', closureReason: '',
@@ -574,7 +619,8 @@
             ]
         },
         {
-            poNo: 'PO-1004', project: 'Security System', supplier: 'SafeGuard Technologies',
+            poNo: 'PO-1004', projectCode: 'PRJ-004', projectName: 'Security System', project: 'Security System',
+            itemCode: 'ITM-404', itemName: 'CCTV Camera', supplier: 'SafeGuard Technologies',
             poDate: '05/06/2023', poValue: 75000, paymentTerm: 'Full Payment',
             amountPaid: 75000, dueDate: '2023-07-05', paymentStatus: 'Fully Paid', poStatus: 'CLOSED',
             closedBy: 'Anish', closedDate: '06/07/2023', closureReason: 'All payments completed and verified.',
@@ -588,7 +634,8 @@
             ]
         },
         {
-            poNo: 'PO-1005', project: 'Software Licenses', supplier: 'TechSoft Global',
+            poNo: 'PO-1005', projectCode: 'PRJ-005', projectName: 'Software Licenses', project: 'Software Licenses',
+            itemCode: 'ITM-505', itemName: 'Software License', supplier: 'TechSoft Global',
             poDate: '01/09/2026', poValue: 120000, paymentTerm: 'Full Payment',
             amountPaid: 120000, dueDate: '2026-09-15', paymentStatus: 'Fully Paid', poStatus: 'CLOSED',
             closedBy: 'Anish', closedDate: '05/09/2026', closureReason: 'Licenses delivered and payment cleared.',
@@ -649,7 +696,7 @@
         tbody.innerHTML = '';
 
         if (data.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="12" style="text-align:center; padding:20px; color:#888;">No records found matching the filters.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="15" style="text-align:center; padding:20px; color:#888;">No records found matching the filters.</td></tr>';
             return;
         }
 
@@ -658,7 +705,10 @@
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><a href="#" onclick="openPaymentManagement('${po.poNo}'); return false;" style="color:var(--primary-blue); font-weight:bold;">${po.poNo}</a></td>
-                <td>${po.project}</td>
+                <td>${po.projectCode}</td>
+                <td>${po.projectName}</td>
+                <td>${po.itemCode}</td>
+                <td>${po.itemName}</td>
                 <td>${po.supplier}</td>
                 <td>${po.poDate}</td>
                 <td style="text-align:right;">${formatCurrency(po.poValue)}</td>
@@ -681,7 +731,10 @@
     // ==================== FILTERS ====================
     function applyFilters() {
         const poNo = document.getElementById('filter-po-no').value.toLowerCase().trim();
-        const project = document.getElementById('filter-project').value.toLowerCase().trim();
+        const projCode = document.getElementById('filter-project-code').value.toLowerCase().trim();
+        const projName = document.getElementById('filter-project-name').value.toLowerCase().trim();
+        const itemCode = document.getElementById('filter-item-code').value.toLowerCase().trim();
+        const itemName = document.getElementById('filter-item-name').value.toLowerCase().trim();
         const supplier = document.getElementById('filter-supplier').value.toLowerCase().trim();
         const payStatus = document.getElementById('filter-payment-status').value;
         const poStatus = document.getElementById('filter-po-status').value;
@@ -691,7 +744,10 @@
 
         const filtered = financePOs.filter(po => {
             if (poNo && !po.poNo.toLowerCase().includes(poNo)) return false;
-            if (project && !po.project.toLowerCase().includes(project)) return false;
+            if (projCode && !po.projectCode.toLowerCase().includes(projCode)) return false;
+            if (projName && !po.projectName.toLowerCase().includes(projName)) return false;
+            if (itemCode && !po.itemCode.toLowerCase().includes(itemCode)) return false;
+            if (itemName && !po.itemName.toLowerCase().includes(itemName)) return false;
             if (supplier && !po.supplier.toLowerCase().includes(supplier)) return false;
             if (payStatus && po.paymentStatus !== payStatus) return false;
             if (poStatus && po.poStatus !== poStatus) return false;
@@ -705,7 +761,10 @@
 
     function clearFilters() {
         document.getElementById('filter-po-no').value = '';
-        document.getElementById('filter-project').value = '';
+        document.getElementById('filter-project-code').value = '';
+        document.getElementById('filter-project-name').value = '';
+        document.getElementById('filter-item-code').value = '';
+        document.getElementById('filter-item-name').value = '';
         document.getElementById('filter-supplier').value = '';
         document.getElementById('filter-payment-status').value = '';
         document.getElementById('filter-po-status').value = '';
@@ -751,7 +810,10 @@
         // Summary fields
         const remaining = currentPO.poValue - currentPO.amountPaid;
         document.getElementById('pmPoNo').value = currentPO.poNo;
-        document.getElementById('pmProject').value = currentPO.project;
+        document.getElementById('pmProjectCode').value = currentPO.projectCode;
+        document.getElementById('pmProjectName').value = currentPO.projectName;
+        document.getElementById('pmItemCode').value = currentPO.itemCode;
+        document.getElementById('pmItemName').value = currentPO.itemName;
         document.getElementById('pmSupplier').value = currentPO.supplier;
         document.getElementById('pmPoDate').value = currentPO.poDate;
         document.getElementById('pmTotalValue').value = formatCurrency(currentPO.poValue);
@@ -1057,6 +1119,22 @@
             `;
             tbody.appendChild(tr);
         });
+    }
+
+    // ==================== EXPORT ====================
+    function exportFinanceData() {
+        let csv = 'PO Number,Project Code,Project Name,Item Code,Item Name,Supplier/Vendor,PO Date,PO Value,Payment Term,Amount Paid,Balance,Due Date,Payment Status,PO Status\n';
+        financePOs.forEach(po => {
+            const balance = po.poValue - po.amountPaid;
+            csv += `"${po.poNo}","${po.projectCode}","${po.projectName}","${po.itemCode}","${po.itemName}","${po.supplier}","${po.poDate}",${po.poValue},"${po.paymentTerm}",${po.amountPaid},${balance},"${po.dueDate}","${po.paymentStatus}","${po.poStatus}"\n`;
+        });
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'finance_po_list.csv';
+        a.click();
+        URL.revokeObjectURL(url);
     }
 
     // ==================== INIT ====================
