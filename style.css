@@ -435,3 +435,210 @@ body {
 .icon-delete {
     background-color: #dc3545;
 }
+
+/* ======================== */
+/* Goods-In: Form Toggle    */
+/* ======================== */
+.form-wrapper {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.35s ease,
+                margin 0.35s ease;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.form-wrapper.visible {
+    max-height: 2000px;
+    opacity: 1;
+    margin-bottom: 20px;
+}
+
+/* ================================ */
+/* Goods-In: Multi-Value Chip UI    */
+/* ================================ */
+.multi-value-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    flex: 1;
+    padding: 4px 8px;
+    background-color: #f6fafd;
+    min-height: 32px;
+}
+
+.form-group.multi-value-field {
+    height: auto;
+    min-height: 32px;
+}
+
+.value-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: linear-gradient(135deg, #3c9fb6, #2d8a9e);
+    color: #fff;
+    padding: 2px 8px 2px 10px;
+    border-radius: 14px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    animation: chipIn 0.25s ease-out;
+    box-shadow: 0 1px 3px rgba(44, 114, 156, 0.25);
+}
+
+@keyframes chipIn {
+    from {
+        transform: scale(0.7);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.value-chip .remove-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.25);
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    line-height: 1;
+    transition: background-color 0.2s;
+}
+
+.value-chip .remove-chip:hover {
+    background-color: #dc3545;
+}
+
+/* Add value button */
+.add-value-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: transparent;
+    border: 1.5px dashed var(--primary-blue);
+    color: var(--primary-blue);
+    border-radius: 14px;
+    padding: 2px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.add-value-btn:hover {
+    background-color: var(--primary-blue);
+    color: #fff;
+    border-color: var(--primary-blue);
+}
+
+/* Inline input for adding values */
+.add-value-input-wrapper {
+    display: none;
+    align-items: center;
+    gap: 3px;
+}
+
+.add-value-input-wrapper.active {
+    display: inline-flex;
+}
+
+.add-value-input {
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-size: 11px;
+    outline: none;
+    width: 120px;
+    height: 22px;
+    background-color: #fff;
+}
+
+.add-value-input:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 2px rgba(59, 138, 178, 0.15);
+}
+
+.add-value-confirm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.2s;
+}
+
+.add-value-confirm:hover {
+    background-color: #1e7e34;
+}
+
+.add-value-cancel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.2s;
+}
+
+.add-value-cancel:hover {
+    background-color: #dc3545;
+}
+
+/* ================================ */
+/* Goods-In: Add New Entry Button   */
+/* ================================ */
+.btn-add-entry {
+    background-color: var(--primary-blue);
+    border-color: var(--header-blue);
+    color: #fff;
+}
+
+.btn-add-entry:hover {
+    background-color: var(--header-blue);
+}
+
+/* Table multi-value cell */
+.table-multi-values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+}
+
+.table-value-pill {
+    display: inline-block;
+    background-color: #e8f4f8;
+    color: #2c729c;
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 500;
+    border: 1px solid #c7dfe9;
+    white-space: nowrap;
+}
