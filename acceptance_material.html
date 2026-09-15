@@ -379,7 +379,17 @@
                     <div class="acceptance-filters">
                         <h3><i class="fas fa-filter"></i> Filters</h3>
                         <div class="form-grid" style="grid-template-columns: repeat(4, 1fr);">
-                            <div class="form-group"><label>PO Number</label><input type="text" id="f-poNo" placeholder="Search PO..."></div>
+                            <div class="form-group">
+                                <label>PO Number</label>
+                                <select id="f-poNo" onchange="autoPopulateFilters()">
+                                    <option value="">All</option>
+                                    <option value="PO-1001">PO-1001</option>
+                                    <option value="PO-1002">PO-1002</option>
+                                    <option value="PO-1003">PO-1003</option>
+                                    <option value="PO-1004">PO-1004</option>
+                                    <option value="PO-1005">PO-1005</option>
+                                </select>
+                            </div>
                             <div class="form-group"><label>PR Number</label><input type="text" id="f-prNo" placeholder="Search PR..."></div>
                             <div class="form-group"><label>GRN Number</label><input type="text" id="f-grnNo" placeholder="Search GRN..."></div>
                             <div class="form-group"><label>Vendor</label><input type="text" id="f-vendor" placeholder="Search Vendor..."></div>
@@ -833,6 +843,27 @@
         sortData();
         currentPage = 1;
         renderTable();
+    }
+
+    function autoPopulateFilters() {
+        const poNo = document.getElementById('f-poNo').value;
+        if (poNo) {
+            const item = acceptanceData.find(d => d.poNo === poNo);
+            if (item) {
+                document.getElementById('f-prNo').value = item.prNo || '';
+                document.getElementById('f-vendor').value = item.vendor || '';
+                document.getElementById('f-project').value = item.projectCode || '';
+                document.getElementById('f-dept').value = item.department || '';
+                document.getElementById('f-reqUser').value = item.reqUser || '';
+            }
+        } else {
+            document.getElementById('f-prNo').value = '';
+            document.getElementById('f-vendor').value = '';
+            document.getElementById('f-project').value = '';
+            document.getElementById('f-dept').value = '';
+            document.getElementById('f-reqUser').value = '';
+        }
+        applyFilters();
     }
 
     function clearFilters() {

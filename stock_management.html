@@ -16,19 +16,23 @@
             border-bottom: 1px solid #eee;
             margin-top: 20px;
         }
+
         .section-title:first-child {
             margin-top: 0;
         }
+
         .readonly-input {
             background-color: #e9ecef !important;
             cursor: not-allowed;
             color: #6c757d;
         }
+
         .btn-export {
             background-color: #28a745;
             border-color: #1e7e34;
             color: white;
         }
+
         .btn-export:hover {
             background-color: #1e7e34;
         }
@@ -76,8 +80,8 @@
                                 <li><a href="#" class="sub-nav-link">Item Master</a></li>
                                 <li><a href="#" class="sub-nav-link">Supplier Master</a></li>
                                 <li><a href="index.html" class="sub-nav-link">
-                                    Project Master
-                                </a></li>
+                                        Project Master
+                                    </a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
@@ -130,57 +134,79 @@
                                 <label>PO NO.</label>
                                 <select name="poNo" id="poNoSelect" onchange="populatePODetails()">
                                     <option value="">Select PO...</option>
-                                    <option value="5655">5655</option>
+
                                     <option value="PO-1001">PO-1001</option>
                                     <option value="PO-1002">PO-1002</option>
                                 </select>
                             </div>
-                            <div class="form-group"><label>PO DATE</label><input type="date" name="poDate" readonly class="readonly-input"></div>
-                            <div class="form-group"><label>Delivery Period</label><input type="text" name="deliveryPeriod" readonly class="readonly-input"></div>
-                            
-                            <div class="form-group"><label>SUPPLIER NAME</label><input type="text" name="supplierName" readonly class="readonly-input"></div>
-                            <div class="form-group"><label>MATERIAL NAME</label><input type="text" name="materialName" readonly class="readonly-input"></div>
-                            <div class="form-group"><label>PO QTY</label><input type="number" name="poQty" readonly class="readonly-input"></div>
-                            
-                            <div class="form-group"><label>INVOICE NO</label><input type="text" name="invoiceNo" readonly class="readonly-input"></div>
-                            <div class="form-group"><label>TOTAL AMOUNT</label><input type="number" name="totalAmount" step="0.01" readonly class="readonly-input"></div>
-                            <div class="form-group"><label>DEPARTMENT</label><input type="text" name="department" readonly class="readonly-input"></div>
+                            <div class="form-group"><label>PO DATE</label><input type="date" name="poDate" readonly
+                                    class="readonly-input"></div>
+                            <div class="form-group"><label>Delivery Period</label><input type="text"
+                                    name="deliveryPeriod" readonly class="readonly-input"></div>
+
+                            <div class="form-group"><label>SUPPLIER NAME</label><input type="text" name="supplierName"
+                                    readonly class="readonly-input"></div>
+                            <div class="form-group"><label>MATERIAL NAME</label><input type="text" name="materialName"
+                                    readonly class="readonly-input"></div>
+                            <div class="form-group"><label>PO QTY</label><input type="number" name="poQty" readonly
+                                    class="readonly-input"></div>
+
+                            <div class="form-group"><label>INVOICE NO</label><input type="text" name="invoiceNo"
+                                    readonly class="readonly-input"></div>
+                            <div class="form-group"><label>TOTAL AMOUNT</label><input type="number" name="totalAmount"
+                                    step="0.01" readonly class="readonly-input"></div>
+                            <div class="form-group"><label>DEPARTMENT</label><input type="text" name="department"
+                                    readonly class="readonly-input"></div>
                         </div>
 
                         <h3 class="section-title">Stock Entry (Manual)</h3>
                         <div class="form-grid">
-                            <div class="form-group"><label>RECEIVED QTY</label><input type="number" name="receivedQty" oninput="calculateBalanceQty()"></div>
-                            <div class="form-group"><label>BALANCE QTY</label><input type="number" name="balanceQty" readonly class="readonly-input"></div>
+                            <div class="form-group"><label>RECEIVED QTY</label><input type="number" name="receivedQty"
+                                    oninput="calculateBalanceQty()"></div>
+                            <div class="form-group"><label>BALANCE QTY</label><input type="number" name="balanceQty"
+                                    readonly class="readonly-input"></div>
                             <div class="form-group"><label>UOM</label><input type="text" name="uom"></div>
-                            
-                            <div class="form-group"><label>BATCH NUMBER</label><input type="text" name="batchNumber"></div>
-                            <div class="form-group"><label>EXPIRY DATE</label><input type="date" name="expiryDate"></div>
+
+                            <div class="form-group"><label>BATCH NUMBER</label><input type="text" name="batchNumber">
+                            </div>
+                            <div class="form-group"><label>EXPIRY DATE</label><input type="date" name="expiryDate">
+                            </div>
                             <div class="form-group"><label>REC DATE</label><input type="date" name="recDate"></div>
-                            
-                            <div class="form-group"><label>INVOICE DATE</label><input type="date" name="invoiceDate"></div>
-                            <div class="form-group"><label>RECEIVED BY</label><input type="text" name="receivedBy"></div>
-                            <div class="form-group"><label>ACCEPTANCE DATE</label><input type="date" name="acceptanceDate"></div>
-                            
-                            <div class="form-group"><label>SUBMITTED TO ACCTS</label><input type="text" name="submittedToAccounts"></div>
+
+                            <div class="form-group"><label>INVOICE DATE</label><input type="date" name="invoiceDate">
+                            </div>
+                            <div class="form-group"><label>RECEIVED BY</label><input type="text" name="receivedBy">
+                            </div>
+                            <div class="form-group"><label>ACCEPTANCE DATE</label><input type="date"
+                                    name="acceptanceDate"></div>
+
+                            <div class="form-group"><label>SUBMITTED TO ACCTS</label><input type="text"
+                                    name="submittedToAccounts"></div>
                             <div class="form-group"><label>REMARKS</label><input type="text" name="remarks"></div>
-                            <div class="form-group"><label>Attachment</label><input type="file" name="attachment" style="padding-top: 5px;"></div>
+                            <div class="form-group"><label>Attachment</label><input type="file" name="attachment"
+                                    style="padding-top: 5px;"></div>
                         </div>
 
                         <!-- Actions -->
                         <div class="form-actions">
                             <button type="button" id="btnSaveStock" class="btn btn-save" onclick="saveStock()"><i
                                     class="fas fa-save"></i> Save</button>
-                            <button type="button" id="btnUpdateStock" class="btn btn-update" disabled onclick="updateStock()"><i class="fas fa-file-alt"></i>
+                            <button type="button" id="btnUpdateStock" class="btn btn-update" disabled
+                                onclick="updateStock()"><i class="fas fa-file-alt"></i>
                                 Update</button>
-                            <button type="button" id="btnCancelStock" class="btn btn-reset" style="display:none; background-color:#6c757d; border-color:#5a6268;" onclick="cancelEditStock()"><i class="fas fa-times"></i> Cancel</button>
-                            <button type="reset" class="btn btn-reset" onclick="cancelEditStock()"><i class="fas fa-sync-alt"></i> Reset</button>
+                            <button type="button" id="btnCancelStock" class="btn btn-reset"
+                                style="display:none; background-color:#6c757d; border-color:#5a6268;"
+                                onclick="cancelEditStock()"><i class="fas fa-times"></i> Cancel</button>
+                            <button type="reset" class="btn btn-reset" onclick="cancelEditStock()"><i
+                                    class="fas fa-sync-alt"></i> Reset</button>
                         </div>
                     </form>
                 </div>
 
                 <!-- Table Actions Bar -->
                 <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
-                    <button type="button" class="btn btn-export" onclick="exportStockData()"><i class="fas fa-file-export"></i> Export</button>
+                    <button type="button" class="btn btn-export" onclick="exportStockData()"><i
+                            class="fas fa-file-export"></i> Export</button>
                 </div>
 
                 <!-- Data Table -->
@@ -234,7 +260,8 @@
                                 <td>2023-02-12</td>
                                 <td>2023-02-15</td>
                                 <td>Fully Delivered</td>
-                                <td><a href="#" download style="color:var(--primary-blue); white-space: nowrap;"><i class="fas fa-download"></i> Download</a></td>
+                                <td><a href="#" download style="color:var(--primary-blue); white-space: nowrap;"><i
+                                            class="fas fa-download"></i> Download</a></td>
                                 <td>
                                     <div class="action-icons">
                                         <i class="fas fa-edit icon-edit" title="Edit" onclick="editStock(this)"></i>
@@ -281,16 +308,7 @@
     <script>
         // Mock Data for PO auto-population
         const poDataMap = {
-            '5655': {
-                poDate: '2023-08-20',
-                deliveryPeriod: '45 Days',
-                supplierName: 'Global Enterprises',
-                materialName: 'Server Rack',
-                poQty: 10,
-                invoiceNo: 'GE-9901',
-                totalAmount: 150000.00,
-                department: 'Infrastructure'
-            },
+
             'PO-1001': {
                 poDate: '2023-01-15',
                 deliveryPeriod: '30 Days',

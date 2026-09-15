@@ -1,20 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
     const budgetInput = document.getElementById('budget');
+    const budgetExtensionInput = document.getElementById('budgetExtension');
     const utilizedInput = document.getElementById('utilized');
     const availableInput = document.getElementById('available');
 
     function calculateAvailable() {
         if (!budgetInput || !utilizedInput || !availableInput) return;
         const budget = parseFloat(budgetInput.value) || 0;
+        const extension = parseFloat(budgetExtensionInput ? budgetExtensionInput.value : 0) || 0;
         const utilized = parseFloat(utilizedInput.value) || 0;
-        const available = budget - utilized;
+        const available = (budget + extension) - utilized;
         availableInput.value = available.toFixed(2);
     }
 
-    if (budgetInput && utilizedInput) {
-        budgetInput.addEventListener('input', calculateAvailable);
-        utilizedInput.addEventListener('input', calculateAvailable);
-    }
+    if (budgetInput) budgetInput.addEventListener('input', calculateAvailable);
+    if (budgetExtensionInput) budgetExtensionInput.addEventListener('input', calculateAvailable);
+    if (utilizedInput) utilizedInput.addEventListener('input', calculateAvailable);
 
     // Initial dummy data for the table
     const dummyData = [
@@ -22,13 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
             code: 'PRJ-001', name: 'ERP Implementation',
             budgetYear: '2023-2024',
             manager: 'John Doe', start: '2023-01-10', end: '2023-12-31',
-            budget: '50000.00', utilized: '20000.00', available: '30000.00', status: 'Active'
+            budget: '50000.00', extension: '0.00', utilized: '20000.00', available: '30000.00', status: 'Active'
         },
         {
             code: 'PRJ-002', name: 'Office Renovation',
             budgetYear: '2023-2024',
             manager: 'Jane Smith', start: '2023-05-01', end: '2023-08-15',
-            budget: '15000.00', utilized: '15000.00', available: '0.00', status: 'Completed'
+            budget: '15000.00', extension: '0.00', utilized: '15000.00', available: '0.00', status: 'Completed'
         }
     ];
 
@@ -50,6 +51,7 @@ function addProjectToTable(proj) {
         <td>${proj.start}</td>
         <td>${proj.end}</td>
         <td>${proj.budget}</td>
+        <td>${proj.extension !== undefined ? proj.extension : '0.00'}</td>
         <td>${proj.utilized}</td>
         <td>${proj.available}</td>
         <td><span class="badge ${proj.status.toLowerCase()}">${proj.status}</span></td>
@@ -80,6 +82,7 @@ function saveProject() {
         start: form.startDate.value,
         end: form.endDate.value,
         budget: parseFloat(form.budget.value || 0).toFixed(2),
+        extension: parseFloat(form.budgetExtension ? form.budgetExtension.value : 0).toFixed(2),
         utilized: parseFloat(form.utilized.value || 0).toFixed(2),
         available: parseFloat(form.available.value || 0).toFixed(2),
         status: form.status.value
