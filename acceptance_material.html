@@ -14,10 +14,11 @@
             padding: 15px;
             border: 1px solid var(--border-color);
             border-radius: 4px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
         }
         .acceptance-filters h3 {
-            margin-bottom: 10px;
+            margin-bottom: 0;
             font-size: 14px;
             color: var(--header-blue);
         }
@@ -25,6 +26,158 @@
             margin-top: 10px;
             display: flex;
             justify-content: flex-end;
+            gap: 8px;
+        }
+
+        /* Filter collapsible header */
+        .filter-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            margin-bottom: 10px;
+        }
+        .filter-header-bar h3 {
+            margin: 0;
+            font-size: 14px;
+            color: var(--header-blue);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .filter-toggle-text {
+            font-size: 12px;
+            color: var(--header-blue);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: #eef6f9;
+            transition: background 0.2s;
+        }
+        .filter-toggle-text:hover {
+            background: #dbeaf0;
+        }
+
+        /* ==================== STATUS TABS BAR ==================== */
+        .status-tabs-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px 14px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .status-tabs-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .status-tab {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a5568;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+            user-select: none;
+        }
+
+        .status-tab:hover {
+            background: #edf2f7;
+            color: #1a202c;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
+        }
+
+        /* Active states */
+        .status-tab.active {
+            color: #ffffff !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .status-tab.tab-all.active {
+            background: linear-gradient(135deg, #2c729c, #3b8ab2);
+            border-color: #2c729c;
+        }
+
+        .status-tab.tab-accepted.active {
+            background: linear-gradient(135deg, #16a34a, #28a745);
+            border-color: #15803d;
+        }
+
+        .status-tab.tab-pending.active {
+            background: linear-gradient(135deg, #d97706, #f59e0b);
+            border-color: #b45309;
+        }
+
+        .status-tab.tab-rejected.active {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            border-color: #b91c1c;
+        }
+
+        /* Tab Counter Badges */
+        .tab-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px 8px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 12px;
+            min-width: 22px;
+            line-height: 1.2;
+            transition: all 0.2s ease;
+        }
+
+        .status-tab.tab-all:not(.active) .tab-badge {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .status-tab.tab-accepted:not(.active) .tab-badge {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-tab.tab-pending:not(.active) .tab-badge {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-tab.tab-rejected:not(.active) .tab-badge {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-tab.active .tab-badge {
+            background: rgba(255, 255, 255, 0.28);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .status-tabs-actions {
+            display: flex;
+            align-items: center;
             gap: 8px;
         }
 
@@ -56,14 +209,11 @@
         .badge.pending { background-color: #ffc107; color: #212529; }
         .badge.accepted { background-color: #28a745; }
         .badge.rejected { background-color: #dc3545; }
-        .badge.partially-accepted { background-color: #17a2b8; }
-        .badge.under-review { background-color: #6f42c1; }
         .badge.completed { background-color: #007bff; }
         .badge.inward { background-color: #28a745; }
         .badge.partial { background-color: #fd7e14; }
         .badge.open { background-color: #28a745; }
         .badge.closed { background-color: #6c757d; }
-        .badge.overdue { background-color: #dc3545; }
 
         /* Action Buttons in table */
         .action-btn-group {
@@ -350,14 +500,14 @@
                                 <i class="fas fa-cubes"></i> Goods-In
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="finance_management.html" class="nav-link">
-                                <i class="fas fa-coins"></i> Finance Approval
-                            </a>
-                        </li>
                         <li class="nav-item active">
                             <a href="acceptance_material.html" class="nav-link active">
                                 <i class="fas fa-clipboard-check"></i> User Acceptance Material
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="finance_management.html" class="nav-link">
+                                <i class="fas fa-coins"></i> Finance Approval
                             </a>
                         </li>
                     </ul>
@@ -377,61 +527,109 @@
 
                     <!-- Filters -->
                     <div class="acceptance-filters">
-                        <h3><i class="fas fa-filter"></i> Filters</h3>
-                        <div class="form-grid" style="grid-template-columns: repeat(4, 1fr);">
-                            <div class="form-group">
-                                <label>PO Number</label>
-                                <select id="f-poNo" onchange="autoPopulateFilters()">
-                                    <option value="">All</option>
-                                    <option value="PO-1001">PO-1001</option>
-                                    <option value="PO-1002">PO-1002</option>
-                                    <option value="PO-1003">PO-1003</option>
-                                    <option value="PO-1004">PO-1004</option>
-                                    <option value="PO-1005">PO-1005</option>
-                                </select>
-                            </div>
-                            <div class="form-group"><label>PR Number</label><input type="text" id="f-prNo" placeholder="Search PR..."></div>
-                            <div class="form-group"><label>GRN Number</label><input type="text" id="f-grnNo" placeholder="Search GRN..."></div>
-                            <div class="form-group"><label>Vendor</label><input type="text" id="f-vendor" placeholder="Search Vendor..."></div>
-                            <div class="form-group"><label>Project Code</label><input type="text" id="f-project" placeholder="Search Project Code..."></div>
-                            <div class="form-group"><label>Department</label><input type="text" id="f-dept" placeholder="Search Department..."></div>
-                            <div class="form-group"><label>Requesting User</label><input type="text" id="f-reqUser" placeholder="Search User..."></div>
-                            <div class="form-group"><label>Material</label><input type="text" id="f-material" placeholder="Search Material..."></div>
-                            <div class="form-group"><label>Item Code</label><input type="text" id="f-itemCode" placeholder="Search Item Code..."></div>
-                            <div class="form-group">
-                                <label>Acceptance Status</label>
-                                <select id="f-status">
-                                    <option value="">All</option>
-                                    <option value="Pending">Pending</option>
-                                    <option value="Accepted">Accepted</option>
-                                    <option value="Rejected">Rejected</option>
-                                    <option value="Partially Accepted">Partially Accepted</option>
-                                    <option value="Under Review">Under Review</option>
-                                </select>
-                            </div>
-                            <div class="form-group"><label>GRN Date From</label><input type="date" id="f-grnDateFrom"></div>
-                            <div class="form-group"><label>GRN Date To</label><input type="date" id="f-grnDateTo"></div>
-                            <div class="form-group"><label>Acceptance Date From</label><input type="date" id="f-accDateFrom"></div>
-                            <div class="form-group"><label>Acceptance Date To</label><input type="date" id="f-accDateTo"></div>
-                            <div class="form-group">
-                                <label>Pending / Overdue</label>
-                                <select id="f-pendingOverdue">
-                                    <option value="">All</option>
-                                    <option value="Pending">Pending Only</option>
-                                    <option value="Overdue">Overdue Only</option>
-                                </select>
-                            </div>
-                            <div class="form-group"><label>Store Location</label><input type="text" id="f-storeLocation" placeholder="Search Location..."></div>
+                        <div class="filter-header-bar" onclick="toggleFilterCard()">
+                            <h3><i class="fas fa-filter"></i> Filters</h3>
+                            <span class="filter-toggle-text" id="filterToggleBtn"><i class="fas fa-chevron-up"></i> Collapse Filters</span>
                         </div>
-                        <div class="filter-actions">
-                            <button class="btn btn-save" onclick="applyFilters()"><i class="fas fa-search"></i> Apply</button>
-                            <button class="btn btn-reset" onclick="clearFilters()"><i class="fas fa-times"></i> Clear</button>
+                        <div id="filterBody">
+                            <div class="form-grid" style="grid-template-columns: repeat(4, 1fr);">
+                                <div class="form-group">
+                                    <label>PO Number</label>
+                                    <input type="text" id="f-poNo" list="poList" placeholder="Search PO..." oninput="autoPopulateFromPo()">
+                                    <datalist id="poList">
+                                        <option value="PO-1001">
+                                        <option value="PO-1002">
+                                        <option value="PO-1003">
+                                        <option value="PO-1004">
+                                        <option value="PO-1005">
+                                    </datalist>
+                                </div>
+                                <div class="form-group">
+                                    <label>PR Number</label>
+                                    <input type="text" id="f-prNo" list="prList" placeholder="Search PR..." oninput="autoPopulateFromPr()">
+                                    <datalist id="prList">
+                                        <option value="PR-501">
+                                        <option value="PR-502">
+                                        <option value="PR-503">
+                                        <option value="PR-504">
+                                        <option value="PR-506">
+                                    </datalist>
+                                </div>
+                                <div class="form-group">
+                                    <label>PO Status</label>
+                                    <select id="f-poStatus" onchange="applyFilters()">
+                                        <option value="">All</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Closed">Closed</option>
+                                    </select>
+                                </div>
+                                <div class="form-group"><label>GRN Number</label><input type="text" id="f-grnNo" placeholder="Search GRN..."></div>
+                                <div class="form-group"><label>Vendor</label><input type="text" id="f-vendor" placeholder="Search Vendor..."></div>
+                                <div class="form-group"><label>Project Code</label><input type="text" id="f-project" placeholder="Search Project Code..."></div>
+                                <div class="form-group"><label>Department</label><input type="text" id="f-dept" placeholder="Search Department..."></div>
+                                <div class="form-group"><label>Requesting User</label><input type="text" id="f-reqUser" placeholder="Search User..."></div>
+                                <div class="form-group">
+                                    <label>Material</label>
+                                    <input type="text" id="f-material" list="materialList" placeholder="Search Material(s)..." oninput="applyFilters()">
+                                    <datalist id="materialList">
+                                        <option value="Laptop">
+                                        <option value="Monitor">
+                                        <option value="Server Rack">
+                                        <option value="Power Strip">
+                                        <option value="Network Switch">
+                                        <option value="Patch Panel">
+                                        <option value="Cat6 Cable Roll">
+                                        <option value="RJ45 Connectors">
+                                        <option value="Wireless Mouse">
+                                        <option value="Keyboard">
+                                    </datalist>
+                                </div>
+                                <div class="form-group"><label>Item Code</label><input type="text" id="f-itemCode" placeholder="Search Item Code..."></div>
+                                <div class="form-group">
+                                    <label>Acceptance Status</label>
+                                    <select id="f-status" onchange="onStatusFilterChange()">
+                                        <option value="">All</option>
+                                        <option value="Accepted">Accepted</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Rejected">Rejected</option>
+                                    </select>
+                                </div>
+                                <div class="form-group"><label>Store Location</label><input type="text" id="f-storeLocation" placeholder="Search Location..."></div>
+                                <div class="form-group"><label>GRN Date From</label><input type="date" id="f-grnDateFrom"></div>
+                                <div class="form-group"><label>GRN Date To</label><input type="date" id="f-grnDateTo"></div>
+                                <div class="form-group"><label>Acceptance Date From</label><input type="date" id="f-accDateFrom"></div>
+                                <div class="form-group"><label>Acceptance Date To</label><input type="date" id="f-accDateTo"></div>
+                            </div>
+                            <div class="filter-actions">
+                                <button class="btn btn-save" onclick="applyFilters()"><i class="fas fa-search"></i> Apply</button>
+                                <button class="btn btn-reset" onclick="clearFilters()"><i class="fas fa-times"></i> Clear</button>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Table Actions Bar -->
-                    <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
-                        <button class="btn btn-export" onclick="exportData()"><i class="fas fa-file-export"></i> Export</button>
+                    <!-- Status Tabs & Actions Bar -->
+                    <div class="status-tabs-container">
+                        <div class="status-tabs-group" role="tablist">
+                            <button type="button" class="status-tab tab-all active" data-status="All" onclick="switchStatusTab('All')" role="tab" aria-selected="true" title="Show all material records">
+                                <i class="fas fa-layer-group"></i> All
+                                <span class="tab-badge" id="badge-all">0</span>
+                            </button>
+                            <button type="button" class="status-tab tab-accepted" data-status="Accepted" onclick="switchStatusTab('Accepted')" role="tab" aria-selected="false" title="Show accepted material records">
+                                <i class="fas fa-check-circle"></i> Accepted
+                                <span class="tab-badge" id="badge-accepted">0</span>
+                            </button>
+                            <button type="button" class="status-tab tab-pending" data-status="Pending" onclick="switchStatusTab('Pending')" role="tab" aria-selected="false" title="Show pending material records">
+                                <i class="fas fa-clock"></i> Pending
+                                <span class="tab-badge" id="badge-pending">0</span>
+                            </button>
+                            <button type="button" class="status-tab tab-rejected" data-status="Rejected" onclick="switchStatusTab('Rejected')" role="tab" aria-selected="false" title="Show rejected material records">
+                                <i class="fas fa-times-circle"></i> Rejected
+                                <span class="tab-badge" id="badge-rejected">0</span>
+                            </button>
+                        </div>
+                        <div class="status-tabs-actions">
+                            <button class="btn btn-export" onclick="exportData()"><i class="fas fa-file-export"></i> Export</button>
+                        </div>
                     </div>
 
                     <!-- Data Table -->
@@ -441,6 +639,7 @@
                                 <tr>
                                     <th class="sortable" data-col="accId">Acceptance ID</th>
                                     <th class="sortable" data-col="poNo">PO Number</th>
+                                    <th class="sortable" data-col="poStatus">PO Status</th>
                                     <th class="sortable" data-col="poDate">PO Date</th>
                                     <th class="sortable" data-col="prNo">PR Number</th>
                                     <th class="sortable" data-col="projectCode">Project Code</th>
@@ -584,7 +783,6 @@
                         <div class="form-actions" style="margin-top: 10px;">
                             <button class="btn btn-success" onclick="acceptMaterial()"><i class="fas fa-check-circle"></i> Accept</button>
                             <button class="btn btn-danger" onclick="rejectMaterial()"><i class="fas fa-times-circle"></i> Reject</button>
-                            <button class="btn btn-secondary" onclick="markUnderReview()"><i class="fas fa-search"></i> Mark Under Review</button>
                         </div>
                     </div>
 
@@ -597,6 +795,44 @@
                     </div>
                 </div>
             </main>
+        </div>
+    </div>
+
+    <!-- ========== CONFIRMATION MODAL ========== -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-box" style="width: 450px;">
+            <h3 id="confirmModalTitle" style="display: flex; align-items: center; gap: 8px;"><i class="fas fa-question-circle"></i> Confirm Action</h3>
+            <p id="confirmModalMessage" style="font-size: 13px; color: #555; margin-bottom: 15px;"></p>
+            <div id="confirmModalReasonGroup" style="display: none; margin-bottom: 15px;">
+                <label style="font-size: 12px; font-weight: bold; color: #555; display: block; margin-bottom: 5px;">Reason <span style="color: #dc3545;">*</span></label>
+                <select id="confirmModalReasonSelect" style="width: 100%; padding: 7px 10px; border: 1px solid #ccc; border-radius: 3px; font-size: 12px; margin-bottom: 8px;">
+                    <option value="">Select Reason...</option>
+                    <option value="Quality Issue">Quality Issue</option>
+                    <option value="Specification Mismatch">Specification Mismatch</option>
+                    <option value="Damaged Goods">Damaged Goods</option>
+                    <option value="Wrong Item">Wrong Item</option>
+                    <option value="Expired Material">Expired Material</option>
+                    <option value="Short Quantity">Short Quantity</option>
+                    <option value="Other">Other</option>
+                </select>
+                <textarea id="confirmModalReasonText" rows="2" placeholder="Additional remarks (optional)..." style="width: 100%; border: 1px solid #ccc; padding: 7px 10px; font-size: 12px; border-radius: 3px; font-family: inherit; resize: none;"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeConfirmModal()"><i class="fas fa-times"></i> Cancel</button>
+                <button class="btn" id="confirmModalBtn" onclick="executeConfirmAction()"><i class="fas fa-check"></i> Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SUCCESS/ALERT MODAL ========== -->
+    <div class="modal-overlay" id="alertModal">
+        <div class="modal-box" style="width: 400px; text-align: center;">
+            <div id="alertModalIcon" style="font-size: 48px; margin-bottom: 12px;"></div>
+            <h3 id="alertModalTitle" style="border-bottom: none; padding-bottom: 0;"></h3>
+            <p id="alertModalMessage" style="font-size: 13px; color: #555; margin: 10px 0 20px;"></p>
+            <div class="modal-actions" style="justify-content: center;">
+                <button class="btn btn-save" onclick="closeAlertModal()"><i class="fas fa-check"></i> OK</button>
+            </div>
         </div>
     </div>
 
@@ -629,8 +865,8 @@
             accId: 'ACC-001', poNo: 'PO-1001', poDate: '2023-01-15', prNo: 'PR-501',
             projectCode: 'PRJ-001', project: 'ERP Implementation', department: 'IT', reqUser: 'John Doe',
             vendor: 'ABC Tech Solutions', vendorCode: 'V-1001',
-            itemCode: 'ITM-101', materialName: 'Laptop', description: 'Dell Latitude 5530',
-            specification: 'i7, 16GB RAM, 512GB SSD', orderedQty: 50, receivedQty: 50,
+            itemCode: 'ITM-101, ITM-102', materialName: 'Laptop, Monitor', description: 'Dell Latitude 5530, Dell 24" FHD Monitor',
+            specification: 'i7, 16GB RAM, 512GB SSD / 1080p IPS', orderedQty: 50, receivedQty: 50,
             prevReceivedQty: 0, uom: 'Nos', grnNo: 'GRN-001', grnDate: '2023-02-10',
             stockInwardStatus: 'Completed', accStatus: 'Accepted', accDueDate: '2023-02-17',
             acceptedRejectedBy: 'John Doe', acceptedQty: 50,
@@ -644,102 +880,160 @@
             ]
         },
         {
-            accId: 'ACC-002', poNo: 'PO-1002', poDate: '2023-03-01', prNo: 'PR-502',
-            projectCode: 'PRJ-002', project: 'Office Renovation', department: 'Operations', reqUser: 'Jane Smith',
-            vendor: 'Office Supplies Co.', vendorCode: 'V-1002',
-            itemCode: 'ITM-202', materialName: 'Printer Paper', description: 'A4 Paper 80 GSM',
-            specification: '500 Sheets per Ream', orderedQty: 100, receivedQty: 80,
-            prevReceivedQty: 0, uom: 'Boxes', grnNo: 'GRN-002', grnDate: '2023-03-10',
-            stockInwardStatus: 'Partial', accStatus: 'Partially Accepted', accDueDate: '2023-03-17',
-            acceptedRejectedBy: 'Jane Smith', acceptedQty: 75,
-            batchNo: 'BATCH-2023-002', mfgDate: '2023-02-15', expiryDate: '2025-02-15',
-            storeLocation: 'Warehouse B - Rack 3',
-            poStatus: 'Open', costCentre: 'CC-OPS-02', deliveryLoc: 'Main Office - Store Room',
-            payTerms: 'Net 45', poTotalValue: 16000,
-            history: [
-                { date: '10/03/2023, 09:00 AM', action: 'Material Received', by: 'Store Keeper', detail: 'GRN-002 created. 80 Boxes received (ordered 100).' },
-                { date: '12/03/2023, 11:00 AM', action: 'Partially Accepted', by: 'Jane Smith', detail: '75 Boxes accepted, 5 Boxes rejected due to damage.' }
-            ]
-        },
-        {
-            accId: 'ACC-003', poNo: 'PO-1003', poDate: '2023-04-20', prNo: 'PR-503',
+            accId: 'ACC-002', poNo: 'PO-1003', poDate: '2023-04-20', prNo: 'PR-503',
             projectCode: 'PRJ-003', project: 'Server Infrastructure', department: 'IT', reqUser: 'Rahul Kumar',
             vendor: 'CloudNet India Pvt Ltd', vendorCode: 'V-1003',
-            itemCode: 'ITM-303', materialName: 'Server Rack', description: '42U Server Rack',
-            specification: '42U, 600mm x 1000mm, with PDU', orderedQty: 5, receivedQty: 5,
+            itemCode: 'ITM-303, ITM-304', materialName: 'Server Rack, Power Strip', description: '42U Server Rack, 16A Rack PDU',
+            specification: '42U, 600mm x 1000mm / 8-Way PDU', orderedQty: 5, receivedQty: 5,
             prevReceivedQty: 0, uom: 'Nos', grnNo: 'GRN-003', grnDate: '2023-05-15',
             stockInwardStatus: 'Completed', accStatus: 'Pending', accDueDate: '2023-05-22',
             acceptedRejectedBy: '-', acceptedQty: 0,
             batchNo: 'BATCH-2023-003', mfgDate: '2023-04-01', expiryDate: '-',
             storeLocation: 'Data Centre - Floor 2',
-            poStatus: 'Open', costCentre: 'CC-IT-03', deliveryLoc: 'Data Centre Building',
+            poStatus: 'Pending', costCentre: 'CC-IT-03', deliveryLoc: 'Data Centre Building',
             payTerms: 'Net 60', poTotalValue: 500000,
             history: [
                 { date: '15/05/2023, 03:00 PM', action: 'Material Received', by: 'Store Keeper', detail: 'GRN-003 created. 5 Nos received.' }
             ]
         },
         {
-            accId: 'ACC-004', poNo: 'PO-1004', poDate: '2023-06-05', prNo: 'PR-504',
-            projectCode: 'PRJ-004', project: 'Security System', department: 'Admin', reqUser: 'Priya Sharma',
-            vendor: 'SafeGuard Technologies', vendorCode: 'V-1004',
-            itemCode: 'ITM-404', materialName: 'CCTV Camera', description: 'IP Camera 4MP Dome',
-            specification: '4MP, IR Night Vision, IP67', orderedQty: 20, receivedQty: 20,
-            prevReceivedQty: 0, uom: 'Nos', grnNo: 'GRN-004', grnDate: '2023-07-01',
-            stockInwardStatus: 'Completed', accStatus: 'Rejected', accDueDate: '2023-07-08',
-            acceptedRejectedBy: 'Priya Sharma', acceptedQty: 0,
-            batchNo: 'BATCH-2023-004', mfgDate: '2023-03-01', expiryDate: '-',
-            storeLocation: 'Warehouse A - Rack 5',
-            poStatus: 'Open', costCentre: 'CC-ADM-04', deliveryLoc: 'Head Office - Admin Dept',
-            payTerms: 'Net 30', poTotalValue: 75000,
-            history: [
-                { date: '01/07/2023, 10:00 AM', action: 'Material Received', by: 'Store Keeper', detail: 'GRN-004 created. 20 Nos received.' },
-                { date: '03/07/2023, 04:00 PM', action: 'Rejected', by: 'Priya Sharma', detail: 'All 20 units rejected. Reason: Specification Mismatch - Wrong model delivered.' }
-            ]
-        },
-        {
-            accId: 'ACC-005', poNo: 'PO-1005', poDate: '2023-08-10', prNo: 'PR-505',
-            projectCode: 'PRJ-005', project: 'ERP Implementation', department: 'IT', reqUser: 'Anish',
-            vendor: 'TechSoft Global', vendorCode: 'V-1005',
-            itemCode: 'ITM-505', materialName: 'Software License', description: 'Microsoft 365 E3',
-            specification: 'Annual License, Per User', orderedQty: 100, receivedQty: 100,
-            prevReceivedQty: 0, uom: 'Licenses', grnNo: 'GRN-005', grnDate: '2023-08-20',
-            stockInwardStatus: 'Completed', accStatus: 'Under Review', accDueDate: '2023-08-27',
-            acceptedRejectedBy: '-', acceptedQty: 0,
-            batchNo: '-', mfgDate: '-', expiryDate: '2024-08-20',
-            storeLocation: 'Digital - License Server',
-            poStatus: 'Open', costCentre: 'CC-IT-05', deliveryLoc: 'IT Dept - License Admin',
-            payTerms: 'Advance Payment', poTotalValue: 120000,
-            history: [
-                { date: '20/08/2023, 09:30 AM', action: 'Material Received', by: 'License Admin', detail: 'GRN-005 created. 100 Licenses received.' },
-                { date: '22/08/2023, 11:00 AM', action: 'Under Review', by: 'Anish', detail: 'License keys verification in progress.' }
-            ]
-        },
-        {
             accId: 'ACC-006', poNo: 'PO-1003', poDate: '2023-04-20', prNo: 'PR-506',
             projectCode: 'PRJ-003', project: 'Server Infrastructure', department: 'IT', reqUser: 'Rahul Kumar',
             vendor: 'CloudNet India Pvt Ltd', vendorCode: 'V-1003',
-            itemCode: 'ITM-306', materialName: 'Network Switch', description: '48-Port Managed Switch',
-            specification: 'Gigabit, Layer 3, PoE+', orderedQty: 10, receivedQty: 10,
+            itemCode: 'ITM-306, ITM-307', materialName: 'Network Switch, Patch Panel', description: '48-Port Managed Switch, 24-Port Cat6 Patch Panel',
+            specification: 'Gigabit, Layer 3, PoE+ / 1U Cat6 UTP', orderedQty: 10, receivedQty: 10,
             prevReceivedQty: 0, uom: 'Nos', grnNo: 'GRN-006', grnDate: '2023-05-18',
             stockInwardStatus: 'Completed', accStatus: 'Pending', accDueDate: '2023-05-25',
             acceptedRejectedBy: '-', acceptedQty: 0,
             batchNo: 'BATCH-2023-006', mfgDate: '2023-03-15', expiryDate: '-',
             storeLocation: 'Data Centre - Floor 1',
-            poStatus: 'Open', costCentre: 'CC-IT-03', deliveryLoc: 'Data Centre Building',
+            poStatus: 'Pending', costCentre: 'CC-IT-03', deliveryLoc: 'Data Centre Building',
             payTerms: 'Net 60', poTotalValue: 500000,
             history: [
                 { date: '18/05/2023, 02:00 PM', action: 'Material Received', by: 'Store Keeper', detail: 'GRN-006 created. 10 Nos received.' }
             ]
+        },
+        {
+            accId: 'ACC-004', poNo: 'PO-1002', poDate: '2023-02-18', prNo: 'PR-502',
+            projectCode: 'PRJ-002', project: 'Network Upgrade', department: 'IT', reqUser: 'Priya Sharma',
+            vendor: 'TechnoSource Pvt Ltd', vendorCode: 'V-1002',
+            itemCode: 'ITM-202, ITM-203', materialName: 'Cat6 Cable Roll, RJ45 Connectors', description: 'Cat6 UTP 305m Cable Roll, RJ45 Modular Plugs 100pk',
+            specification: 'Copper 23AWG High Speed / Cat6 Pass-Through', orderedQty: 20, receivedQty: 20,
+            prevReceivedQty: 0, uom: 'Nos', grnNo: 'GRN-002', grnDate: '2023-03-05',
+            stockInwardStatus: 'Completed', accStatus: 'Rejected', accDueDate: '2023-03-12',
+            acceptedRejectedBy: 'Priya Sharma', acceptedQty: 0,
+            batchNo: 'BATCH-2023-002', mfgDate: '2023-02-01', expiryDate: '-',
+            storeLocation: 'Warehouse B - Shelf 4',
+            poStatus: 'Pending', costCentre: 'CC-IT-02', deliveryLoc: 'Head Office - IT Dept',
+            payTerms: 'Net 30', poTotalValue: 80000,
+            history: [
+                { date: '05/03/2023, 11:15 AM', action: 'Material Received', by: 'Store Keeper', detail: 'GRN-002 created. 20 Nos received.' },
+                { date: '08/03/2023, 04:00 PM', action: 'Rejected', by: 'Priya Sharma', detail: 'All 20 Nos rejected. Reason: Specification Mismatch (CCA instead of Pure Copper).' }
+            ]
+        },
+        {
+            accId: 'ACC-005', poNo: 'PO-1004', poDate: '2023-05-10', prNo: 'PR-504',
+            projectCode: 'PRJ-001', project: 'ERP Implementation', department: 'IT', reqUser: 'John Doe',
+            vendor: 'ABC Tech Solutions', vendorCode: 'V-1001',
+            itemCode: 'ITM-105, ITM-106', materialName: 'Wireless Mouse, Keyboard', description: 'Logitech Optical Mouse, Logitech K120 USB Keyboard',
+            specification: '2.4GHz Wireless / Spill-resistant Wired', orderedQty: 50, receivedQty: 50,
+            prevReceivedQty: 0, uom: 'Nos', grnNo: 'GRN-004', grnDate: '2023-05-25',
+            stockInwardStatus: 'Completed', accStatus: 'Accepted', accDueDate: '2023-06-01',
+            acceptedRejectedBy: 'John Doe', acceptedQty: 50,
+            batchNo: 'BATCH-2023-005', mfgDate: '2023-04-10', expiryDate: '-',
+            storeLocation: 'Warehouse A - Rack 2',
+            poStatus: 'Closed', costCentre: 'CC-IT-01', deliveryLoc: 'Head Office - IT Dept',
+            payTerms: 'Net 30', poTotalValue: 45000,
+            history: [
+                { date: '25/05/2023, 09:30 AM', action: 'Material Received', by: 'Store Keeper', detail: 'GRN-004 created. 50 Nos received.' },
+                { date: '27/05/2023, 11:00 AM', action: 'Accepted', by: 'John Doe', detail: 'All 50 units accepted. Quality verified.' }
+            ]
         }
     ];
 
+    let currentActiveTab = 'All';
     let filteredData = [...acceptanceData];
     let currentPage = 1;
     const pageSize = 10;
     let currentSort = { col: null, dir: null };
     let currentDetailItem = null;
 
+    // ==================== FILTER COLLAPSE TOGGLE ====================
+    function toggleFilterCard() {
+        const body = document.getElementById('filterBody');
+        const btn = document.getElementById('filterToggleBtn');
+        if (!body) return;
+        if (body.style.display === 'none') {
+            body.style.display = 'block';
+            if (btn) btn.innerHTML = '<i class="fas fa-chevron-up"></i> Collapse Filters';
+        } else {
+            body.style.display = 'none';
+            if (btn) btn.innerHTML = '<i class="fas fa-chevron-down"></i> Expand Filters';
+        }
+    }
+
+    // ==================== STATUS TABS ====================
+    function switchStatusTab(status) {
+        currentActiveTab = status;
+
+        document.querySelectorAll('.status-tab').forEach(btn => {
+            const isActive = btn.dataset.status === status;
+            btn.classList.toggle('active', isActive);
+            btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+
+        const fStatus = document.getElementById('f-status');
+        if (fStatus) {
+            fStatus.value = (status === 'All') ? '' : status;
+        }
+
+        applyFilters();
+    }
+
+    function onStatusFilterChange() {
+        const val = document.getElementById('f-status').value || 'All';
+        currentActiveTab = val;
+        document.querySelectorAll('.status-tab').forEach(btn => {
+            const isActive = btn.dataset.status === val;
+            btn.classList.toggle('active', isActive);
+            btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+        applyFilters();
+    }
+
+    function updateTabCounts() {
+        const totalAll = acceptanceData.length;
+        const totalAccepted = acceptanceData.filter(i => i.accStatus === 'Accepted').length;
+        const totalPending = acceptanceData.filter(i => i.accStatus === 'Pending').length;
+        const totalRejected = acceptanceData.filter(i => i.accStatus === 'Rejected').length;
+
+        const badgeAll = document.getElementById('badge-all');
+        const badgeAccepted = document.getElementById('badge-accepted');
+        const badgePending = document.getElementById('badge-pending');
+        const badgeRejected = document.getElementById('badge-rejected');
+
+        if (badgeAll) badgeAll.textContent = totalAll;
+        if (badgeAccepted) badgeAccepted.textContent = totalAccepted;
+        if (badgePending) badgePending.textContent = totalPending;
+        if (badgeRejected) badgeRejected.textContent = totalRejected;
+    }
+
     // ==================== FORMATTING ====================
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function formatMultiPills(val) {
+        if (!val) return '-';
+        const parts = String(val).split(',').map(s => s.trim()).filter(Boolean);
+        if (parts.length === 0) return '-';
+        const pills = parts.map(p => `<span class="table-value-pill">${escapeHtml(p)}</span>`).join('');
+        return `<div class="table-multi-values">${pills}</div>`;
+    }
+
     function formatCurrency(val) {
         return '₹' + Number(val).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
@@ -796,6 +1090,7 @@
         const globalSearch = globalSearchEl ? globalSearchEl.value.toLowerCase().trim() : '';
         const fPoNo = document.getElementById('f-poNo').value.toLowerCase().trim();
         const fPrNo = document.getElementById('f-prNo').value.toLowerCase().trim();
+        const fPoStatus = document.getElementById('f-poStatus') ? document.getElementById('f-poStatus').value : '';
         const fGrnNo = document.getElementById('f-grnNo').value.toLowerCase().trim();
         const fVendor = document.getElementById('f-vendor').value.toLowerCase().trim();
         const fProject = document.getElementById('f-project').value.toLowerCase().trim();
@@ -803,12 +1098,11 @@
         const fReqUser = document.getElementById('f-reqUser').value.toLowerCase().trim();
         const fMaterial = document.getElementById('f-material').value.toLowerCase().trim();
         const fItemCode = document.getElementById('f-itemCode').value.toLowerCase().trim();
-        const fStatus = document.getElementById('f-status').value;
+        const fStatus = currentActiveTab !== 'All' ? currentActiveTab : document.getElementById('f-status').value;
         const fGrnDateFrom = document.getElementById('f-grnDateFrom').value;
         const fGrnDateTo = document.getElementById('f-grnDateTo').value;
         const fAccDateFrom = document.getElementById('f-accDateFrom').value;
         const fAccDateTo = document.getElementById('f-accDateTo').value;
-        const fPendingOverdue = document.getElementById('f-pendingOverdue').value;
         const fStoreLoc = document.getElementById('f-storeLocation').value.toLowerCase().trim();
 
         filteredData = acceptanceData.filter(item => {
@@ -819,49 +1113,79 @@
             }
             if (fPoNo && !item.poNo.toLowerCase().includes(fPoNo)) return false;
             if (fPrNo && !item.prNo.toLowerCase().includes(fPrNo)) return false;
+            if (fPoStatus && item.poStatus.toLowerCase() !== fPoStatus.toLowerCase()) return false;
             if (fGrnNo && !item.grnNo.toLowerCase().includes(fGrnNo)) return false;
             if (fVendor && !item.vendor.toLowerCase().includes(fVendor)) return false;
             if (fProject && !(item.projectCode && item.projectCode.toLowerCase().includes(fProject)) && !(item.project && item.project.toLowerCase().includes(fProject))) return false;
             if (fDept && !item.department.toLowerCase().includes(fDept)) return false;
             if (fReqUser && !item.reqUser.toLowerCase().includes(fReqUser)) return false;
-            if (fMaterial && !item.materialName.toLowerCase().includes(fMaterial)) return false;
-            if (fItemCode && !item.itemCode.toLowerCase().includes(fItemCode)) return false;
+            if (fMaterial) {
+                const searchTerms = fMaterial.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+                const itemMatLower = item.materialName.toLowerCase();
+                const matched = searchTerms.some(term => itemMatLower.includes(term));
+                if (!matched) return false;
+            }
+            if (fItemCode) {
+                const searchTerms = fItemCode.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+                const itemCodeLower = item.itemCode.toLowerCase();
+                const matched = searchTerms.some(term => itemCodeLower.includes(term));
+                if (!matched) return false;
+            }
             if (fStatus && item.accStatus !== fStatus) return false;
             if (fGrnDateFrom && item.grnDate < fGrnDateFrom) return false;
             if (fGrnDateTo && item.grnDate > fGrnDateTo) return false;
             if (fAccDateFrom && item.accDueDate < fAccDateFrom) return false;
             if (fAccDateTo && item.accDueDate > fAccDateTo) return false;
             if (fStoreLoc && !item.storeLocation.toLowerCase().includes(fStoreLoc)) return false;
-            if (fPendingOverdue === 'Pending' && item.accStatus !== 'Pending') return false;
-            if (fPendingOverdue === 'Overdue') {
-                const today = new Date().toISOString().split('T')[0];
-                if (item.accStatus !== 'Pending' || item.accDueDate >= today) return false;
-            }
             return true;
         });
 
         sortData();
         currentPage = 1;
         renderTable();
+        updateTabCounts();
     }
 
-    function autoPopulateFilters() {
-        const poNo = document.getElementById('f-poNo').value;
-        if (poNo) {
-            const item = acceptanceData.find(d => d.poNo === poNo);
+    // Auto-populate when searching / entering PR Number
+    function autoPopulateFromPr() {
+        const prVal = document.getElementById('f-prNo').value.trim().toLowerCase();
+        if (prVal) {
+            const item = acceptanceData.find(d => d.prNo && (d.prNo.toLowerCase() === prVal || d.prNo.toLowerCase().includes(prVal)));
             if (item) {
-                document.getElementById('f-prNo').value = item.prNo || '';
+                document.getElementById('f-poNo').value = item.poNo || '';
+                const poStatusEl = document.getElementById('f-poStatus');
+                if (poStatusEl) poStatusEl.value = item.poStatus || '';
+                document.getElementById('f-grnNo').value = item.grnNo || '';
                 document.getElementById('f-vendor').value = item.vendor || '';
                 document.getElementById('f-project').value = item.projectCode || '';
                 document.getElementById('f-dept').value = item.department || '';
                 document.getElementById('f-reqUser').value = item.reqUser || '';
+                document.getElementById('f-material').value = item.materialName || '';
+                document.getElementById('f-itemCode').value = item.itemCode || '';
+                document.getElementById('f-storeLocation').value = item.storeLocation || '';
             }
-        } else {
-            document.getElementById('f-prNo').value = '';
-            document.getElementById('f-vendor').value = '';
-            document.getElementById('f-project').value = '';
-            document.getElementById('f-dept').value = '';
-            document.getElementById('f-reqUser').value = '';
+        }
+        applyFilters();
+    }
+
+    // Auto-populate when searching / entering PO Number
+    function autoPopulateFromPo() {
+        const poVal = document.getElementById('f-poNo').value.trim().toLowerCase();
+        if (poVal) {
+            const item = acceptanceData.find(d => d.poNo && (d.poNo.toLowerCase() === poVal || d.poNo.toLowerCase().includes(poVal)));
+            if (item) {
+                document.getElementById('f-prNo').value = item.prNo || '';
+                const poStatusEl = document.getElementById('f-poStatus');
+                if (poStatusEl) poStatusEl.value = item.poStatus || '';
+                document.getElementById('f-grnNo').value = item.grnNo || '';
+                document.getElementById('f-vendor').value = item.vendor || '';
+                document.getElementById('f-project').value = item.projectCode || '';
+                document.getElementById('f-dept').value = item.department || '';
+                document.getElementById('f-reqUser').value = item.reqUser || '';
+                document.getElementById('f-material').value = item.materialName || '';
+                document.getElementById('f-itemCode').value = item.itemCode || '';
+                document.getElementById('f-storeLocation').value = item.storeLocation || '';
+            }
         }
         applyFilters();
     }
@@ -871,6 +1195,7 @@
         if (globalSearchEl) globalSearchEl.value = '';
         document.getElementById('f-poNo').value = '';
         document.getElementById('f-prNo').value = '';
+        if (document.getElementById('f-poStatus')) document.getElementById('f-poStatus').value = '';
         document.getElementById('f-grnNo').value = '';
         document.getElementById('f-vendor').value = '';
         document.getElementById('f-project').value = '';
@@ -883,11 +1208,19 @@
         document.getElementById('f-grnDateTo').value = '';
         document.getElementById('f-accDateFrom').value = '';
         document.getElementById('f-accDateTo').value = '';
-        document.getElementById('f-pendingOverdue').value = '';
         document.getElementById('f-storeLocation').value = '';
+
+        currentActiveTab = 'All';
+        document.querySelectorAll('.status-tab').forEach(btn => {
+            const isActive = btn.dataset.status === 'All';
+            btn.classList.toggle('active', isActive);
+            btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+
         filteredData = [...acceptanceData];
         currentPage = 1;
         renderTable();
+        updateTabCounts();
     }
 
     // ==================== RENDER TABLE ====================
@@ -904,37 +1237,41 @@
         const pageData = filteredData.slice(start, end);
 
         if (pageData.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="20" style="text-align:center; padding:25px; color:#888;">No records found.</td></tr>';
+            const statusLabel = currentActiveTab === 'All' ? 'No records' : `No ${currentActiveTab} material records`;
+            tbody.innerHTML = `<tr><td colspan="21" style="text-align:center; padding:35px 20px; color:#64748b;">
+                <i class="fas fa-inbox" style="font-size: 32px; color: #cbd5e1; margin-bottom: 8px; display: block;"></i>
+                <span style="font-weight: 600; font-size: 13px;">${statusLabel} found</span>
+                <p style="font-size: 11px; margin-top: 4px; color: #94a3b8;">Try changing filter criteria or selecting another tab.</p>
+            </td></tr>`;
         } else {
             pageData.forEach(item => {
-                const isOverdue = item.accStatus === 'Pending' && item.accDueDate < new Date().toISOString().split('T')[0];
                 const tr = document.createElement('tr');
-                if (isOverdue) tr.style.backgroundColor = '#fff5f5';
                 tr.innerHTML = `
                     <td><strong>${item.accId}</strong></td>
                     <td>${item.poNo}</td>
+                    <td><span class="badge ${getStatusClass(item.poStatus)}">${item.poStatus}</span></td>
                     <td>${item.poDate}</td>
                     <td>${item.prNo}</td>
                     <td>${item.projectCode || item.project}</td>
                     <td>${item.department}</td>
                     <td>${item.reqUser}</td>
                     <td>${item.vendor}</td>
-                    <td>${item.itemCode}</td>
-                    <td>${item.materialName}</td>
+                    <td>${formatMultiPills(item.itemCode)}</td>
+                    <td>${formatMultiPills(item.materialName)}</td>
                     <td style="text-align:right;">${item.orderedQty}</td>
                     <td style="text-align:right;">${item.receivedQty}</td>
                     <td>${item.uom}</td>
                     <td>${item.grnNo}</td>
                     <td>${item.grnDate}</td>
                     <td><span class="badge ${getStatusClass(item.stockInwardStatus)}">${item.stockInwardStatus}</span></td>
-                    <td><span class="badge ${getStatusClass(item.accStatus)}">${item.accStatus}</span>${isOverdue ? ' <span class="badge overdue" style="font-size:9px;">OVERDUE</span>' : ''}</td>
+                    <td><span class="badge ${getStatusClass(item.accStatus)}">${item.accStatus}</span></td>
                     <td>${item.accDueDate}</td>
                     <td>${item.acceptedRejectedBy}</td>
                     <td>
                         <div class="action-btn-group">
                             <button class="action-btn action-btn-view" onclick="viewDetail('${item.accId}')" title="View"><i class="fas fa-eye"></i></button>
-                            <button class="action-btn action-btn-accept" onclick="quickAccept('${item.accId}')" title="Accept" ${item.accStatus === 'Accepted' || item.accStatus === 'Rejected' ? 'disabled style="opacity:0.4;"' : ''}><i class="fas fa-check"></i></button>
-                            <button class="action-btn action-btn-reject" onclick="quickReject('${item.accId}')" title="Reject" ${item.accStatus === 'Accepted' || item.accStatus === 'Rejected' ? 'disabled style="opacity:0.4;"' : ''}><i class="fas fa-times"></i></button>
+                            ${currentActiveTab !== 'Accepted' ? `<button class="action-btn action-btn-accept" onclick="quickAccept('${item.accId}')" title="Accept"><i class="fas fa-check"></i></button>` : ''}
+                            ${currentActiveTab !== 'Rejected' ? `<button class="action-btn action-btn-reject" onclick="quickReject('${item.accId}')" title="Reject"><i class="fas fa-times"></i></button>` : ''}
                             <button class="action-btn action-btn-history" onclick="showHistory('${item.accId}')" title="History"><i class="fas fa-history"></i></button>
                         </div>
                     </td>
@@ -972,42 +1309,119 @@
         pagCtrl.appendChild(nextBtn);
     }
 
+    // ==================== CONFIRMATION MODAL ====================
+    let confirmActionCallback = null;
+
+    function showConfirmModal(title, message, btnText, btnClass, showReason, callback) {
+        document.getElementById('confirmModalTitle').innerHTML = `<i class="fas fa-question-circle"></i> ${title}`;
+        document.getElementById('confirmModalMessage').textContent = message;
+        const btn = document.getElementById('confirmModalBtn');
+        btn.innerHTML = `<i class="fas fa-check"></i> ${btnText}`;
+        btn.className = 'btn ' + btnClass;
+        const reasonGroup = document.getElementById('confirmModalReasonGroup');
+        reasonGroup.style.display = showReason ? 'block' : 'none';
+        if (showReason) {
+            document.getElementById('confirmModalReasonSelect').value = '';
+            document.getElementById('confirmModalReasonText').value = '';
+        }
+        confirmActionCallback = callback;
+        document.getElementById('confirmModal').style.display = 'flex';
+    }
+
+    function closeConfirmModal() {
+        document.getElementById('confirmModal').style.display = 'none';
+        confirmActionCallback = null;
+    }
+
+    function executeConfirmAction() {
+        if (confirmActionCallback) {
+            const reasonGroup = document.getElementById('confirmModalReasonGroup');
+            if (reasonGroup.style.display === 'block') {
+                const reason = document.getElementById('confirmModalReasonSelect').value;
+                const remarks = document.getElementById('confirmModalReasonText').value.trim();
+                if (!reason) {
+                    showAlertModal('warning', 'Reason Required', 'Please select a rejection reason before confirming.');
+                    return;
+                }
+                confirmActionCallback(reason, remarks);
+            } else {
+                confirmActionCallback();
+            }
+        }
+        closeConfirmModal();
+    }
+
+    function showAlertModal(type, title, message) {
+        const iconEl = document.getElementById('alertModalIcon');
+        if (type === 'success') {
+            iconEl.innerHTML = '<i class="fas fa-check-circle" style="color: #28a745;"></i>';
+        } else if (type === 'error') {
+            iconEl.innerHTML = '<i class="fas fa-times-circle" style="color: #dc3545;"></i>';
+        } else if (type === 'warning') {
+            iconEl.innerHTML = '<i class="fas fa-exclamation-triangle" style="color: #ffc107;"></i>';
+        }
+        document.getElementById('alertModalTitle').textContent = title;
+        document.getElementById('alertModalMessage').textContent = message;
+        document.getElementById('alertModal').style.display = 'flex';
+    }
+
+    function closeAlertModal() {
+        document.getElementById('alertModal').style.display = 'none';
+    }
+
     // ==================== QUICK ACTIONS ====================
     function quickAccept(accId) {
         const item = acceptanceData.find(i => i.accId === accId);
-        if (!item || item.accStatus === 'Accepted' || item.accStatus === 'Rejected') return;
-        if (!confirm(`Accept all ${item.receivedQty} ${item.uom} of "${item.materialName}" for ${accId}?`)) return;
+        if (!item) return;
 
-        item.accStatus = 'Accepted';
-        item.acceptedQty = item.receivedQty;
-        item.acceptedRejectedBy = 'Anish';
-        item.history.push({
-            date: getCurrentDateTime(),
-            action: 'Accepted',
-            by: 'Anish',
-            detail: `All ${item.receivedQty} ${item.uom} accepted via quick action.`
-        });
-        alert(`${accId} — Material accepted successfully!`);
-        applyFilters();
+        showConfirmModal(
+            'Accept Material',
+            `Are you sure you want to accept all ${item.receivedQty} ${item.uom} of "${item.materialName}" for ${accId}?`,
+            'Accept',
+            'btn-success',
+            false,
+            function() {
+                item.accStatus = 'Accepted';
+                item.acceptedQty = item.receivedQty;
+                item.acceptedRejectedBy = 'Anish';
+                item.history.push({
+                    date: getCurrentDateTime(),
+                    action: 'Accepted',
+                    by: 'Anish',
+                    detail: `All ${item.receivedQty} ${item.uom} accepted via quick action.`
+                });
+                applyFilters();
+                showAlertModal('success', 'Material Accepted', `${accId} — Material accepted successfully!`);
+            }
+        );
     }
 
     function quickReject(accId) {
         const item = acceptanceData.find(i => i.accId === accId);
-        if (!item || item.accStatus === 'Accepted' || item.accStatus === 'Rejected') return;
-        const reason = prompt(`Enter rejection reason for ${accId}:`);
-        if (!reason) return;
+        if (!item) return;
 
-        item.accStatus = 'Rejected';
-        item.acceptedQty = 0;
-        item.acceptedRejectedBy = 'Anish';
-        item.history.push({
-            date: getCurrentDateTime(),
-            action: 'Rejected',
-            by: 'Anish',
-            detail: `All ${item.receivedQty} ${item.uom} rejected. Reason: ${reason}`
-        });
-        alert(`${accId} — Material rejected.`);
-        applyFilters();
+        showConfirmModal(
+            'Reject Material',
+            `Are you sure you want to reject all ${item.receivedQty} ${item.uom} of "${item.materialName}" for ${accId}?`,
+            'Reject',
+            'btn-danger',
+            true,
+            function(reason, remarks) {
+                item.accStatus = 'Rejected';
+                item.acceptedQty = 0;
+                item.acceptedRejectedBy = 'Anish';
+                let detail = `All ${item.receivedQty} ${item.uom} rejected. Reason: ${reason}.`;
+                if (remarks) detail += ` Remarks: ${remarks}`;
+                item.history.push({
+                    date: getCurrentDateTime(),
+                    action: 'Rejected',
+                    by: 'Anish',
+                    detail: detail
+                });
+                applyFilters();
+                showAlertModal('error', 'Material Rejected', `${accId} — Material has been rejected.`);
+            }
+        );
     }
 
     // ==================== VIEW DETAIL ====================
@@ -1049,8 +1463,8 @@
         const pending = item.orderedQty - totalReceived;
         matBody.innerHTML = `
             <tr>
-                <td>${item.itemCode}</td>
-                <td>${item.materialName}</td>
+                <td>${formatMultiPills(item.itemCode)}</td>
+                <td>${formatMultiPills(item.materialName)}</td>
                 <td>${item.description}</td>
                 <td>${item.specification}</td>
                 <td style="text-align:right;">${item.orderedQty}</td>
@@ -1128,11 +1542,7 @@
             return;
         }
 
-        if (qty === currentDetailItem.receivedQty) {
-            currentDetailItem.accStatus = 'Accepted';
-        } else {
-            currentDetailItem.accStatus = 'Partially Accepted';
-        }
+        currentDetailItem.accStatus = 'Accepted';
         currentDetailItem.acceptedQty = qty;
         currentDetailItem.acceptedRejectedBy = 'Anish';
 
@@ -1276,9 +1686,9 @@
 
     // ==================== EXPORT ====================
     function exportData() {
-        let csv = 'Acceptance ID,PO Number,PO Date,PR Number,Project Code,Department,Requesting User,Vendor,Item Code,Material Name,Ordered Qty,Received Qty,UOM,GRN Number,GRN Date,Stock Inward Status,Acceptance Status,Acceptance Due Date,Accepted/Rejected By\n';
+        let csv = 'Acceptance ID,PO Number,PO Status,PO Date,PR Number,Project Code,Department,Requesting User,Vendor,Item Code,Material Name,Ordered Qty,Received Qty,UOM,GRN Number,GRN Date,Stock Inward Status,Acceptance Status,Acceptance Due Date,Accepted/Rejected By\n';
         filteredData.forEach(item => {
-            csv += `${item.accId},${item.poNo},${item.poDate},${item.prNo},${item.projectCode || item.project},${item.department},${item.reqUser},${item.vendor},${item.itemCode},${item.materialName},${item.orderedQty},${item.receivedQty},${item.uom},${item.grnNo},${item.grnDate},${item.stockInwardStatus},${item.accStatus},${item.accDueDate},${item.acceptedRejectedBy}\n`;
+            csv += `${item.accId},${item.poNo},${item.poStatus},${item.poDate},${item.prNo},${item.projectCode || item.project},${item.department},${item.reqUser},${item.vendor},${item.itemCode},${item.materialName},${item.orderedQty},${item.receivedQty},${item.uom},${item.grnNo},${item.grnDate},${item.stockInwardStatus},${item.accStatus},${item.accDueDate},${item.acceptedRejectedBy}\n`;
         });
         const blob = new Blob([csv], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);
@@ -1291,7 +1701,8 @@
 
     // ==================== INIT ====================
     document.addEventListener('DOMContentLoaded', () => {
-        renderTable();
+        updateTabCounts();
+        applyFilters();
     });
     </script>
 </body>

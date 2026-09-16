@@ -513,13 +513,13 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="finance_management.html" class="nav-link">
-                                <i class="fas fa-coins"></i> Finance Approval
+                            <a href="acceptance_material.html" class="nav-link">
+                                <i class="fas fa-clipboard-check"></i> User Acceptance Material
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="acceptance_material.html" class="nav-link">
-                                <i class="fas fa-clipboard-check"></i> User Acceptance Material
+                            <a href="finance_management.html" class="nav-link">
+                                <i class="fas fa-coins"></i> Finance Approval
                             </a>
                         </li>
                     </ul>
@@ -606,6 +606,10 @@
                                         <option value="Completed">Completed</option>
                                     </select>
                                 </div>
+                                <div class="form-group" style="grid-column: span 3;">
+                                    <label for="comment">Comment</label>
+                                    <textarea id="comment" name="comment" rows="2" placeholder="Enter comment..."></textarea>
+                                </div>
                             </div>
 
                             <!-- Actions -->
@@ -640,6 +644,7 @@
                                     <th>Utilized Budget</th>
                                     <th>Available Budget</th>
                                     <th>Status</th>
+                                    <th>Comment</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -830,13 +835,13 @@
                     code: 'PRJ-001', name: 'ERP Implementation',
                     budgetYear: '2023-2024',
                     manager: 'John Doe', start: '2023-01-10', end: '2023-12-31',
-                    budget: '50000.00', extension: '0.00', utilized: '20000.00', available: '30000.00', status: 'Active'
+                    budget: '50000.00', extension: '0.00', utilized: '20000.00', available: '30000.00', status: 'Active', comment: ''
                 },
                 {
                     code: 'PRJ-002', name: 'Office Renovation',
                     budgetYear: '2023-2024',
                     manager: 'Jane Smith', start: '2023-05-01', end: '2023-08-15',
-                    budget: '15000.00', extension: '0.00', utilized: '15000.00', available: '0.00', status: 'Completed'
+                    budget: '15000.00', extension: '0.00', utilized: '15000.00', available: '0.00', status: 'Completed', comment: ''
                 }
             ];
 
@@ -859,6 +864,7 @@
         <td>${proj.utilized}</td>
         <td>${proj.available}</td>
         <td><span class="badge ${proj.status.toLowerCase()}">${proj.status}</span></td>
+        <td>${proj.comment || '-'}</td>
         <td>
             <div class="action-icons">
                 <i class="fas fa-edit icon-edit" title="Edit" onclick="editProject(this)"></i>
@@ -888,7 +894,8 @@
                 extension: parseFloat(form.budgetExtension ? form.budgetExtension.value : 0).toFixed(2),
                 utilized: parseFloat(form.utilized.value || 0).toFixed(2),
                 available: parseFloat(form.available.value || 0).toFixed(2),
-                status: form.status.value
+                status: form.status.value,
+                comment: form.comment.value.trim()
             };
 
             addProjectToTable(proj);
@@ -927,6 +934,7 @@
             form.utilized.value = cells[8].textContent.trim();
             document.getElementById('available').value = cells[9].textContent.trim();
             form.status.value = cells[10].textContent.trim();
+            form.comment.value = cells[11].textContent.trim() === '-' ? '' : cells[11].textContent.trim();
 
             // Switch to edit mode
             document.getElementById('btnSave').style.display = 'none';
@@ -966,6 +974,7 @@
         <td>${parseFloat(form.utilized.value || 0).toFixed(2)}</td>
         <td>${parseFloat(form.available.value || 0).toFixed(2)}</td>
         <td><span class="badge ${statusVal.toLowerCase()}">${statusVal}</span></td>
+        <td>${form.comment.value.trim() || '-'}</td>
         <td>
             <div class="action-icons">
                 <i class="fas fa-edit icon-edit" title="Edit" onclick="editProject(this)"></i>
