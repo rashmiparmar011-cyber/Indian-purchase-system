@@ -222,7 +222,7 @@ const DEFAULT_PURCHASE_DATA = [
                 status: "Partial",
                 userAcceptanceStatus: "Rejected",
                 userAcceptedQty: 0,
-                acceptanceRemarks: "Defective armrest mechanism and torn lumbar cushion.",
+                acceptanceRemarks: "Quality defect / failed on testing — Defective armrest mechanism and torn lumbar cushion.",
                 batches: [
                     {
                         batchNo: "B006",
@@ -231,6 +231,48 @@ const DEFAULT_PURCHASE_DATA = [
                         expiryDate: "N/A",
                         invoiceNo: "Inv004",
                         attachment: "inv004_chairs.pdf"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        poNo: "PO05",
+        poDate: "2026-09-17",
+        prNo: "PR-505",
+        requestedBy: "Anish Patel",
+        supplierName: "Apex Hardware Systems",
+        supplierCode: "SUP-105",
+        department: "Operations & Safety",
+        projectCode: "PRJ-005",
+        projectName: "Facility Calibration & Tooling",
+        totalCost: 18000,
+        status: "Complete",
+        paymentStatus: "Pending",
+        paymentTerm: "Full Payment",
+        amountPaid: 0,
+        dueDate: "2026-10-10",
+        lineItems: [
+            {
+                itemKey: "Item008",
+                itemName: "Industrial Digital Calipers (Set of 6)",
+                reqQty: 6,
+                recQty: 6,
+                uom: "Set",
+                cost: 18000,
+                balance: 0,
+                status: "Full",
+                userAcceptanceStatus: "Rejected",
+                userAcceptedQty: 0,
+                acceptanceRemarks: "Quality defect / failed on testing — Calibration certificate expired and sensor display flickering.",
+                batches: [
+                    {
+                        batchNo: "B007",
+                        recDate: "2026-09-17",
+                        recQty: 6,
+                        expiryDate: "2028-09-17",
+                        invoiceNo: "Inv005",
+                        attachment: "inv005_calipers.pdf"
                     }
                 ]
             }
@@ -249,6 +291,33 @@ class PurchaseDataManager {
             if (raw) {
                 const parsed = JSON.parse(raw);
                 if (Array.isArray(parsed) && parsed.length > 0) {
+                    let needsSave = false;
+                    // Migrate: ensure Item007 is rejected with reason
+                    parsed.forEach(po => {
+                        if (po.lineItems) {
+                            po.lineItems.forEach(li => {
+                                if (li.itemKey === 'Item007' && (!li.userAcceptanceStatus || li.userAcceptanceStatus !== 'Rejected')) {
+                                    li.userAcceptanceStatus = 'Rejected';
+                                    li.acceptanceRemarks = 'Quality defect / failed on testing — Defective armrest mechanism and torn lumbar cushion.';
+                                    needsSave = true;
+                                }
+                            });
+                        }
+                    });
+
+                    // Migrate: ensure PO05 exists so Rejected tab has rich sample records
+                    const hasPo5 = parsed.some(p => p.poNo === 'PO05');
+                    if (!hasPo5) {
+                        const po5Default = DEFAULT_PURCHASE_DATA.find(p => p.poNo === 'PO05');
+                        if (po5Default) {
+                            parsed.push(JSON.parse(JSON.stringify(po5Default)));
+                            needsSave = true;
+                        }
+                    }
+
+                    if (needsSave) {
+                        this.saveData(parsed);
+                    }
                     return parsed;
                 }
             }
@@ -303,6 +372,10 @@ class PurchaseDataManager {
                     uom: li.uom,
                     cost: li.cost,
                     status: li.status,
+                    userAcceptanceStatus: li.userAcceptanceStatus || 'Pending',
+                    acceptanceRemarks: li.acceptanceRemarks || '',
+                    rejectionReason: li.acceptanceRemarks || '',
+                    userAcceptedQty: li.userAcceptedQty || 0,
                     batches: li.batches || []
                 });
             });
@@ -381,6 +454,52 @@ class PurchaseDataManager {
         } else {
             po.status = 'New';
         }
+
+        this.saveData(this.data);
+        return { success: true, lineItem, po };
+    }
+
+    // Update an existing batch
+    updateBatch(poNo, itemKey, batchIndex, updatedBatchData) {
+        const po = this.getPO(poNo);
+        if (!po) return { success: false, message: 'PO not found' };
+        const lineItem = po.lineItems.find(li => li.itemKey.toLowerCase() === itemKey.toLowerCase());
+        if (!lineItem || !lineItem.batches || !lineItem.batches[batchIndex]) return { success: false, message: 'Batch not found' };
+
+        const newQty = Number(updatedBatchData.recQty);
+        if (!newQty || newQty <= 0) {
+            return {
+                success: false,
+                message: 'Received quantity must be greater than 0.'
+            };
+        }
+
+        lineItem.batches[batchIndex] = {
+            ...lineItem.batches[batchIndex],
+            recDate: updatedBatchData.recDate || lineItem.batches[batchIndex].recDate,
+            recQty: newQty,
+            batchNo: updatedBatchData.batchNo || lineItem.batches[batchIndex].batchNo,
+            expiryDate: updatedBatchData.expiryDate || lineItem.batches[batchIndex].expiryDate,
+            invoiceNo: updatedBatchData.invoiceNo || lineItem.batches[batchIndex].invoiceNo,
+            attachment: updatedBatchData.attachment || lineItem.batches[batchIndex].attachment
+        };
+
+        // Recalculate
+        const totalReceived = lineItem.batches.reduce((sum, b) => sum + Number(b.recQty), 0);
+        lineItem.recQty = totalReceived;
+        lineItem.balance = Math.max(0, lineItem.reqQty - totalReceived);
+
+        if (lineItem.balance === 0 && lineItem.recQty > 0) {
+            lineItem.status = 'Full';
+        } else if (lineItem.recQty > 0) {
+            lineItem.status = 'Partial';
+        } else {
+            lineItem.status = 'New';
+        }
+
+        const allItemsFull = po.lineItems.every(li => li.status === 'Full');
+        const anyItemReceived = po.lineItems.some(li => li.recQty > 0);
+        po.status = allItemsFull ? 'Complete' : (anyItemReceived ? 'Partial' : 'New');
 
         this.saveData(this.data);
         return { success: true, lineItem, po };

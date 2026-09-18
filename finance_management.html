@@ -77,10 +77,24 @@
             margin: 2px 4px 2px 0;
             text-decoration: none;
         }
+
         .inv-chip:hover {
             background: #0284c7;
             color: #fff;
             border-color: #0284c7;
+        }
+
+        #btnApprovePay {
+            transition: all 0.15s ease;
+        }
+
+        #btnApprovePay:hover {
+            filter: brightness(1.1);
+        }
+
+        #btnApprovePay:active {
+            transform: scale(0.97);
+            filter: brightness(0.9);
         }
     </style>
 </head>
@@ -130,12 +144,14 @@
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="fas fa-exchange-alt"></i> Purchase Transactions <i class="fas fa-chevron-down arrow"></i>
+                                <i class="fas fa-exchange-alt"></i> Purchase Transactions <i
+                                    class="fas fa-chevron-down arrow"></i>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="fas fa-file-invoice"></i> Purchase Reports <i class="fas fa-chevron-down arrow"></i>
+                                <i class="fas fa-file-invoice"></i> Purchase Reports <i
+                                    class="fas fa-chevron-down arrow"></i>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -163,27 +179,27 @@
             <!-- Content Area -->
             <main class="content">
                 <div class="breadcrumb">
-                    <i class="fas fa-home"></i> Finance <i class="fas fa-chevron-right"></i> 
+                    <i class="fas fa-home"></i> Finance <i class="fas fa-chevron-right"></i>
                     <span class="current">Finance Approval &amp; Invoices</span>
                 </div>
 
                 <!-- Filters Card -->
-                <div class="form-container" style="margin-bottom: 15px; padding: 15px;">
-                    <div class="filter-grid-finance">
-                        <div class="form-group" style="margin: 0;">
-                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">PO NUMBER</label>
+                <div class="filter-card">
+                    <div class="filter-grid filter-grid-finance">
+                        <div class="form-group">
+                            <label for="filterFinPoNo">PO No.</label>
                             <input type="text" id="filterFinPoNo" placeholder="Search PO No (e.g. PO01)..." oninput="applyFinanceFilters()">
                         </div>
-                        <div class="form-group" style="margin: 0;">
-                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">REQUESTED BY</label>
+                        <div class="form-group">
+                            <label for="filterFinRequester">Requested By</label>
                             <input type="text" id="filterFinRequester" placeholder="Search Requester..." oninput="applyFinanceFilters()">
                         </div>
-                        <div class="form-group" style="margin: 0;">
-                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">SUPPLIER NAME</label>
+                        <div class="form-group">
+                            <label for="filterFinSupplier">Supplier</label>
                             <input type="text" id="filterFinSupplier" placeholder="Search Supplier..." oninput="applyFinanceFilters()">
                         </div>
-                        <div class="form-group" style="margin: 0;">
-                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">PO STATUS</label>
+                        <div class="form-group">
+                            <label for="filterFinStatus">PO Status</label>
                             <select id="filterFinStatus" onchange="onFinStatusDropdownChange()">
                                 <option value="">All Statuses</option>
                                 <option value="Partial">Partial</option>
@@ -191,9 +207,9 @@
                                 <option value="New">New</option>
                             </select>
                         </div>
-                        <div style="display: flex; gap: 8px;">
-                            <button class="btn btn-primary" onclick="applyFinanceFilters()"><i class="fas fa-search"></i> Apply</button>
-                            <button class="btn btn-secondary" onclick="clearFinanceFilters()"><i class="fas fa-undo"></i> Reset</button>
+                        <div class="filter-actions">
+                            <button type="button" class="btn btn-primary" onclick="applyFinanceFilters()"><i class="fas fa-search"></i> Apply</button>
+                            <button type="button" class="btn btn-secondary" onclick="clearFinanceFilters()"><i class="fas fa-undo"></i> Reset</button>
                         </div>
                     </div>
                 </div>
@@ -201,21 +217,28 @@
                 <!-- Status Tabs & Export Bar -->
                 <div class="status-tabs-container">
                     <div class="status-tabs-group" role="tablist">
-                        <button type="button" class="status-tab tab-all active" data-status="All" onclick="switchFinanceTab('All')">
+                        <button type="button" class="status-tab tab-all active" data-status="All"
+                            onclick="switchFinanceTab('All')">
                             <i class="fas fa-layer-group"></i> All POs <span class="tab-badge" id="finBadgeAll">0</span>
                         </button>
-                        <button type="button" class="status-tab tab-partial" data-status="Partial" onclick="switchFinanceTab('Partial')">
-                            <i class="fas fa-hourglass-half"></i> Partial <span class="tab-badge" id="finBadgePartial">0</span>
+                        <button type="button" class="status-tab tab-partial" data-status="Partial"
+                            onclick="switchFinanceTab('Partial')">
+                            <i class="fas fa-hourglass-half"></i> Partial <span class="tab-badge"
+                                id="finBadgePartial">0</span>
                         </button>
-                        <button type="button" class="status-tab tab-complete" data-status="Complete" onclick="switchFinanceTab('Complete')">
-                            <i class="fas fa-check-circle"></i> Complete <span class="tab-badge" id="finBadgeComplete">0</span>
+                        <button type="button" class="status-tab tab-complete" data-status="Complete"
+                            onclick="switchFinanceTab('Complete')">
+                            <i class="fas fa-check-circle"></i> Complete <span class="tab-badge"
+                                id="finBadgeComplete">0</span>
                         </button>
-                        <button type="button" class="status-tab tab-new" data-status="New" onclick="switchFinanceTab('New')">
+                        <button type="button" class="status-tab tab-new" data-status="New"
+                            onclick="switchFinanceTab('New')">
                             <i class="fas fa-sparkles"></i> New <span class="tab-badge" id="finBadgeNew">0</span>
                         </button>
                     </div>
                     <div style="display: flex; gap: 8px;">
-                        <button class="btn btn-export" onclick="exportFinanceData()"><i class="fas fa-file-export"></i> Export</button>
+                        <button class="btn btn-export" onclick="exportFinanceData()"><i class="fas fa-file-export"></i>
+                            Export</button>
                     </div>
                 </div>
 
@@ -242,7 +265,8 @@
                 </div>
 
                 <!-- Pagination Bar -->
-                <div class="pagination-bar" style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 12px; color: #64748b;">
+                <div class="pagination-bar"
+                    style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 12px; color: #64748b;">
                     <div id="financePaginationInfo">Showing 1 to 0 of 0 records</div>
                     <div class="pagination-controls" id="financePaginationControls"></div>
                 </div>
@@ -262,7 +286,8 @@
             <div class="modal-body">
                 <!-- 1. PO Summary (Header Level) -->
                 <div class="summary-card">
-                    <div class="summary-card-title"><i class="fas fa-file-invoice-dollar"></i> Purchase Order Summary</div>
+                    <div class="summary-card-title"><i class="fas fa-file-invoice-dollar"></i> Purchase Order Summary
+                    </div>
                     <div class="summary-grid-5">
                         <div class="summary-item">
                             <span class="label">PO Number</span>
@@ -285,7 +310,8 @@
                             <span class="value highlight" id="finSumTotalCost">-</span>
                         </div>
                     </div>
-                    <div class="summary-grid-4" style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed #cbd5e1;">
+                    <div class="summary-grid-4"
+                        style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed #cbd5e1;">
                         <div class="summary-item">
                             <span class="label">Payment Term</span>
                             <span class="value" id="finSumPayTerm">-</span>
@@ -361,10 +387,14 @@
                                 <label>Reference / UTR No</label>
                                 <input type="text" id="finPayRef" placeholder="e.g. UTR-9827361">
                             </div>
-                            <div>
-                                <button type="button" class="btn btn-primary" onclick="handleRecordPayment()" style="white-space: nowrap; height: 34px;">
-                                    <i class="fas fa-check-circle"></i> Approve &amp; Pay
-                                </button>
+                            <div class="payment-action-col" style="display: flex; flex-direction: column; justify-content: flex-end; min-width: 140px;">
+                                <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; display: block; height: auto; pointer-events: none;">Action</label>
+                                <div style="height: 34px;">
+                                    <button type="button" id="btnApprovePay" class="btn btn-primary" onclick="handleRecordPayment()"
+                                        style="white-space: nowrap; height: 34px; padding: 0 16px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px; width: 100%; cursor: pointer; position: relative; z-index: 10;">
+                                        <i class="fas fa-check-circle" id="btnApprovePayIcon" style="pointer-events: none;"></i> <span id="btnApprovePayText" style="pointer-events: none;">Approve &amp; Pay</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -525,11 +555,24 @@
             const remaining = Math.max(0, po.totalCost - (po.amountPaid || 0));
             document.getElementById('finSumRemaining').textContent = '₹' + Number(remaining).toLocaleString('en-IN');
 
-            // Prefill payment amount with remaining
+            // Prefill payment amount with remaining, or handle fully paid state
             const payInput = document.getElementById('finPayAmount');
+            const approveBtnText = document.getElementById('btnApprovePayText');
+            const approveBtnIcon = document.getElementById('btnApprovePayIcon');
+
             if (payInput) {
-                payInput.value = remaining > 0 ? remaining : 0;
-                payInput.max = remaining;
+                payInput.removeAttribute('max');
+                if (remaining > 0) {
+                    payInput.value = remaining;
+                    payInput.placeholder = 'Enter amount...';
+                    if (approveBtnText) approveBtnText.textContent = 'Approve & Pay';
+                    if (approveBtnIcon) approveBtnIcon.className = 'fas fa-check-circle';
+                } else {
+                    payInput.value = '';
+                    payInput.placeholder = 'Fully Paid (₹0 Balance)';
+                    if (approveBtnText) approveBtnText.textContent = 'Approve & Close PO';
+                    if (approveBtnIcon) approveBtnIcon.className = 'fas fa-check-double';
+                }
             }
             document.getElementById('finPayRef').value = `UTR-${Date.now().toString().slice(-6)}`;
 
@@ -563,7 +606,7 @@
 
                 let invoiceHtml = '-';
                 if (invoices.length > 0) {
-                    invoiceHtml = invoices.map(inv => 
+                    invoiceHtml = invoices.map(inv =>
                         `<span class="inv-chip" onclick="showInvoiceDetails('${inv}', '${po.poNo}', '${li.itemKey}')" title="Click to view invoice details">
                             <i class="fas fa-file-invoice"></i> ${inv}
                         </span>`
@@ -592,24 +635,35 @@
             const po = window.PurchaseData.getPO(currentFinPoNo);
             if (!po) return;
 
-            const amt = Number(document.getElementById('finPayAmount').value);
+            const remaining = Math.max(0, po.totalCost - (po.amountPaid || 0));
+            const amtVal = document.getElementById('finPayAmount').value.trim();
+            const amt = Number(amtVal);
             const term = document.getElementById('finPayTerm').value;
-            const ref = document.getElementById('finPayRef').value.trim();
+            const ref = document.getElementById('finPayRef').value.trim() || `UTR-${Date.now().toString().slice(-6)}`;
 
-            if (!amt || amt <= 0) {
-                alert('Please enter a valid payment amount greater than 0.');
+            // Case A: PO is already fully paid (remaining === 0)
+            if (remaining === 0) {
+                po.financeApprovalStatus = 'Approved';
+                po.paymentStatus = 'Fully Paid';
+                po.status = 'Complete';
+                if (amt && !isNaN(amt) && amt > 0) {
+                    po.amountPaid = (po.amountPaid || 0) + amt;
+                }
+                window.PurchaseData.saveData(window.PurchaseData.data);
+                alert(`Finance Approval recorded successfully for ${currentFinPoNo}! All invoices verified and marked complete.`);
+                openFinanceModal(currentFinPoNo);
                 return;
             }
 
-            const remaining = po.totalCost - (po.amountPaid || 0);
-            if (amt > remaining) {
-                alert(`Payment amount (₹${amt}) cannot exceed remaining balance (₹${remaining}).`);
-                return;
-            }
-
-            const res = window.PurchaseData.recordPayment(currentFinPoNo, amt, term, ref);
+            // Case B: PO has remaining balance
+            const paymentAmount = (amt && !isNaN(amt) && amt > 0) ? amt : remaining;
+            const res = window.PurchaseData.recordPayment(currentFinPoNo, paymentAmount, term, ref);
             if (res.success) {
-                alert(`Payment of ₹${amt.toLocaleString('en-IN')} recorded successfully against ${currentFinPoNo}!`);
+                po.financeApprovalStatus = 'Approved';
+                window.PurchaseData.saveData(window.PurchaseData.data);
+                alert(`Payment of ₹${paymentAmount.toLocaleString('en-IN')} approved & recorded successfully against ${currentFinPoNo}!`);
+                openFinanceModal(currentFinPoNo);
+            } else {
                 openFinanceModal(currentFinPoNo);
             }
         }
@@ -664,4 +718,5 @@
         }
     </script>
 </body>
+
 </html>

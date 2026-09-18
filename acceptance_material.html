@@ -33,8 +33,13 @@
             font-weight: 700;
         }
 
-        .confirm-modal-header.accept { color: #16a34a; }
-        .confirm-modal-header.reject { color: #dc2626; }
+        .confirm-modal-header.accept {
+            color: #16a34a;
+        }
+
+        .confirm-modal-header.reject {
+            color: #dc2626;
+        }
 
         .timeline-container {
             border-left: 2px solid #cbd5e1;
@@ -122,12 +127,14 @@
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="fas fa-exchange-alt"></i> Purchase Transactions <i class="fas fa-chevron-down arrow"></i>
+                                <i class="fas fa-exchange-alt"></i> Purchase Transactions <i
+                                    class="fas fa-chevron-down arrow"></i>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="fas fa-file-invoice"></i> Purchase Reports <i class="fas fa-chevron-down arrow"></i>
+                                <i class="fas fa-file-invoice"></i> Purchase Reports <i
+                                    class="fas fa-chevron-down arrow"></i>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -155,27 +162,27 @@
             <!-- Content Area -->
             <main class="content">
                 <div class="breadcrumb">
-                    <i class="fas fa-home"></i> User Acceptance Material <i class="fas fa-chevron-right"></i> 
+                    <i class="fas fa-home"></i> User Acceptance Material <i class="fas fa-chevron-right"></i>
                     <span class="current">Desk User Verification</span>
                 </div>
 
                 <!-- Filters Card (Prioritized for Requesters per BA Vimal) -->
-                <div class="form-container" style="margin-bottom: 15px; padding: 15px;">
-                    <div class="filter-grid-acceptance">
-                        <div class="form-group" style="margin: 0;">
-                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">PR NUMBER</label>
+                <div class="filter-card">
+                    <div class="filter-grid filter-grid-acceptance">
+                        <div class="form-group">
+                            <label for="filterAccPrNo">PR No.</label>
                             <input type="text" id="filterAccPrNo" placeholder="Search PR No (e.g. PR-501)..." oninput="applyAcceptanceFilters()">
                         </div>
-                        <div class="form-group" style="margin: 0;">
-                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">ITEM NAME</label>
+                        <div class="form-group">
+                            <label for="filterAccItem">Item Name</label>
                             <input type="text" id="filterAccItem" placeholder="Search Item (e.g. MacBook)..." oninput="applyAcceptanceFilters()">
                         </div>
-                        <div class="form-group" style="margin: 0;">
-                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">PO NUMBER</label>
+                        <div class="form-group">
+                            <label for="filterAccPoNo">PO No.</label>
                             <input type="text" id="filterAccPoNo" placeholder="Search PO No..." oninput="applyAcceptanceFilters()">
                         </div>
-                        <div class="form-group" style="margin: 0;">
-                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">ACCEPTANCE STATUS</label>
+                        <div class="form-group">
+                            <label for="filterAccStatus">Status</label>
                             <select id="filterAccStatus" onchange="onAccStatusDropdownChange()">
                                 <option value="">All Statuses</option>
                                 <option value="Pending">Pending</option>
@@ -183,9 +190,9 @@
                                 <option value="Rejected">Rejected</option>
                             </select>
                         </div>
-                        <div style="display: flex; gap: 8px;">
-                            <button class="btn btn-primary" onclick="applyAcceptanceFilters()"><i class="fas fa-search"></i> Apply</button>
-                            <button class="btn btn-secondary" onclick="clearAcceptanceFilters()"><i class="fas fa-undo"></i> Reset</button>
+                        <div class="filter-actions">
+                            <button type="button" class="btn btn-primary" onclick="applyAcceptanceFilters()"><i class="fas fa-search"></i> Apply</button>
+                            <button type="button" class="btn btn-secondary" onclick="clearAcceptanceFilters()"><i class="fas fa-undo"></i> Reset</button>
                         </div>
                     </div>
                 </div>
@@ -193,21 +200,29 @@
                 <!-- Status Tabs Bar -->
                 <div class="status-tabs-container">
                     <div class="status-tabs-group" role="tablist">
-                        <button type="button" class="status-tab tab-all active" data-status="All" onclick="switchAcceptanceTab('All')">
-                            <i class="fas fa-layer-group"></i> All Items <span class="tab-badge" id="accBadgeAll">0</span>
+                        <button type="button" class="status-tab tab-all active" data-status="All"
+                            onclick="switchAcceptanceTab('All')">
+                            <i class="fas fa-layer-group"></i> All Items <span class="tab-badge"
+                                id="accBadgeAll">0</span>
                         </button>
-                        <button type="button" class="status-tab tab-pending" data-status="Pending" onclick="switchAcceptanceTab('Pending')">
+                        <button type="button" class="status-tab tab-pending" data-status="Pending"
+                            onclick="switchAcceptanceTab('Pending')">
                             <i class="fas fa-clock"></i> Pending <span class="tab-badge" id="accBadgePending">0</span>
                         </button>
-                        <button type="button" class="status-tab tab-accepted" data-status="Accepted" onclick="switchAcceptanceTab('Accepted')">
-                            <i class="fas fa-check-circle"></i> Accepted <span class="tab-badge" id="accBadgeAccepted">0</span>
+                        <button type="button" class="status-tab tab-accepted" data-status="Accepted"
+                            onclick="switchAcceptanceTab('Accepted')">
+                            <i class="fas fa-check-circle"></i> Accepted <span class="tab-badge"
+                                id="accBadgeAccepted">0</span>
                         </button>
-                        <button type="button" class="status-tab tab-rejected" data-status="Rejected" onclick="switchAcceptanceTab('Rejected')">
-                            <i class="fas fa-times-circle"></i> Rejected <span class="tab-badge" id="accBadgeRejected">0</span>
+                        <button type="button" class="status-tab tab-rejected" data-status="Rejected"
+                            onclick="switchAcceptanceTab('Rejected')">
+                            <i class="fas fa-times-circle"></i> Rejected <span class="tab-badge"
+                                id="accBadgeRejected">0</span>
                         </button>
                     </div>
                     <div style="display: flex; gap: 8px;">
-                        <button class="btn btn-export" onclick="exportAcceptanceData()"><i class="fas fa-file-export"></i> Export</button>
+                        <button class="btn btn-export" onclick="exportAcceptanceData()"><i
+                                class="fas fa-file-export"></i> Export</button>
                     </div>
                 </div>
 
@@ -225,7 +240,6 @@
                                 <th style="text-align: right;">USER ACCEPTED</th>
                                 <th>UOM</th>
                                 <th>SUPPLIER/VENDOR</th>
-                                <th>ACCEPTANCE STATUS</th>
                                 <th style="text-align: center;">ACTION</th>
                             </tr>
                         </thead>
@@ -236,7 +250,8 @@
                 </div>
 
                 <!-- Pagination Bar -->
-                <div class="pagination-bar" style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 12px; color: #64748b;">
+                <div class="pagination-bar"
+                    style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 12px; color: #64748b;">
                     <div id="accPaginationInfo">Showing 1 to 0 of 0 records</div>
                     <div class="pagination-controls" id="accPaginationControls"></div>
                 </div>
@@ -250,13 +265,15 @@
     <div class="modal-overlay" id="viewMoreModal">
         <div class="modal-box" style="max-width: 860px;">
             <div class="modal-header">
-                <h3><i class="fas fa-info-circle"></i> Item Details &amp; Goods-In History — <span id="vmHeaderTitle"></span></h3>
+                <h3><i class="fas fa-info-circle"></i> Item Details &amp; Goods-In History — <span
+                        id="vmHeaderTitle"></span></h3>
                 <button class="modal-close-btn" onclick="closeViewMoreModal()">&times;</button>
             </div>
             <div class="modal-body">
                 <!-- Summary -->
                 <div class="summary-card">
-                    <div class="summary-card-title"><i class="fas fa-file-invoice"></i> Tracking &amp; Requisition Details</div>
+                    <div class="summary-card-title"><i class="fas fa-file-invoice"></i> Tracking &amp; Requisition
+                        Details</div>
                     <div class="summary-grid-5">
                         <div class="summary-item">
                             <span class="label">PR Number</span>
@@ -284,7 +301,7 @@
                 <!-- Received Batches & Goods-In Dock Receipts -->
                 <div class="summary-card" style="background: #ffffff; padding: 12px;">
                     <div class="summary-card-title" style="color: #0369a1;">
-                        <i class="fas fa-warehouse"></i> Goods-In Dock Receipts &amp; Batches (Japan's Entry)
+                        <i class="fas fa-warehouse"></i> Goods-In Dock Receipts &amp; Batches
                     </div>
                     <div class="table-container" style="margin: 0;">
                         <table class="data-table" id="vmBatchesTable">
@@ -330,9 +347,13 @@
             <p id="confirmModalText" style="font-size: 13px; color: #334155; margin-bottom: 12px;"></p>
 
             <div id="rejectReasonSection" style="display: none; margin-bottom: 12px;">
-                <label style="font-size: 11px; font-weight: 700; color: #b91c1c; display: block; margin-bottom: 4px;">REJECTION REASON</label>
-                <select id="confirmRejectReason" style="width: 100%; padding: 7px; font-size: 12px; border: 1px solid #cbd5e1; border-radius: 4px; margin-bottom: 8px;">
-                    <option value="Damaged during transit / transit defect">Damaged during transit / transit defect</option>
+                <label
+                    style="font-size: 11px; font-weight: 700; color: #b91c1c; display: block; margin-bottom: 4px;">REJECTION
+                    REASON</label>
+                <select id="confirmRejectReason"
+                    style="width: 100%; padding: 7px; font-size: 12px; border: 1px solid #cbd5e1; border-radius: 4px; margin-bottom: 8px;">
+                    <option value="Damaged during transit / transit defect">Damaged during transit / transit defect
+                    </option>
                     <option value="Specification mismatch with PO">Specification mismatch with PO</option>
                     <option value="Missing accessory / incomplete unit">Missing accessory / incomplete unit</option>
                     <option value="Quality defect / failed on testing">Quality defect / failed on testing</option>
@@ -341,8 +362,12 @@
             </div>
 
             <div style="margin-bottom: 15px;">
-                <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">VERIFICATION REMARKS</label>
-                <textarea id="confirmRemarks" rows="2" style="width: 100%; padding: 8px; font-size: 12px; border: 1px solid #cbd5e1; border-radius: 4px;" placeholder="Optional remarks..."></textarea>
+                <label
+                    style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">VERIFICATION
+                    REMARKS</label>
+                <textarea id="confirmRemarks" rows="2"
+                    style="width: 100%; padding: 8px; font-size: 12px; border: 1px solid #cbd5e1; border-radius: 4px;"
+                    placeholder="Optional remarks..."></textarea>
             </div>
 
             <div style="display: flex; justify-content: flex-end; gap: 8px;">
@@ -423,7 +448,7 @@
             });
 
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="11" style="text-align: center; padding: 30px; color: #64748b;">
+                tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 30px; color: #64748b;">
                     <i class="fas fa-inbox" style="font-size: 28px; color: #cbd5e1; display: block; margin-bottom: 6px;"></i>
                     No requisition items found matching the filter criteria.
                 </td></tr>`;
@@ -470,7 +495,6 @@
                     <td style="text-align: right; color: #16a34a; font-weight: 700;">${item.userAcceptedQty}</td>
                     <td>${item.uom}</td>
                     <td>${item.supplierName}</td>
-                    <td><span class="badge ${statusClass}">${item.userAcceptanceStatus}</span></td>
                     <td style="text-align: center;">${actionsHtml}</td>
                 `;
                 tbody.appendChild(tr);
@@ -582,7 +606,7 @@
                 ${li.batches && li.batches.length > 0 ? `
                     <div class="timeline-step">
                         <div class="timeline-date">${li.batches[0].recDate}</div>
-                        <div class="timeline-title">Goods Received at Dock (Japan's Entry)</div>
+                        <div class="timeline-title">Goods Received at Dock</div>
                         <div class="timeline-desc">${li.recQty} ${li.uom} received and logged under batch ${li.batches.map(b => b.batchNo).join(', ')}.</div>
                     </div>
                 ` : ''}
@@ -617,4 +641,5 @@
         }
     </script>
 </body>
+
 </html>
