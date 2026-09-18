@@ -8,46 +8,83 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        .section-title {
-            font-size: 16px;
-            color: var(--primary-blue);
-            margin-bottom: 15px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid #eee;
-            margin-top: 20px;
+        .filter-grid-goods {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr) auto;
+            gap: 15px;
+            align-items: flex-end;
         }
 
-        .section-title:first-child {
-            margin-top: 0;
+        .batch-entry-form {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-left: 4px solid #0284c7;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 18px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
-        .readonly-input {
-            background-color: #e9ecef !important;
-            cursor: not-allowed;
-            color: #6c757d;
+        .batch-form-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.9fr 1fr 1.2fr 1.1fr 1.3fr auto;
+            gap: 12px;
+            align-items: flex-end;
         }
 
-        .btn-export {
-            background-color: #28a745;
-            border-color: #1e7e34;
-            color: white;
+        .batch-form-grid .form-group {
+            display: flex !important;
+            flex-direction: column !important;
+            height: auto !important;
+            border: none !important;
+            background: transparent !important;
+            overflow: visible !important;
+            margin: 0 !important;
         }
 
-        .btn-export:hover {
-            background-color: #1e7e34;
+        .batch-form-grid .form-group label {
+            background-color: transparent !important;
+            color: #334155 !important;
+            padding: 0 !important;
+            width: auto !important;
+            border-right: none !important;
+            font-size: 11px !important;
+            font-weight: 700 !important;
+            margin-bottom: 5px !important;
+            display: block !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.3px !important;
+            white-space: nowrap !important;
         }
 
-        /* Date-type multi-value input */
-        .add-value-input[type="date"] {
-            width: 150px;
+        .batch-form-grid .form-group input,
+        .batch-form-grid .form-group select {
+            width: 100% !important;
+            padding: 7px 10px !important;
+            font-size: 12px !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 4px !important;
+            background: #ffffff !important;
+            color: #1e293b !important;
+            height: 34px !important;
+            box-sizing: border-box !important;
+            outline: none !important;
         }
 
-        /* File-type multi-value input */
-        .add-value-input[type="file"] {
-            width: 180px;
-            padding: 1px 4px;
-            height: auto;
+        .batch-form-grid .form-group input:focus,
+        .batch-form-grid .form-group select:focus {
+            border-color: #0284c7 !important;
+            box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2) !important;
         }
+
+        .balance-badge {
+            font-size: 13px;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 12px;
+        }
+        .balance-badge.zero { background: #dcfce7; color: #15803d; }
+        .balance-badge.positive { background: #fef3c7; color: #b45309; }
     </style>
 </head>
 
@@ -85,27 +122,23 @@
                 <nav class="sidebar-nav">
                     <ul class="nav-list">
                         <li class="nav-item">
-                            <a href="#" class="nav-link active">
+                            <a href="#" class="nav-link">
                                 <i class="fas fa-list"></i> Purchase Masters <i class="fas fa-chevron-down arrow"></i>
                             </a>
                             <ul class="sub-nav-list">
                                 <li><a href="#" class="sub-nav-link">Item Master</a></li>
                                 <li><a href="#" class="sub-nav-link">Supplier Master</a></li>
-                                <li><a href="index.html" class="sub-nav-link">
-                                        Project Master
-                                    </a></li>
+                                <li><a href="index.html" class="sub-nav-link">Project Master</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="fas fa-exchange-alt"></i> Purchase Transactions <i
-                                    class="fas fa-chevron-down arrow"></i>
+                                <i class="fas fa-exchange-alt"></i> Purchase Transactions <i class="fas fa-chevron-down arrow"></i>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="fas fa-file-invoice"></i> Purchase Reports <i
-                                    class="fas fa-chevron-down arrow"></i>
+                                <i class="fas fa-file-invoice"></i> Purchase Reports <i class="fas fa-chevron-down arrow"></i>
                             </a>
                         </li>
                         <li class="nav-item active">
@@ -133,892 +166,523 @@
             <!-- Content Area -->
             <main class="content">
                 <div class="breadcrumb">
-                    <i class="fas fa-home"></i> Goods-In <i class="fas fa-chevron-right"></i> <span
-                        class="current">Stock Entry</span>
+                    <i class="fas fa-home"></i> Goods-In <i class="fas fa-chevron-right"></i> 
+                    <span class="current">Stock Entry &amp; Receiving</span>
                 </div>
 
-                <!-- ========== FORM (hidden by default) ========== -->
-                <div class="form-wrapper" id="formWrapper">
-                    <div class="form-container">
-                        <form id="projectForm">
-                            <h3 class="section-title">PO Details (Auto-populated)</h3>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label>PO NO.</label>
-                                    <input type="text" name="poNo" id="poNoInput" placeholder="Enter PO No...">
-                                </div>
-                                <div class="form-group"><label>PO DATE</label><input type="date" name="poDate" readonly
-                                        class="readonly-input"></div>
-                                <div class="form-group"><label>Delivery Period</label><input type="text"
-                                        name="deliveryPeriod" readonly class="readonly-input"></div>
-
-                                <div class="form-group"><label>SUPPLIER NAME</label><input type="text" name="supplierName"
-                                        readonly class="readonly-input"></div>
-
-                                <!-- MATERIAL NAME — Multi-Value -->
-                                <div class="form-group multi-value-field">
-                                    <label>MATERIAL NAME</label>
-                                    <div class="multi-value-group" id="mv-materialName">
-                                        <button type="button" class="add-value-btn" onclick="showAddInput('materialName', 'text')">
-                                            <i class="fas fa-plus"></i> Add
-                                        </button>
-                                        <div class="add-value-input-wrapper" id="mvInput-materialName">
-                                            <input type="text" class="add-value-input" placeholder="Material name..."
-                                                onkeydown="if(event.key==='Enter'){event.preventDefault();confirmAddValue('materialName')}">
-                                            <button type="button" class="add-value-confirm" onclick="confirmAddValue('materialName')">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                            <button type="button" class="add-value-cancel" onclick="hideAddInput('materialName')">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group"><label>PO QTY</label><input type="number" name="poQty" readonly
-                                        class="readonly-input"></div>
-
-                                <div class="form-group"><label>TOTAL AMOUNT</label><input type="number" name="totalAmount"
-                                        step="0.01" readonly class="readonly-input"></div>
-                                <div class="form-group"><label>DEPARTMENT</label><input type="text" name="department"
-                                        readonly class="readonly-input"></div>
-                            </div>
-
-                            <h3 class="section-title">Stock Entry (Manual)</h3>
-                            <div class="form-grid">
-                                <!-- RECEIVED QTY — Multi-Value -->
-                                <div class="form-group multi-value-field">
-                                    <label>RECEIVED QTY</label>
-                                    <div class="multi-value-group" id="mv-receivedQty">
-                                        <button type="button" class="add-value-btn" onclick="showAddInput('receivedQty', 'number')">
-                                            <i class="fas fa-plus"></i> Add
-                                        </button>
-                                        <div class="add-value-input-wrapper" id="mvInput-receivedQty">
-                                            <input type="number" class="add-value-input" placeholder="Qty..."
-                                                onkeydown="if(event.key==='Enter'){event.preventDefault();confirmAddValue('receivedQty')}">
-                                            <button type="button" class="add-value-confirm" onclick="confirmAddValue('receivedQty')">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                            <button type="button" class="add-value-cancel" onclick="hideAddInput('receivedQty')">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group"><label>BALANCE QTY</label><input type="number" name="balanceQty"
-                                        readonly class="readonly-input"></div>
-                                <div class="form-group"><label>UOM</label><input type="text" name="uom"></div>
-
-                                <!-- BATCH NUMBER — Multi-Value -->
-                                <div class="form-group multi-value-field">
-                                    <label>BATCH NUMBER</label>
-                                    <div class="multi-value-group" id="mv-batchNumber">
-                                        <button type="button" class="add-value-btn" onclick="showAddInput('batchNumber', 'text')">
-                                            <i class="fas fa-plus"></i> Add
-                                        </button>
-                                        <div class="add-value-input-wrapper" id="mvInput-batchNumber">
-                                            <input type="text" class="add-value-input" placeholder="Batch number..."
-                                                onkeydown="if(event.key==='Enter'){event.preventDefault();confirmAddValue('batchNumber')}">
-                                            <button type="button" class="add-value-confirm" onclick="confirmAddValue('batchNumber')">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                            <button type="button" class="add-value-cancel" onclick="hideAddInput('batchNumber')">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- EXPIRY DATE — Multi-Value -->
-                                <div class="form-group multi-value-field">
-                                    <label>EXPIRY DATE</label>
-                                    <div class="multi-value-group" id="mv-expiryDate">
-                                        <button type="button" class="add-value-btn" onclick="showAddInput('expiryDate', 'date')">
-                                            <i class="fas fa-plus"></i> Add
-                                        </button>
-                                        <div class="add-value-input-wrapper" id="mvInput-expiryDate">
-                                            <input type="date" class="add-value-input"
-                                                onkeydown="if(event.key==='Enter'){event.preventDefault();confirmAddValue('expiryDate')}">
-                                            <button type="button" class="add-value-confirm" onclick="confirmAddValue('expiryDate')">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                            <button type="button" class="add-value-cancel" onclick="hideAddInput('expiryDate')">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group"><label>REC DATE</label><input type="date" name="recDate"></div>
-
-                                <!-- INVOICE NO — Multi-Value -->
-                                <div class="form-group multi-value-field">
-                                    <label>INVOICE NO</label>
-                                    <div class="multi-value-group" id="mv-invoiceNo">
-                                        <button type="button" class="add-value-btn" onclick="showAddInput('invoiceNo', 'text')">
-                                            <i class="fas fa-plus"></i> Add
-                                        </button>
-                                        <div class="add-value-input-wrapper" id="mvInput-invoiceNo">
-                                            <input type="text" class="add-value-input" placeholder="Invoice number..."
-                                                onkeydown="if(event.key==='Enter'){event.preventDefault();confirmAddValue('invoiceNo')}">
-                                            <button type="button" class="add-value-confirm" onclick="confirmAddValue('invoiceNo')">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                            <button type="button" class="add-value-cancel" onclick="hideAddInput('invoiceNo')">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- INVOICE DATE — Multi-Value -->
-                                <div class="form-group multi-value-field">
-                                    <label>INVOICE DATE</label>
-                                    <div class="multi-value-group" id="mv-invoiceDate">
-                                        <button type="button" class="add-value-btn" onclick="showAddInput('invoiceDate', 'date')">
-                                            <i class="fas fa-plus"></i> Add
-                                        </button>
-                                        <div class="add-value-input-wrapper" id="mvInput-invoiceDate">
-                                            <input type="date" class="add-value-input"
-                                                onkeydown="if(event.key==='Enter'){event.preventDefault();confirmAddValue('invoiceDate')}">
-                                            <button type="button" class="add-value-confirm" onclick="confirmAddValue('invoiceDate')">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                            <button type="button" class="add-value-cancel" onclick="hideAddInput('invoiceDate')">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group"><label>RECEIVED BY</label><input type="text" name="receivedBy">
-                                </div>
-                                <div class="form-group"><label>ACCEPTANCE DATE</label><input type="date"
-                                        name="acceptanceDate"></div>
-
-                                <div class="form-group"><label>SUBMITTED TO ACCTS</label><input type="text"
-                                        name="submittedToAccounts"></div>
-                                <div class="form-group"><label>REMARKS</label><input type="text" name="remarks"></div>
-
-                                <!-- ATTACHMENT — Multi-Value -->
-                                <div class="form-group multi-value-field">
-                                    <label>Attachment</label>
-                                    <div class="multi-value-group" id="mv-attachment">
-                                        <button type="button" class="add-value-btn" onclick="showAddInput('attachment', 'file')">
-                                            <i class="fas fa-plus"></i> Add
-                                        </button>
-                                        <div class="add-value-input-wrapper" id="mvInput-attachment">
-                                            <input type="file" class="add-value-input"
-                                                onchange="confirmAddFileValue('attachment')">
-                                            <button type="button" class="add-value-cancel" onclick="hideAddInput('attachment')">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Actions -->
-                            <div class="form-actions">
-                                <button type="button" id="btnSaveStock" class="btn btn-save" onclick="saveStock()"><i
-                                        class="fas fa-save"></i> Save</button>
-                                <button type="button" id="btnUpdateStock" class="btn btn-update" disabled
-                                    onclick="updateStock()"><i class="fas fa-file-alt"></i>
-                                    Update</button>
-                                <button type="button" id="btnCancelStock" class="btn btn-reset"
-                                    style="display:none; background-color:#6c757d; border-color:#5a6268;"
-                                    onclick="cancelEditStock()"><i class="fas fa-times"></i> Cancel</button>
-                                <button type="button" class="btn btn-reset" onclick="resetForm()"><i
-                                        class="fas fa-sync-alt"></i> Reset</button>
-                            </div>
-                        </form>
+                <!-- Filters Section -->
+                <div class="form-container" style="margin-bottom: 15px; padding: 15px;">
+                    <div class="filter-grid-goods">
+                        <div class="form-group" style="margin: 0;">
+                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">PO NUMBER</label>
+                            <input type="text" id="filterPoNo" list="poDatalist" placeholder="Search PO No (e.g. PO01)..." oninput="applyGoodsInFilters()">
+                            <datalist id="poDatalist">
+                                <option value="PO01">
+                                <option value="PO02">
+                                <option value="PO03">
+                                <option value="PO04">
+                            </datalist>
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">ITEM NAME</label>
+                            <input type="text" id="filterItemName" list="itemDatalist" placeholder="Search Item (e.g. MacBook)..." oninput="applyGoodsInFilters()">
+                            <datalist id="itemDatalist">
+                                <option value="MacBook Air M2">
+                                <option value="Dell Latitude Laptop">
+                                <option value="Server Rack 42U Enclosure">
+                                <option value="Cisco 48-Port Managed Switch">
+                                <option value="Cat6 UTP Cable Roll 305m">
+                                <option value="RJ45 Connectors">
+                                <option value="Ergonomic High-Back Mesh Chair">
+                            </datalist>
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">STATUS</label>
+                            <select id="filterStatus" onchange="onStatusFilterDropdownChange()">
+                                <option value="">All Statuses</option>
+                                <option value="New">New</option>
+                                <option value="Partial">Partial</option>
+                                <option value="Full">Full / Complete</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">SUPPLIER</label>
+                            <input type="text" id="filterSupplier" placeholder="Search Supplier..." oninput="applyGoodsInFilters()">
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-primary" onclick="applyGoodsInFilters()"><i class="fas fa-search"></i> Apply</button>
+                            <button class="btn btn-secondary" onclick="clearGoodsInFilters()"><i class="fas fa-undo"></i> Reset</button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Table Actions Bar -->
-                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 10px;">
-                    <button type="button" class="btn btn-add-entry" onclick="showAddNewForm()">
-                        <i class="fas fa-plus"></i> Add New Entry
-                    </button>
-                    <button type="button" class="btn btn-export" onclick="exportStockData()"><i
-                            class="fas fa-file-export"></i> Export</button>
+                <!-- Status Tabs & Export Bar -->
+                <div class="status-tabs-container">
+                    <div class="status-tabs-group" role="tablist">
+                        <button type="button" class="status-tab tab-all active" data-status="All" onclick="switchGoodsInTab('All')">
+                            <i class="fas fa-layer-group"></i> All <span class="tab-badge" id="badgeAll">0</span>
+                        </button>
+                        <button type="button" class="status-tab tab-new" data-status="New" onclick="switchGoodsInTab('New')">
+                            <i class="fas fa-sparkles"></i> New <span class="tab-badge" id="badgeNew">0</span>
+                        </button>
+                        <button type="button" class="status-tab tab-partial" data-status="Partial" onclick="switchGoodsInTab('Partial')">
+                            <i class="fas fa-hourglass-half"></i> Partial <span class="tab-badge" id="badgePartial">0</span>
+                        </button>
+                        <button type="button" class="status-tab tab-complete" data-status="Full" onclick="switchGoodsInTab('Full')">
+                            <i class="fas fa-check-circle"></i> Complete <span class="tab-badge" id="badgeComplete">0</span>
+                        </button>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-export" onclick="exportGoodsInData()"><i class="fas fa-file-export"></i> Export</button>
+                    </div>
                 </div>
 
-                <!-- Data Table -->
+                <!-- Main Line Item Table -->
                 <div class="table-container">
-                    <table class="data-table" id="stockTable">
+                    <table class="data-table" id="goodsInTable">
                         <thead>
                             <tr>
                                 <th>PO NO.</th>
                                 <th>PO DATE</th>
-                                <th>Delivery Period</th>
-                                <th>SUPPLIER NAME</th>
-                                <th>MATERIAL NAME</th>
+                                <th>ITEM KEY</th>
+                                <th>ITEM NAME</th>
+                                <th style="text-align: right;">REQ QTY</th>
+                                <th style="text-align: right;">REC QTY</th>
+                                <th style="text-align: right;">BALANCE</th>
                                 <th>UOM</th>
-                                <th>BATCH NUMBER</th>
-                                <th>EXPIRY DATE</th>
-                                <th>PO QTY</th>
-                                <th>RECEIVED QTY</th>
-                                <th>BALANCE QTY</th>
-                                <th>REC DATE</th>
-                                <th>INVOICE NO</th>
-                                <th>INVOICE DATE</th>
-                                <th>TOTAL AMOUNT</th>
-                                <th>DEPARTMENT</th>
-                                <th>RECEIVED BY</th>
-                                <th>ACCEPTANCE DATE</th>
-                                <th>SUBMITTED TO ACCTS</th>
-                                <th>REMARKS</th>
-                                <th>Attachment</th>
-                                <th>Action</th>
+                                <th>SUPPLIER NAME</th>
+                                <th>STATUS</th>
+                                <th style="text-align: center;">ACTION</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>PO-1001</td>
-                                <td>2023-01-15</td>
-                                <td>30 Days</td>
-                                <td>ABC Tech Solutions</td>
-                                <td>
-                                    <div class="table-multi-values">
-                                        <span class="table-value-pill">Laptop</span>
-                                        <span class="table-value-pill">Monitor</span>
-                                    </div>
-                                </td>
-                                <td>Nos</td>
-                                <td>
-                                    <div class="table-multi-values">
-                                        <span class="table-value-pill">BN-1001</span>
-                                        <span class="table-value-pill">BN-1002</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="table-multi-values">
-                                        <span class="table-value-pill">2025-12-31</span>
-                                        <span class="table-value-pill">2026-06-30</span>
-                                    </div>
-                                </td>
-                                <td>50</td>
-                                <td>
-                                    <div class="table-multi-values">
-                                        <span class="table-value-pill">30</span>
-                                        <span class="table-value-pill">20</span>
-                                    </div>
-                                </td>
-                                <td>0</td>
-                                <td>2023-02-10</td>
-                                <td>
-                                    <div class="table-multi-values">
-                                        <span class="table-value-pill">INV-001</span>
-                                        <span class="table-value-pill">INV-002</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="table-multi-values">
-                                        <span class="table-value-pill">2023-02-10</span>
-                                        <span class="table-value-pill">2023-02-15</span>
-                                    </div>
-                                </td>
-                                <td>2500000.00</td>
-                                <td>IT</td>
-                                <td>John Doe</td>
-                                <td>2023-02-12</td>
-                                <td>2023-02-15</td>
-                                <td>Fully Delivered</td>
-                                <td>
-                                    <div class="table-multi-values">
-                                        <span class="table-value-pill"><i class="fas fa-paperclip"></i> invoice_1.pdf</span>
-                                        <span class="table-value-pill"><i class="fas fa-paperclip"></i> receipt_1.pdf</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="action-icons">
-                                        <i class="fas fa-edit icon-edit" title="Edit" onclick="editStock(this)"></i>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>PO-1002</td>
-                                <td>2023-03-01</td>
-                                <td>15 Days</td>
-                                <td>Office Supplies Co.</td>
-                                <td>
-                                    <div class="table-multi-values">
-                                        <span class="table-value-pill">Printer Paper</span>
-                                    </div>
-                                </td>
-                                <td>Reams</td>
-                                <td>
-                                    <div class="table-multi-values">
-                                        <span class="table-value-pill">BN-1002</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="table-multi-values">
-                                        <span class="table-value-pill">2024-06-30</span>
-                                    </div>
-                                </td>
-                                <td>100</td>
-                                <td>
-                                    <div class="table-multi-values">
-                                        <span class="table-value-pill">80</span>
-                                    </div>
-                                </td>
-                                <td>20</td>
-                                <td>2023-03-10</td>
-                                <td>
-                                    <div class="table-multi-values">
-                                        <span class="table-value-pill">CHL-992</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="table-multi-values">
-                                        <span class="table-value-pill">2023-03-09</span>
-                                    </div>
-                                </td>
-                                <td>16000.00</td>
-                                <td>Operations</td>
-                                <td>Jane Smith</td>
-                                <td>2023-03-11</td>
-                                <td>2023-03-12</td>
-                                <td>Partial Delivery</td>
-                                <td>-</td>
-                                <td>
-                                    <div class="action-icons">
-                                        <i class="fas fa-edit icon-edit" title="Edit" onclick="editStock(this)"></i>
-                                    </div>
-                                </td>
-                            </tr>
+                        <tbody id="goodsInTableBody">
+                            <!-- Populated dynamically -->
                         </tbody>
                     </table>
                 </div>
 
+                <!-- Pagination Bar -->
+                <div class="pagination-bar" style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 12px; color: #64748b;">
+                    <div id="goodsInPaginationInfo">Showing 1 to 0 of 0 records</div>
+                    <div class="pagination-controls" id="goodsInPaginationControls"></div>
+                </div>
             </main>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- ========================================================= -->
+    <!-- ACCEPT CLICK MODAL: PO Summary + Item Summary + Batches   -->
+    <!-- ========================================================= -->
+    <div class="modal-overlay" id="acceptModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fas fa-box-open"></i> Goods Receive &amp; Batch Entry — <span id="modalHeaderPoItem"></span></h3>
+                <button class="modal-close-btn" onclick="closeAcceptModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- 1. PO Summary -->
+                <div class="summary-card">
+                    <div class="summary-card-title"><i class="fas fa-file-invoice"></i> Purchase Order Summary</div>
+                    <div class="summary-grid-5">
+                        <div class="summary-item">
+                            <span class="label">PO Number</span>
+                            <span class="value highlight" id="sumPoNo">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">PO Date</span>
+                            <span class="value" id="sumPoDate">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Requested By</span>
+                            <span class="value" id="sumRequestedBy">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Supplier Name</span>
+                            <span class="value" id="sumSupplierName">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Total PO Cost</span>
+                            <span class="value" id="sumTotalCost">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Item Summary -->
+                <div class="summary-card" style="background: #ffffff; border-color: #cbd5e1;">
+                    <div class="summary-card-title" style="color: #0369a1;"><i class="fas fa-box"></i> Selected Line Item Summary</div>
+                    <div class="summary-grid-5">
+                        <div class="summary-item">
+                            <span class="label">Item Name</span>
+                            <span class="value" id="sumItemName">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Required Qty</span>
+                            <span class="value" id="sumReqQty">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Received Qty</span>
+                            <span class="value success" id="sumRecQty">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">UOM</span>
+                            <span class="value" id="sumUom">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Balance Qty</span>
+                            <span class="value alert" id="sumBalance">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Batch Information Table -->
+                <div class="summary-card" style="background: #ffffff; padding: 12px; margin-bottom: 0;">
+                    <div class="summary-card-title" style="color: #0f172a; margin-bottom: 8px;">
+                        <i class="fas fa-cubes"></i> Batch Information (Goods Receipts)
+                    </div>
+                    
+                    <div class="table-container" style="margin: 0;">
+                        <table class="data-table" id="batchTable">
+                            <thead>
+                                <tr>
+                                    <th>RCVD DATE</th>
+                                    <th style="text-align: right;">RCVD QTY</th>
+                                    <th>BATCH NO</th>
+                                    <th>EXPIRY DATE</th>
+                                    <th>INVOICE NO</th>
+                                    <th>ATTACHMENT</th>
+                                    <th style="text-align: center;">ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody id="batchTableBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 4. Add Batch Entry Row (Directly matches BA Vimal's Wireframe) -->
+                    <div class="batch-entry-form" id="addBatchContainer">
+                        <div id="batchCompleteNotice" style="display: none; background: #f0fdf4; border: 1px solid #86efac; border-radius: 6px; padding: 10px 14px; color: #166534; font-size: 12px; font-weight: 600; margin-bottom: 12px; align-items: center; gap: 8px;">
+                            <i class="fas fa-check-circle" style="color: #16a34a; font-size: 15px;"></i> All requested quantities have been fully received for this line item (Balance: 0).
+                        </div>
+                        <h5 style="font-size: 12px; font-weight: 700; color: #1e40af; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                            <i class="fas fa-plus-circle"></i> Add Batch Receipt
+                        </h5>
+                        <div class="batch-form-grid">
+                            <div class="form-group">
+                                <label>Rcvd Date</label>
+                                <input type="date" id="newBatchDate">
+                            </div>
+                            <div class="form-group">
+                                <label>Rcvd Qty</label>
+                                <input type="number" id="newBatchQty" min="1" placeholder="Qty">
+                            </div>
+                            <div class="form-group">
+                                <label>Batch No</label>
+                                <input type="text" id="newBatchNo" placeholder="e.g. B001">
+                            </div>
+                            <div class="form-group">
+                                <label>Expiry Date</label>
+                                <input type="date" id="newBatchExpiry">
+                            </div>
+                            <div class="form-group">
+                                <label>Invoice No</label>
+                                <input type="text" id="newBatchInvoice" placeholder="e.g. Inv001">
+                            </div>
+                            <div class="form-group">
+                                <label>Attachment</label>
+                                <input type="text" id="newBatchAttachment" placeholder="invoice.pdf">
+                            </div>
+                            <div style="display: flex; flex-direction: column; justify-content: flex-end;">
+                                <button type="button" id="btnAddBatchBtn" class="btn btn-primary" onclick="handleAddBatch()" style="white-space: nowrap; height: 34px; padding: 0 16px;">
+                                    <i class="fas fa-plus"></i> Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeAcceptModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="shared_data.js"></script>
     <script>
-        // ==================== MULTI-VALUE FIELD CONFIG ====================
-        // Column indices for multi-value fields in the table
-        const MULTI_VALUE_COLUMNS = {
-            materialName: 4,
-            batchNumber: 6,
-            expiryDate: 7,
-            receivedQty: 9,
-            invoiceNo: 12,
-            invoiceDate: 13,
-            attachment: 20
-        };
+        let currentTab = 'All';
+        let currentPoNo = null;
+        let currentItemKey = null;
 
-        // Mock Data for PO auto-population
-        const poDataMap = {
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set default date for new batch to today
+            const today = new Date().toISOString().split('T')[0];
+            const dateInput = document.getElementById('newBatchDate');
+            if (dateInput) dateInput.value = today;
 
-            'PO-1001': {
-                poDate: '2023-01-15',
-                deliveryPeriod: '30 Days',
-                supplierName: 'ABC Tech Solutions',
-                materialName: 'Laptop, Monitor',
-                poQty: 50,
-                totalAmount: 2500000.00,
-                department: 'IT'
-            },
-            'PO-1002': {
-                poDate: '2023-03-01',
-                deliveryPeriod: '15 Days',
-                supplierName: 'Office Supplies Co.',
-                materialName: 'Printer Paper',
-                poQty: 100,
-                totalAmount: 16000.00,
-                department: 'Operations'
-            }
-        };
+            renderGoodsInTable();
+        });
 
-        // ==================== FORM TOGGLE ====================
-        function toggleForm(show) {
-            const wrapper = document.getElementById('formWrapper');
-            if (show) {
-                wrapper.classList.add('visible');
-                // Scroll to form after a small delay for animation
-                setTimeout(() => {
-                    wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 100);
-            } else {
-                wrapper.classList.remove('visible');
-            }
-        }
-
-        function showAddNewForm() {
-            cancelEditStock();
-            const form = document.getElementById('projectForm');
-            form.reset();
-            clearAllMultiValues();
-
-            // Show save button, hide update/cancel
-            document.getElementById('btnSaveStock').style.display = 'inline-flex';
-            document.getElementById('btnUpdateStock').disabled = true;
-            document.getElementById('btnUpdateStock').style.backgroundColor = '#92a9c3';
-            document.getElementById('btnUpdateStock').style.borderColor = '#7b91a9';
-            document.getElementById('btnUpdateStock').style.cursor = 'not-allowed';
-            document.getElementById('btnCancelStock').style.display = 'none';
-
-            toggleForm(true);
-        }
-
-        // ==================== MULTI-VALUE CHIP FUNCTIONS ====================
-        function addValueChip(fieldName, value) {
-            if (!value || value.trim() === '') return;
-            const container = document.getElementById('mv-' + fieldName);
-            const addBtn = container.querySelector('.add-value-btn');
-
-            const chip = document.createElement('span');
-            chip.className = 'value-chip';
-            chip.setAttribute('data-value', value.trim());
-            chip.innerHTML = `${escapeHtml(value.trim())} <button type="button" class="remove-chip" onclick="removeValueChip(this)" title="Remove">&times;</button>`;
-
-            // Insert chip before the add button
-            container.insertBefore(chip, addBtn);
-        }
-
-        function removeValueChip(btnEl) {
-            const chip = btnEl.closest('.value-chip');
-            chip.style.animation = 'none'; // prevent re-animation
-            chip.style.transition = 'transform 0.2s, opacity 0.2s';
-            chip.style.transform = 'scale(0.5)';
-            chip.style.opacity = '0';
-            setTimeout(() => chip.remove(), 200);
-        }
-
-        function showAddInput(fieldName, inputType) {
-            const wrapper = document.getElementById('mvInput-' + fieldName);
-            const addBtn = wrapper.previousElementSibling || wrapper.parentElement.querySelector('.add-value-btn');
-            if (addBtn) addBtn.style.display = 'none';
-            wrapper.classList.add('active');
-
-            const input = wrapper.querySelector('.add-value-input');
-            if (input) {
-                input.value = '';
-                input.focus();
-            }
-        }
-
-        function hideAddInput(fieldName) {
-            const wrapper = document.getElementById('mvInput-' + fieldName);
-            wrapper.classList.remove('active');
-            const container = document.getElementById('mv-' + fieldName);
-            const addBtn = container.querySelector('.add-value-btn');
-            if (addBtn) addBtn.style.display = 'inline-flex';
-        }
-
-        function confirmAddValue(fieldName) {
-            const wrapper = document.getElementById('mvInput-' + fieldName);
-            const input = wrapper.querySelector('.add-value-input');
-            const value = input.value.trim();
-
-            if (value) {
-                addValueChip(fieldName, value);
-            }
-
-            input.value = '';
-            hideAddInput(fieldName);
-        }
-
-        function confirmAddFileValue(fieldName) {
-            const wrapper = document.getElementById('mvInput-' + fieldName);
-            const input = wrapper.querySelector('.add-value-input');
-
-            if (input.files && input.files.length > 0) {
-                const fileName = input.files[0].name;
-                addValueChip(fieldName, fileName);
-            }
-
-            input.value = '';
-            hideAddInput(fieldName);
-        }
-
-        function getMultiValues(fieldName) {
-            const container = document.getElementById('mv-' + fieldName);
-            const chips = container.querySelectorAll('.value-chip');
-            return Array.from(chips).map(chip => chip.getAttribute('data-value'));
-        }
-
-        function setMultiValues(fieldName, valuesStr) {
-            clearMultiValues(fieldName);
-            if (!valuesStr || valuesStr.trim() === '' || valuesStr.trim() === '-') return;
-
-            const values = valuesStr.split(',').map(v => v.trim()).filter(v => v);
-            values.forEach(val => addValueChip(fieldName, val));
-        }
-
-        function clearMultiValues(fieldName) {
-            const container = document.getElementById('mv-' + fieldName);
-            const chips = container.querySelectorAll('.value-chip');
-            chips.forEach(chip => chip.remove());
-            hideAddInput(fieldName);
-        }
-
-        function clearAllMultiValues() {
-            Object.keys(MULTI_VALUE_COLUMNS).forEach(fieldName => {
-                clearMultiValues(fieldName);
+        function switchGoodsInTab(status) {
+            currentTab = status;
+            document.querySelectorAll('.status-tab').forEach(t => {
+                const isActive = t.dataset.status === status;
+                t.classList.toggle('active', isActive);
             });
-        }
-
-        // Helper: extract multi-value text from a table cell
-        function getMultiValueFromCell(cell) {
-            const pills = cell.querySelectorAll('.table-value-pill');
-            if (pills.length > 0) {
-                return Array.from(pills).map(p => {
-                    // Strip any icon text, just get the text content
-                    return p.textContent.trim();
-                }).join(', ');
+            const statusDropdown = document.getElementById('filterStatus');
+            if (statusDropdown) {
+                statusDropdown.value = (status === 'All') ? '' : status;
             }
-            return cell.textContent.trim();
+            renderGoodsInTable();
         }
 
-        // Helper: render multi-value pills into a table cell
-        function renderMultiValueCell(values) {
-            if (!values || values.length === 0 || (values.length === 1 && values[0] === '')) {
-                return '-';
-            }
-            const pills = values.map(v =>
-                `<span class="table-value-pill">${escapeHtml(v)}</span>`
-            ).join('');
-            return `<div class="table-multi-values">${pills}</div>`;
+        function onStatusFilterDropdownChange() {
+            const val = document.getElementById('filterStatus').value || 'All';
+            switchGoodsInTab(val);
         }
 
-        // Helper: render attachment pills (with icon)
-        function renderAttachmentCell(values) {
-            if (!values || values.length === 0 || (values.length === 1 && (values[0] === '' || values[0] === '-'))) {
-                return '-';
-            }
-            const pills = values.map(v =>
-                `<span class="table-value-pill"><i class="fas fa-paperclip"></i> ${escapeHtml(v)}</span>`
-            ).join('');
-            return `<div class="table-multi-values">${pills}</div>`;
+        function applyGoodsInFilters() {
+            renderGoodsInTable();
         }
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+        function clearGoodsInFilters() {
+            document.getElementById('filterPoNo').value = '';
+            document.getElementById('filterItemName').value = '';
+            document.getElementById('filterSupplier').value = '';
+            document.getElementById('filterStatus').value = '';
+            switchGoodsInTab('All');
         }
 
-        // ==================== PO DETAILS AUTO-POPULATE ====================
-        function populatePODetails() {
-            const form = document.getElementById('projectForm');
-            const poNo = form.poNo.value;
-            if (poNo && poDataMap[poNo]) {
-                const data = poDataMap[poNo];
-                form.poDate.value = data.poDate;
-                form.deliveryPeriod.value = data.deliveryPeriod;
-                form.supplierName.value = data.supplierName;
-                form.poQty.value = data.poQty;
-                form.totalAmount.value = data.totalAmount;
-                form.department.value = data.department;
+        function renderGoodsInTable() {
+            const tbody = document.getElementById('goodsInTableBody');
+            tbody.innerHTML = '';
 
-                // Multi-value fields from PO data
-                setMultiValues('materialName', data.materialName);
+            const allItems = window.PurchaseData.getGoodsInLineItems();
 
-                calculateBalanceQty();
-            } else {
-                form.poDate.value = '';
-                form.deliveryPeriod.value = '';
-                form.supplierName.value = '';
-                form.poQty.value = '';
-                form.totalAmount.value = '';
-                form.department.value = '';
-                form.balanceQty.value = '';
-                clearMultiValues('materialName');
-            }
-        }
+            // Update badge counts
+            const countAll = allItems.length;
+            const countNew = allItems.filter(i => i.status === 'New').length;
+            const countPartial = allItems.filter(i => i.status === 'Partial').length;
+            const countComplete = allItems.filter(i => i.status === 'Full').length;
 
-        function calculateBalanceQty() {
-            const form = document.getElementById('projectForm');
-            const poQty = parseFloat(form.poQty.value) || 0;
-            // Sum all received qty chips
-            const receivedValues = getMultiValues('receivedQty');
-            const totalReceived = receivedValues.reduce((sum, v) => sum + (parseFloat(v) || 0), 0);
-            form.balanceQty.value = Math.max(0, poQty - totalReceived);
-        }
+            document.getElementById('badgeAll').textContent = countAll;
+            document.getElementById('badgeNew').textContent = countNew;
+            document.getElementById('badgePartial').textContent = countPartial;
+            document.getElementById('badgeComplete').textContent = countComplete;
 
-        // ==================== PO DETAILS LOCK (Auto-populated) ====================
-        function lockPODetailsSection(lock) {
-            const poNoInput = document.getElementById('poNoInput');
+            // Filter
+            const fPo = document.getElementById('filterPoNo').value.trim().toLowerCase();
+            const fItem = document.getElementById('filterItemName').value.trim().toLowerCase();
+            const fSupplier = document.getElementById('filterSupplier').value.trim().toLowerCase();
+            const fStatus = currentTab !== 'All' ? currentTab : document.getElementById('filterStatus').value;
 
-            if (lock) {
-                // Make PO NO readonly
-                poNoInput.setAttribute('readonly', true);
-                poNoInput.classList.add('readonly-input');
+            const filtered = allItems.filter(item => {
+                if (fPo && !item.poNo.toLowerCase().includes(fPo)) return false;
+                if (fItem && !item.itemName.toLowerCase().includes(fItem) && !item.itemKey.toLowerCase().includes(fItem)) return false;
+                if (fSupplier && !item.supplierName.toLowerCase().includes(fSupplier)) return false;
+                if (fStatus && item.status.toLowerCase() !== fStatus.toLowerCase()) return false;
+                return true;
+            });
 
-                // Hide add/remove controls on Material Name (auto-populated)
-                ['materialName'].forEach(fieldName => {
-                    const container = document.getElementById('mv-' + fieldName);
-                    // Hide the + Add button
-                    const addBtn = container.querySelector('.add-value-btn');
-                    if (addBtn) addBtn.style.display = 'none';
-                    // Hide the input wrapper
-                    const inputWrapper = document.getElementById('mvInput-' + fieldName);
-                    if (inputWrapper) inputWrapper.classList.remove('active');
-                    // Hide remove buttons on existing chips
-                    container.querySelectorAll('.remove-chip').forEach(btn => {
-                        btn.style.display = 'none';
-                    });
-                });
-            } else {
-                // Unlock PO NO
-                poNoInput.removeAttribute('readonly');
-                poNoInput.classList.remove('readonly-input');
-
-                // Show add/remove controls on Material Name
-                ['materialName'].forEach(fieldName => {
-                    const container = document.getElementById('mv-' + fieldName);
-                    const addBtn = container.querySelector('.add-value-btn');
-                    if (addBtn) addBtn.style.display = 'inline-flex';
-                    container.querySelectorAll('.remove-chip').forEach(btn => {
-                        btn.style.display = 'inline-flex';
-                    });
-                });
-            }
-        }
-
-        // ==================== EDIT / UPDATE / CANCEL ====================
-        let editingStockRow = null;
-
-        function editStock(iconEl) {
-            const row = iconEl.closest('tr');
-            const cells = row.querySelectorAll('td');
-            editingStockRow = row;
-
-            // Show the form
-            toggleForm(true);
-
-            const form = document.getElementById('projectForm');
-
-            // Single-value fields
-            form.poNo.value = cells[0].textContent.trim();
-            form.poDate.value = cells[1].textContent.trim();
-            form.deliveryPeriod.value = cells[2].textContent.trim();
-            form.supplierName.value = cells[3].textContent.trim();
-            form.uom.value = cells[5].textContent.trim();
-            form.poQty.value = cells[8].textContent.trim();
-            form.balanceQty.value = cells[10].textContent.trim();
-            form.recDate.value = cells[11].textContent.trim();
-            form.totalAmount.value = cells[14].textContent.trim();
-            form.department.value = cells[15].textContent.trim();
-            form.receivedBy.value = cells[16].textContent.trim();
-            form.acceptanceDate.value = cells[17].textContent.trim();
-            form.submittedToAccounts.value = cells[18].textContent.trim();
-            form.remarks.value = cells[19].textContent.trim();
-
-            // Multi-value fields — read from pills in table
-            setMultiValues('materialName', getMultiValueFromCell(cells[4]));
-            setMultiValues('batchNumber', getMultiValueFromCell(cells[6]));
-            setMultiValues('expiryDate', getMultiValueFromCell(cells[7]));
-            setMultiValues('receivedQty', getMultiValueFromCell(cells[9]));
-            setMultiValues('invoiceNo', getMultiValueFromCell(cells[12]));
-            setMultiValues('invoiceDate', getMultiValueFromCell(cells[13]));
-
-            // Attachment — extract file names
-            const attachmentText = getMultiValueFromCell(cells[20]);
-            setMultiValues('attachment', attachmentText !== '-' ? attachmentText : '');
-
-            // Lock PO Details section (auto-populated, read-only)
-            lockPODetailsSection(true);
-
-            // Switch to edit mode
-            document.getElementById('btnSaveStock').style.display = 'none';
-            document.getElementById('btnUpdateStock').disabled = false;
-            document.getElementById('btnUpdateStock').style.backgroundColor = '#f0ad4e';
-            document.getElementById('btnUpdateStock').style.borderColor = '#eea236';
-            document.getElementById('btnUpdateStock').style.cursor = 'pointer';
-            document.getElementById('btnCancelStock').style.display = 'inline-flex';
-
-            // Highlight the row being edited
-            document.querySelectorAll('#stockTable tbody tr').forEach(r => r.style.backgroundColor = '');
-            row.style.backgroundColor = '#fff8e1';
-        }
-
-        function updateStock() {
-            if (!editingStockRow) return;
-
-            const form = document.getElementById('projectForm');
-            if (!form.poNo.value) {
-                alert('PO NO. is required!');
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="11" style="text-align: center; padding: 30px; color: #64748b;">
+                    <i class="fas fa-inbox" style="font-size: 28px; color: #cbd5e1; display: block; margin-bottom: 6px;"></i>
+                    No line items found for the selected criteria.
+                </td></tr>`;
+                document.getElementById('goodsInPaginationInfo').textContent = 'Showing 0 to 0 of 0 records';
                 return;
             }
 
-            // Read multi-value fields
-            const materialNames = getMultiValues('materialName');
-            const batchNumbers = getMultiValues('batchNumber');
-            const expiryDates = getMultiValues('expiryDate');
-            const receivedQtys = getMultiValues('receivedQty');
-            const invoiceNos = getMultiValues('invoiceNo');
-            const invoiceDates = getMultiValues('invoiceDate');
-            const attachments = getMultiValues('attachment');
+            filtered.forEach(item => {
+                const tr = document.createElement('tr');
+                const statusClass = item.status.toLowerCase();
+                tr.innerHTML = `
+                    <td><strong>${item.poNo}</strong></td>
+                    <td>${item.poDate}</td>
+                    <td><span class="badge open" style="font-size: 10px;">${item.itemKey}</span></td>
+                    <td><strong>${item.itemName}</strong></td>
+                    <td style="text-align: right; font-weight: 600;">${item.reqQty}</td>
+                    <td style="text-align: right; color: #16a34a; font-weight: 600;">${item.recQty}</td>
+                    <td style="text-align: right;">
+                        <span class="balance-badge ${item.balance === 0 ? 'zero' : 'positive'}">${item.balance}</span>
+                    </td>
+                    <td>${item.uom}</td>
+                    <td>${item.supplierName}</td>
+                    <td><span class="badge ${statusClass}">${item.status === 'Full' ? 'Complete' : item.status}</span></td>
+                    <td style="text-align: center;">
+                        <button class="action-btn action-btn-accept" onclick="openAcceptModal('${item.poNo}', '${item.itemKey}')" title="Receive & Add Batch">
+                            <i class="fas fa-boxes"></i> Accept
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
 
-            editingStockRow.innerHTML = `
-                <td>${escapeHtml(form.poNo.value)}</td>
-                <td>${escapeHtml(form.poDate.value)}</td>
-                <td>${escapeHtml(form.deliveryPeriod.value)}</td>
-                <td>${escapeHtml(form.supplierName.value)}</td>
-                <td>${renderMultiValueCell(materialNames)}</td>
-                <td>${escapeHtml(form.uom.value)}</td>
-                <td>${renderMultiValueCell(batchNumbers)}</td>
-                <td>${renderMultiValueCell(expiryDates)}</td>
-                <td>${escapeHtml(form.poQty.value)}</td>
-                <td>${renderMultiValueCell(receivedQtys)}</td>
-                <td>${escapeHtml(form.balanceQty.value)}</td>
-                <td>${escapeHtml(form.recDate.value)}</td>
-                <td>${renderMultiValueCell(invoiceNos)}</td>
-                <td>${renderMultiValueCell(invoiceDates)}</td>
-                <td>${parseFloat(form.totalAmount.value || 0).toFixed(2)}</td>
-                <td>${escapeHtml(form.department.value)}</td>
-                <td>${escapeHtml(form.receivedBy.value)}</td>
-                <td>${escapeHtml(form.acceptanceDate.value)}</td>
-                <td>${escapeHtml(form.submittedToAccounts.value)}</td>
-                <td>${escapeHtml(form.remarks.value)}</td>
-                <td>${renderAttachmentCell(attachments)}</td>
-                <td>
-                    <div class="action-icons">
-                        <i class="fas fa-edit icon-edit" title="Edit" onclick="editStock(this)"></i>
-                    </div>
-                </td>
-            `;
-            editingStockRow.style.backgroundColor = '';
-
-            alert('Stock entry updated successfully!');
-            cancelEditStock();
+            document.getElementById('goodsInPaginationInfo').textContent = `Showing 1 to ${filtered.length} of ${filtered.length} records`;
         }
 
-        function cancelEditStock() {
-            editingStockRow = null;
-            const form = document.getElementById('projectForm');
-            form.reset();
-            clearAllMultiValues();
+        // =========================================================
+        // ACCEPT CLICK MODAL WORKFLOW
+        // =========================================================
+        function openAcceptModal(poNo, itemKey) {
+            currentPoNo = poNo;
+            currentItemKey = itemKey;
 
-            // Unlock PO Details section
-            lockPODetailsSection(false);
+            const po = window.PurchaseData.getPO(poNo);
+            if (!po) return;
+            const lineItem = po.lineItems.find(li => li.itemKey.toLowerCase() === itemKey.toLowerCase());
+            if (!lineItem) return;
 
-            // Switch back to save mode
-            document.getElementById('btnSaveStock').style.display = 'inline-flex';
-            document.getElementById('btnUpdateStock').disabled = true;
-            document.getElementById('btnUpdateStock').style.backgroundColor = '#92a9c3';
-            document.getElementById('btnUpdateStock').style.borderColor = '#7b91a9';
-            document.getElementById('btnUpdateStock').style.cursor = 'not-allowed';
-            document.getElementById('btnCancelStock').style.display = 'none';
+            // Populate Header & Summaries
+            document.getElementById('modalHeaderPoItem').textContent = `${po.poNo} - ${lineItem.itemName}`;
+            document.getElementById('sumPoNo').textContent = po.poNo;
+            document.getElementById('sumPoDate').textContent = po.poDate;
+            document.getElementById('sumRequestedBy').textContent = po.requestedBy;
+            document.getElementById('sumSupplierName').textContent = po.supplierName;
+            document.getElementById('sumTotalCost').textContent = '₹' + Number(po.totalCost).toLocaleString('en-IN');
 
-            // Remove row highlight
-            document.querySelectorAll('#stockTable tbody tr').forEach(r => r.style.backgroundColor = '');
+            document.getElementById('sumItemName').textContent = `${lineItem.itemName} (${lineItem.itemKey})`;
+            document.getElementById('sumReqQty').textContent = `${lineItem.reqQty} ${lineItem.uom}`;
+            document.getElementById('sumRecQty').textContent = `${lineItem.recQty} ${lineItem.uom}`;
+            document.getElementById('sumUom').textContent = lineItem.uom;
+            document.getElementById('sumBalance').textContent = `${lineItem.balance} ${lineItem.uom}`;
 
-            // Hide the form
-            toggleForm(false);
-        }
+            // Reset Add form inputs
+            document.getElementById('newBatchQty').value = '';
+            document.getElementById('newBatchQty').max = lineItem.balance;
+            document.getElementById('newBatchQty').placeholder = lineItem.balance > 0 ? `Max: ${lineItem.balance}` : '0';
+            document.getElementById('newBatchNo').value = `B-${Math.floor(100 + Math.random() * 900)}`;
+            document.getElementById('newBatchInvoice').value = `Inv-00${po.poNo.replace(/\D/g,'') || '1'}`;
+            document.getElementById('newBatchAttachment').value = `invoice_${po.poNo.toLowerCase()}.pdf`;
 
-        function resetForm() {
-            const form = document.getElementById('projectForm');
-            form.reset();
-            clearAllMultiValues();
-            toggleForm(false);
-        }
+            // If balance is 0, show notice and disable Add button
+            const noticeEl = document.getElementById('batchCompleteNotice');
+            const addBtn = document.getElementById('btnAddBatchBtn');
+            const addContainer = document.getElementById('addBatchContainer');
+            if (addContainer) addContainer.style.opacity = '1';
 
-        function saveStock() {
-            const form = document.getElementById('projectForm');
-            if (!form.poNo.value) {
-                alert('PO NO. is required!');
-                return;
-            }
-
-            // Read multi-value fields
-            const materialNames = getMultiValues('materialName');
-            const batchNumbers = getMultiValues('batchNumber');
-            const expiryDates = getMultiValues('expiryDate');
-            const receivedQtys = getMultiValues('receivedQty');
-            const invoiceNos = getMultiValues('invoiceNo');
-            const invoiceDates = getMultiValues('invoiceDate');
-            const attachments = getMultiValues('attachment');
-
-            // Add new row to table
-            const tbody = document.querySelector('#stockTable tbody');
-            const newRow = document.createElement('tr');
-            newRow.innerHTML = `
-                <td>${escapeHtml(form.poNo.value)}</td>
-                <td>${escapeHtml(form.poDate.value)}</td>
-                <td>${escapeHtml(form.deliveryPeriod.value)}</td>
-                <td>${escapeHtml(form.supplierName.value)}</td>
-                <td>${renderMultiValueCell(materialNames)}</td>
-                <td>${escapeHtml(form.uom.value)}</td>
-                <td>${renderMultiValueCell(batchNumbers)}</td>
-                <td>${renderMultiValueCell(expiryDates)}</td>
-                <td>${escapeHtml(form.poQty.value)}</td>
-                <td>${renderMultiValueCell(receivedQtys)}</td>
-                <td>${escapeHtml(form.balanceQty.value)}</td>
-                <td>${escapeHtml(form.recDate.value)}</td>
-                <td>${renderMultiValueCell(invoiceNos)}</td>
-                <td>${renderMultiValueCell(invoiceDates)}</td>
-                <td>${parseFloat(form.totalAmount.value || 0).toFixed(2)}</td>
-                <td>${escapeHtml(form.department.value)}</td>
-                <td>${escapeHtml(form.receivedBy.value)}</td>
-                <td>${escapeHtml(form.acceptanceDate.value)}</td>
-                <td>${escapeHtml(form.submittedToAccounts.value)}</td>
-                <td>${escapeHtml(form.remarks.value)}</td>
-                <td>${renderAttachmentCell(attachments)}</td>
-                <td>
-                    <div class="action-icons">
-                        <i class="fas fa-edit icon-edit" title="Edit" onclick="editStock(this)"></i>
-                    </div>
-                </td>
-            `;
-            tbody.appendChild(newRow);
-
-            alert('Stock entry saved successfully!');
-            form.reset();
-            clearAllMultiValues();
-            toggleForm(false);
-        }
-
-        // ==================== EXPORT ====================
-        function exportStockData() {
-            const table = document.getElementById('stockTable');
-            const headers = [];
-            const headerCells = table.querySelectorAll('thead th');
-            headerCells.forEach((th, idx) => {
-                if (idx < headerCells.length - 1) { // exclude Action column
-                    headers.push(`"${th.textContent.trim()}"`);
+            if (lineItem.balance === 0) {
+                if (noticeEl) noticeEl.style.display = 'flex';
+                if (addBtn) {
+                    addBtn.disabled = true;
+                    addBtn.style.opacity = '0.6';
+                    addBtn.style.cursor = 'not-allowed';
+                    addBtn.title = 'All requested quantity received (Balance is 0)';
                 }
+            } else {
+                if (noticeEl) noticeEl.style.display = 'none';
+                if (addBtn) {
+                    addBtn.disabled = false;
+                    addBtn.style.opacity = '1';
+                    addBtn.style.cursor = 'pointer';
+                    addBtn.title = 'Add Batch Receipt';
+                }
+            }
+
+            renderBatchTable(lineItem.batches || []);
+
+            document.getElementById('acceptModal').classList.add('active');
+        }
+
+        function closeAcceptModal() {
+            document.getElementById('acceptModal').classList.remove('active');
+            renderGoodsInTable();
+        }
+
+        function renderBatchTable(batches) {
+            const tbody = document.getElementById('batchTableBody');
+            tbody.innerHTML = '';
+
+            if (!batches || batches.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 18px; color: #94a3b8;">
+                    No batches received yet for this item. Use the form below to log an incoming batch.
+                </td></tr>`;
+                return;
+            }
+
+            batches.forEach((b, idx) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${b.recDate}</strong></td>
+                    <td style="text-align: right; font-weight: 700; color: #16a34a;">${b.recQty}</td>
+                    <td><span class="table-value-pill" style="background:#f1f5f9; color:#0f172a; border-color:#cbd5e1;">${b.batchNo}</span></td>
+                    <td>${b.expiryDate || 'N/A'}</td>
+                    <td><span class="table-value-pill">${b.invoiceNo}</span></td>
+                    <td>
+                        <span class="table-value-pill"><i class="fas fa-paperclip"></i> ${b.attachment || 'attachment.pdf'}</span>
+                    </td>
+                    <td style="text-align: center;">
+                        <button class="action-btn action-btn-reject" onclick="handleDeleteBatch(${idx})" title="Delete Batch">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function handleAddBatch() {
+            if (!currentPoNo || !currentItemKey) return;
+
+            const date = document.getElementById('newBatchDate').value;
+            const qty = Number(document.getElementById('newBatchQty').value);
+            const batchNo = document.getElementById('newBatchNo').value.trim();
+            const expiry = document.getElementById('newBatchExpiry').value || 'N/A';
+            const invoice = document.getElementById('newBatchInvoice').value.trim() || 'N/A';
+            const attachment = document.getElementById('newBatchAttachment').value.trim() || 'invoice.pdf';
+
+            if (!qty || qty <= 0) {
+                alert('Please enter a valid received quantity greater than 0.');
+                return;
+            }
+
+            const po = window.PurchaseData.getPO(currentPoNo);
+            const lineItem = po.lineItems.find(li => li.itemKey.toLowerCase() === currentItemKey.toLowerCase());
+            if (qty > lineItem.balance) {
+                alert(`Cannot receive ${qty} units. Maximum remaining balance is ${lineItem.balance} ${lineItem.uom}.`);
+                return;
+            }
+
+            const result = window.PurchaseData.addBatch(currentPoNo, currentItemKey, {
+                recDate: date,
+                recQty: qty,
+                batchNo: batchNo || `B-${Date.now().toString().slice(-3)}`,
+                expiryDate: expiry,
+                invoiceNo: invoice,
+                attachment: attachment
             });
 
-            let csv = headers.join(',') + '\n';
-            const rows = table.querySelectorAll('tbody tr');
-            rows.forEach(tr => {
-                const cells = tr.querySelectorAll('td');
-                const rowData = [];
-                cells.forEach((td, idx) => {
-                    if (idx < cells.length - 1) { // exclude Action column
-                        // For multi-value cells, extract pill text joined by " | "
-                        const pills = td.querySelectorAll('.table-value-pill');
-                        let text;
-                        if (pills.length > 0) {
-                            text = Array.from(pills).map(p => p.textContent.trim()).join(' | ');
-                        } else {
-                            text = td.textContent.trim();
-                        }
-                        text = text.replace(/"/g, '""');
-                        rowData.push(`"${text}"`);
-                    }
-                });
-                csv += rowData.join(',') + '\n';
-            });
+            if (result.success) {
+                // Refresh modal data
+                openAcceptModal(currentPoNo, currentItemKey);
+            } else {
+                alert(result.message || 'Failed to add batch.');
+            }
+        }
 
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'stock_entry_export.csv';
-            a.click();
-            URL.revokeObjectURL(url);
+        function handleDeleteBatch(idx) {
+            if (!confirm('Are you sure you want to delete this batch receipt entry?')) return;
+            const result = window.PurchaseData.deleteBatch(currentPoNo, currentItemKey, idx);
+            if (result.success) {
+                openAcceptModal(currentPoNo, currentItemKey);
+            }
+        }
+
+        function exportGoodsInData() {
+            const data = window.PurchaseData.getGoodsInLineItems();
+            const headers = ["PO No", "PO Date", "Item Key", "Item Name", "Req Qty", "Rec Qty", "Balance", "UOM", "Supplier Name", "Status"];
+            const rows = data.map(i => [
+                i.poNo, i.poDate, i.itemKey, `"${i.itemName}"`, i.reqQty, i.recQty, i.balance, i.uom, `"${i.supplierName}"`, i.status
+            ]);
+            let csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Goods_In_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>
-
 </html>

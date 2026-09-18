@@ -23,13 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
             code: 'PRJ-001', name: 'ERP Implementation',
             budgetYear: '2023-2024',
             manager: 'John Doe', start: '2023-01-10', end: '2023-12-31',
-            budget: '50000.00', extension: '0.00', utilized: '20000.00', available: '30000.00', status: 'Active'
+            budget: '50000.00', extension: '0.00', utilized: '20000.00', available: '30000.00', comment: ''
         },
         {
             code: 'PRJ-002', name: 'Office Renovation',
             budgetYear: '2023-2024',
             manager: 'Jane Smith', start: '2023-05-01', end: '2023-08-15',
-            budget: '15000.00', extension: '0.00', utilized: '15000.00', available: '0.00', status: 'Completed'
+            budget: '15000.00', extension: '0.00', utilized: '15000.00', available: '0.00', comment: ''
         }
     ];
 
@@ -54,7 +54,7 @@ function addProjectToTable(proj) {
         <td>${proj.extension !== undefined ? proj.extension : '0.00'}</td>
         <td>${proj.utilized}</td>
         <td>${proj.available}</td>
-        <td><span class="badge ${proj.status.toLowerCase()}">${proj.status}</span></td>
+        <td>${proj.comment || '-'}</td>
         <td>
             <div class="action-icons">
                 <i class="fas fa-edit icon-edit" title="Edit"></i>
@@ -85,7 +85,7 @@ function saveProject() {
         extension: parseFloat(form.budgetExtension ? form.budgetExtension.value : 0).toFixed(2),
         utilized: parseFloat(form.utilized.value || 0).toFixed(2),
         available: parseFloat(form.available.value || 0).toFixed(2),
-        status: form.status.value
+        comment: form.comment ? form.comment.value.trim() : ''
     };
 
     addProjectToTable(proj);

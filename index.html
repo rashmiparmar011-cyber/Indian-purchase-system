@@ -273,6 +273,12 @@
             height: 32px;
         }
 
+        .form-group:has(textarea),
+        .form-group.has-textarea {
+            height: auto;
+            min-height: 52px;
+        }
+
         .form-group label {
             background-color: var(--label-bg);
             color: white;
@@ -287,18 +293,27 @@
         }
 
         .form-group input,
-        .form-group select {
+        .form-group select,
+        .form-group textarea {
             flex: 1;
             border: none;
             padding: 0 8px;
             font-size: 12px;
+            font-family: inherit;
             outline: none;
             background-color: #f6fafd;
             color: #333;
         }
 
+        .form-group textarea {
+            padding: 6px 8px;
+            resize: none;
+            line-height: 1.4;
+        }
+
         .form-group input:focus,
-        .form-group select:focus {
+        .form-group select:focus,
+        .form-group textarea:focus {
             background-color: #fff;
             box-shadow: inset 0 0 4px rgba(59, 138, 178, 0.4);
         }
@@ -413,6 +428,15 @@
             background-color: #007bff;
         }
 
+        .badge.pending {
+            background-color: #f39c12;
+        }
+
+        .badge.close,
+        .badge.closed {
+            background-color: #6c757d;
+        }
+
         .action-icons {
             display: flex;
             gap: 8px;
@@ -507,8 +531,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" id="nav-stock-management" class="nav-link"
-                                onclick="switchView('stock-management-view'); return false;">
+                            <a href="stock_management.html" class="nav-link">
                                 <i class="fas fa-cubes"></i> Goods-In
                             </a>
                         </li>
@@ -598,15 +621,7 @@
                                     <input type="number" id="available" name="available" placeholder="0.00" readonly
                                         class="readonly-field">
                                 </div>
-                                <div class="form-group">
-                                    <label for="status">Status</label>
-                                    <select id="status" name="status">
-                                        <option value="Active">Active</option>
-                                        <option value="Inactive">Inactive</option>
-                                        <option value="Completed">Completed</option>
-                                    </select>
-                                </div>
-                                <div class="form-group" style="grid-column: span 3;">
+                                <div class="form-group has-textarea" style="grid-column: span 2;">
                                     <label for="comment">Comment</label>
                                     <textarea id="comment" name="comment" rows="2" placeholder="Enter comment..."></textarea>
                                 </div>
@@ -643,7 +658,6 @@
                                     <th>Budget Extension</th>
                                     <th>Utilized Budget</th>
                                     <th>Available Budget</th>
-                                    <th>Status</th>
                                     <th>Comment</th>
                                     <th>Action</th>
                                 </tr>
@@ -835,13 +849,13 @@
                     code: 'PRJ-001', name: 'ERP Implementation',
                     budgetYear: '2023-2024',
                     manager: 'John Doe', start: '2023-01-10', end: '2023-12-31',
-                    budget: '50000.00', extension: '0.00', utilized: '20000.00', available: '30000.00', status: 'Active', comment: ''
+                    budget: '50000.00', extension: '0.00', utilized: '20000.00', available: '30000.00', comment: ''
                 },
                 {
                     code: 'PRJ-002', name: 'Office Renovation',
                     budgetYear: '2023-2024',
                     manager: 'Jane Smith', start: '2023-05-01', end: '2023-08-15',
-                    budget: '15000.00', extension: '0.00', utilized: '15000.00', available: '0.00', status: 'Completed', comment: ''
+                    budget: '15000.00', extension: '0.00', utilized: '15000.00', available: '0.00', comment: ''
                 }
             ];
 
@@ -863,7 +877,6 @@
         <td>${proj.extension !== undefined ? proj.extension : '0.00'}</td>
         <td>${proj.utilized}</td>
         <td>${proj.available}</td>
-        <td><span class="badge ${proj.status.toLowerCase()}">${proj.status}</span></td>
         <td>${proj.comment || '-'}</td>
         <td>
             <div class="action-icons">
@@ -894,7 +907,6 @@
                 extension: parseFloat(form.budgetExtension ? form.budgetExtension.value : 0).toFixed(2),
                 utilized: parseFloat(form.utilized.value || 0).toFixed(2),
                 available: parseFloat(form.available.value || 0).toFixed(2),
-                status: form.status.value,
                 comment: form.comment.value.trim()
             };
 
@@ -933,8 +945,7 @@
             }
             form.utilized.value = cells[8].textContent.trim();
             document.getElementById('available').value = cells[9].textContent.trim();
-            form.status.value = cells[10].textContent.trim();
-            form.comment.value = cells[11].textContent.trim() === '-' ? '' : cells[11].textContent.trim();
+            form.comment.value = cells[10].textContent.trim() === '-' ? '' : cells[10].textContent.trim();
 
             // Switch to edit mode
             document.getElementById('btnSave').style.display = 'none';
@@ -961,7 +972,6 @@
                 return;
             }
 
-            const statusVal = form.status.value;
             editingRow.innerHTML = `
         <td>${form.projectCode.value}</td>
         <td>${form.projectName.value}</td>
@@ -973,7 +983,6 @@
         <td>${parseFloat(form.budgetExtension ? form.budgetExtension.value : 0).toFixed(2)}</td>
         <td>${parseFloat(form.utilized.value || 0).toFixed(2)}</td>
         <td>${parseFloat(form.available.value || 0).toFixed(2)}</td>
-        <td><span class="badge ${statusVal.toLowerCase()}">${statusVal}</span></td>
         <td>${form.comment.value.trim() || '-'}</td>
         <td>
             <div class="action-icons">

@@ -8,251 +8,79 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Finance Module Specific Styles */
-        .finance-filters {
-            background-color: #f9fbfd;
-            padding: 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            margin-bottom: 20px;
+        .filter-grid-finance {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr) auto;
+            gap: 15px;
+            align-items: flex-end;
         }
-        .finance-filters h3 {
-            margin-bottom: 10px;
-            font-size: 14px;
-            color: var(--header-blue);
+
+        .payment-record-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 15px;
         }
-        .filter-actions {
-            text-align: right;
-            margin-top: 10px;
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
+
+        .payment-record-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr) auto;
+            gap: 12px;
+            align-items: flex-end;
         }
-        .section-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .section-title h3 {
-            color: var(--header-blue);
-            font-size: 15px;
-        }
-        .section-title .badge {
-            font-size: 12px;
-            padding: 4px 12px;
-        }
-        .pm-header-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .form-section-heading {
-            margin: 0 0 10px 5px;
-            font-size: 13px;
-            color: #555;
-            text-transform: uppercase;
-            font-weight: bold;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-        }
-        .payment-form-container {
-            border: 1px solid var(--primary-blue);
-            border-top: 3px solid var(--primary-blue);
-            padding: 15px;
-            border-radius: 0 0 4px 4px;
-            margin-bottom: 20px;
-        }
-        .dynamic-entry {
-            margin-top: 10px;
-            padding: 12px;
-            background-color: #f1f6f9;
-            border-radius: 4px;
-            border: 1px solid #d9e8f0;
-        }
-        .notes-history-container {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .panel {
-            flex: 1;
-            border: 1px solid #ddd;
-            background: #fff;
-            border-radius: 3px;
+
+        .payment-record-grid .form-group {
             display: flex;
             flex-direction: column;
+            height: auto;
+            border: none;
+            overflow: visible;
         }
-        .panel-header {
-            background-color: var(--label-bg);
-            color: white;
-            padding: 8px 12px;
-            font-weight: bold;
-            font-size: 12px;
-        }
-        .panel-body {
-            padding: 10px;
-            flex: 1;
-            overflow-y: auto;
-            max-height: 280px;
-            background-color: #fafafa;
-        }
-        .panel-footer {
-            padding: 10px;
-            border-top: 1px solid #ddd;
-            background: #fff;
-        }
-        .note-item {
-            background: white;
-            padding: 8px 10px;
-            border: 1px solid #eee;
-            border-left: 3px solid var(--primary-blue);
-            margin-bottom: 8px;
-            border-radius: 2px;
-        }
-        .note-meta {
-            display: flex;
-            justify-content: space-between;
-            font-size: 10px;
-            color: #888;
+
+        .payment-record-grid .form-group label {
+            background-color: transparent;
+            color: #334155;
+            padding: 0;
+            width: auto;
+            border-right: none;
+            font-size: 11px;
+            font-weight: 700;
             margin-bottom: 4px;
+            display: block;
         }
-        .note-text {
-            font-size: 12px;
-            color: #444;
-        }
-        .note-input-area textarea {
+
+        .payment-record-grid input,
+        .payment-record-grid select {
             width: 100%;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            padding: 6px;
+            padding: 7px 10px;
             font-size: 12px;
-            resize: none;
-            font-family: inherit;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            background: #fff;
+            height: 34px;
         }
-        .note-controls {
-            text-align: right;
-            margin-top: 5px;
-            display: flex;
-            justify-content: flex-end;
+
+        .inv-chip {
+            display: inline-flex;
             align-items: center;
             gap: 5px;
-        }
-        .note-controls select {
-            padding: 4px 6px;
+            background: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+            padding: 3px 9px;
+            border-radius: 12px;
             font-size: 11px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 2px 4px 2px 0;
+            text-decoration: none;
         }
-
-        /* Modal */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-box {
-            background: white;
-            padding: 25px;
-            border-radius: 5px;
-            width: 420px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-        }
-        .modal-box h3 {
-            margin-bottom: 15px;
-            color: var(--header-blue);
-        }
-        .modal-box p {
-            margin-bottom: 15px;
-            font-size: 13px;
-            color: #555;
-        }
-        .modal-box textarea {
-            width: 100%;
-            border: 1px solid #ccc;
-            padding: 8px;
-            margin-bottom: 15px;
-            font-size: 12px;
-            border-radius: 3px;
-            font-family: inherit;
-            resize: none;
-        }
-        .modal-actions {
-            text-align: right;
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-        }
-
-        .btn-danger {
-            background-color: #dc3545;
-            border-color: #c82333;
-        }
-        .btn-danger:hover {
-            background-color: #c82333;
-        }
-        .btn-warning {
-            background-color: #ffc107;
-            border-color: #e0a800;
-            color: #212529;
-        }
-        .btn-warning:hover {
-            background-color: #e0a800;
-        }
-        .btn-secondary {
-            background-color: #6c757d;
-            border-color: #5a6268;
-        }
-        .btn-secondary:hover {
-            background-color: #5a6268;
-        }
-        .btn-export {
-            background-color: #28a745;
-            border-color: #1e7e34;
-        }
-        .btn-export:hover {
-            background-color: #1e7e34;
-        }
-
-        .badge.pending { background-color: #ffc107; color: #212529; }
-        .badge.partially-paid { background-color: #17a2b8; }
-        .badge.fully-paid { background-color: #28a745; }
-        .badge.overdue { background-color: #dc3545; }
-        .badge.on-hold { background-color: #fd7e14; }
-        .badge.open { background-color: #28a745; }
-        .badge.closed { background-color: #6c757d; }
-
-        .form-group textarea {
-            flex: 1;
-            border: none;
-            padding: 6px 8px;
-            font-size: 12px;
-            outline: none;
-            background-color: #f6fafd;
-            color: #333;
-            font-family: inherit;
-            resize: none;
-        }
-        .form-group textarea:focus {
-            background-color: #fff;
-            box-shadow: inset 0 0 4px rgba(59, 138, 178, 0.4);
-        }
-        .form-group.tall {
-            height: auto;
-            min-height: 32px;
-        }
-
-        .sub-nav-link.active-link {
-            color: var(--primary-blue);
-            font-weight: bold;
-            background-color: #f5f9fc;
+        .inv-chip:hover {
+            background: #0284c7;
+            color: #fff;
+            border-color: #0284c7;
         }
     </style>
 </head>
@@ -291,27 +119,23 @@
                 <nav class="sidebar-nav">
                     <ul class="nav-list">
                         <li class="nav-item">
-                            <a href="#" class="nav-link active">
+                            <a href="#" class="nav-link">
                                 <i class="fas fa-list"></i> Purchase Masters <i class="fas fa-chevron-down arrow"></i>
                             </a>
                             <ul class="sub-nav-list">
                                 <li><a href="#" class="sub-nav-link">Item Master</a></li>
                                 <li><a href="#" class="sub-nav-link">Supplier Master</a></li>
-                                <li><a href="index.html" class="sub-nav-link">
-                                    Project Master
-                                </a></li>
+                                <li><a href="index.html" class="sub-nav-link">Project Master</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="fas fa-exchange-alt"></i> Purchase Transactions <i
-                                    class="fas fa-chevron-down arrow"></i>
+                                <i class="fas fa-exchange-alt"></i> Purchase Transactions <i class="fas fa-chevron-down arrow"></i>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="fas fa-file-invoice"></i> Purchase Reports <i
-                                    class="fas fa-chevron-down arrow"></i>
+                                <i class="fas fa-file-invoice"></i> Purchase Reports <i class="fas fa-chevron-down arrow"></i>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -339,812 +163,505 @@
             <!-- Content Area -->
             <main class="content">
                 <div class="breadcrumb">
-                    <i class="fas fa-home"></i> Finance Approval <i class="fas fa-chevron-right"></i> <span
-                        class="current">Payment Processing</span>
+                    <i class="fas fa-home"></i> Finance <i class="fas fa-chevron-right"></i> 
+                    <span class="current">Finance Approval &amp; Invoices</span>
                 </div>
 
-                <!-- ========== FILTERS SECTION ========== -->
-                <div class="finance-filters">
-                    <h3><i class="fas fa-filter"></i> Filters</h3>
-                    <div class="form-grid" style="grid-template-columns: repeat(4, 1fr);">
-                        <div class="form-group">
-                            <label>PO Number</label>
-                            <select id="filter-po-no" onchange="applyFilters()">
-                                <option value="">All</option>
-                                <option value="5655">5655</option>
-                                <option value="PO-1001">PO-1001</option>
-                                <option value="PO-1002">PO-1002</option>
-                                <option value="PO-1003">PO-1003</option>
-                                <option value="PO-1004">PO-1004</option>
-                                <option value="PO-1005">PO-1005</option>
+                <!-- Filters Card -->
+                <div class="form-container" style="margin-bottom: 15px; padding: 15px;">
+                    <div class="filter-grid-finance">
+                        <div class="form-group" style="margin: 0;">
+                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">PO NUMBER</label>
+                            <input type="text" id="filterFinPoNo" placeholder="Search PO No (e.g. PO01)..." oninput="applyFinanceFilters()">
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">REQUESTED BY</label>
+                            <input type="text" id="filterFinRequester" placeholder="Search Requester..." oninput="applyFinanceFilters()">
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">SUPPLIER NAME</label>
+                            <input type="text" id="filterFinSupplier" placeholder="Search Supplier..." oninput="applyFinanceFilters()">
+                        </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">PO STATUS</label>
+                            <select id="filterFinStatus" onchange="onFinStatusDropdownChange()">
+                                <option value="">All Statuses</option>
+                                <option value="Partial">Partial</option>
+                                <option value="Complete">Complete</option>
+                                <option value="New">New</option>
                             </select>
                         </div>
-                        <div class="form-group"><label>Project Code</label><input type="text" id="filter-project-code" placeholder="Search Project Code..."></div>
-                        <div class="form-group"><label>Project Name</label><input type="text" id="filter-project-name" placeholder="Search Project Name..."></div>
-                        <div class="form-group"><label>Supplier</label><input type="text" id="filter-supplier" placeholder="Search Supplier..."></div>
-                        <div class="form-group"><label>Item Code</label><input type="text" id="filter-item-code" placeholder="Search Item Code..."></div>
-                        <div class="form-group"><label>Item Name</label><input type="text" id="filter-item-name" placeholder="Search Item Name..."></div>
-                        <div class="form-group">
-                            <label>Payment Status</label>
-                            <select id="filter-payment-status">
-                                <option value="">All</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Partially Paid">Partially Paid</option>
-                                <option value="Fully Paid">Fully Paid</option>
-                                <option value="Overdue">Overdue</option>
-                                <option value="On Hold">On Hold</option>
-                            </select>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-primary" onclick="applyFinanceFilters()"><i class="fas fa-search"></i> Apply</button>
+                            <button class="btn btn-secondary" onclick="clearFinanceFilters()"><i class="fas fa-undo"></i> Reset</button>
                         </div>
-                        <div class="form-group">
-                            <label>PO Status</label>
-                            <select id="filter-po-status">
-                                <option value="">All</option>
-                                <option value="OPEN">OPEN</option>
-                                <option value="CLOSED">CLOSED</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Payment Term</label>
-                            <select id="filter-payment-term">
-                                <option value="">All</option>
-                                <option value="Full Payment">Full Payment</option>
-                                <option value="50% Payment">50% Payment</option>
-                                <option value="Partial Payment">Partial Payment</option>
-                                <option value="Custom">Custom</option>
-                            </select>
-                        </div>
-                        <div class="form-group"><label>Due Date From</label><input type="date" id="filter-date-from"></div>
-                        <div class="form-group"><label>Due Date To</label><input type="date" id="filter-date-to"></div>
-                    </div>
-                    <div class="filter-actions">
-                        <button class="btn btn-save" onclick="applyFilters()"><i class="fas fa-search"></i> Apply</button>
-                        <button class="btn btn-reset" onclick="clearFilters()"><i class="fas fa-times"></i> Clear</button>
                     </div>
                 </div>
 
-                <!-- Table Actions Bar -->
-                <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
-                    <button class="btn btn-export" onclick="exportFinanceData()"><i class="fas fa-file-export"></i> Export</button>
+                <!-- Status Tabs & Export Bar -->
+                <div class="status-tabs-container">
+                    <div class="status-tabs-group" role="tablist">
+                        <button type="button" class="status-tab tab-all active" data-status="All" onclick="switchFinanceTab('All')">
+                            <i class="fas fa-layer-group"></i> All POs <span class="tab-badge" id="finBadgeAll">0</span>
+                        </button>
+                        <button type="button" class="status-tab tab-partial" data-status="Partial" onclick="switchFinanceTab('Partial')">
+                            <i class="fas fa-hourglass-half"></i> Partial <span class="tab-badge" id="finBadgePartial">0</span>
+                        </button>
+                        <button type="button" class="status-tab tab-complete" data-status="Complete" onclick="switchFinanceTab('Complete')">
+                            <i class="fas fa-check-circle"></i> Complete <span class="tab-badge" id="finBadgeComplete">0</span>
+                        </button>
+                        <button type="button" class="status-tab tab-new" data-status="New" onclick="switchFinanceTab('New')">
+                            <i class="fas fa-sparkles"></i> New <span class="tab-badge" id="finBadgeNew">0</span>
+                        </button>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-export" onclick="exportFinanceData()"><i class="fas fa-file-export"></i> Export</button>
+                    </div>
                 </div>
 
-                <!-- ========== PO LIST TABLE ========== -->
-                <div class="table-container" style="margin-bottom: 20px;">
-                    <table class="data-table" id="financePoTable">
+                <!-- Main PO Level Table (Directly matches BA Vimal's Wireframe Rows 43-45) -->
+                <div class="table-container">
+                    <table class="data-table" id="financeTable">
                         <thead>
                             <tr>
-                                <th>PO Number</th>
-                                <th>Project Code</th>
-                                <th>Project Name</th>
-                                <th>Item Code</th>
-                                <th>Item Name</th>
-                                <th>Supplier/Vendor</th>
-                                <th>PO Date</th>
-                                <th>PO Value (₹)</th>
-                                <th>Payment Term</th>
-                                <th>Amount Paid (₹)</th>
-                                <th>Balance (₹)</th>
-                                <th>Due Date</th>
-                                <th>Payment Status</th>
-                                <th>PO Status</th>
-                                <th>Action</th>
+                                <th>PO NO.</th>
+                                <th>PO DATE</th>
+                                <th>REQUESTED BY</th>
+                                <th>SUPPLIER NAME</th>
+                                <th style="text-align: right;">TOTAL COST (₹)</th>
+                                <th style="text-align: right;">AMOUNT PAID (₹)</th>
+                                <th>PO STATUS</th>
+                                <th>PAYMENT STATUS</th>
+                                <th style="text-align: center;">ACTION</th>
                             </tr>
                         </thead>
-                        <tbody id="financePoTableBody">
+                        <tbody id="financeTableBody">
+                            <!-- Populated dynamically -->
                         </tbody>
                     </table>
                 </div>
 
-                <!-- ========== PAYMENT MANAGEMENT SECTION ========== -->
-                <div id="paymentManagementSection" style="display: none;">
-
-                    <!-- Header Bar -->
-                    <div class="section-title">
-                        <h3><i class="fas fa-file-invoice-dollar"></i> Payment Management — <span id="pmPoHeader"></span></h3>
-                        <div class="pm-header-actions">
-                            <span id="pmPoStatusBadge" class="badge"></span>
-                            <button id="btnPoAction" class="btn" onclick="handlePoAction()"></button>
-                            <button class="btn btn-secondary" onclick="closePaymentSection()"><i class="fas fa-arrow-left"></i> Back</button>
-                        </div>
-                    </div>
-
-                    <!-- Payment Form -->
-                    <div class="payment-form-container">
-                        <h4 class="form-section-heading"><i class="fas fa-info-circle"></i> PO Summary</h4>
-                        <div class="form-grid" style="margin-bottom: 15px;">
-                            <div class="form-group"><label>PO Number</label><input type="text" id="pmPoNo" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Project Code</label><input type="text" id="pmProjectCode" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Project Name</label><input type="text" id="pmProjectName" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Item Code</label><input type="text" id="pmItemCode" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Item Name</label><input type="text" id="pmItemName" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Supplier/Vendor</label><input type="text" id="pmSupplier" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>PO Date</label><input type="text" id="pmPoDate" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Total PO Value</label><input type="text" id="pmTotalValue" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Total Amount Paid</label><input type="text" id="pmTotalPaid" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Remaining Amount</label><input type="text" id="pmRemainingAmt" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Payment Status</label><input type="text" id="pmPaymentStatus" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>PO Status</label><input type="text" id="pmPoStatus" class="readonly-field" readonly></div>
-                        </div>
-
-                        <div id="paymentEntrySection">
-                            <h4 class="form-section-heading"><i class="fas fa-money-check-alt"></i> Payment Terms & Entry</h4>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label>Payment Term</label>
-                                    <select id="pmPaymentTerm" onchange="onPaymentTermChange()">
-                                        <option value="Full Payment">Full Payment</option>
-                                        <option value="50% Payment">Half Payment / 50%</option>
-                                        <option value="Partial Payment">Partial Payment</option>
-                                        <option value="Custom">Custom Payment</option>
-                                    </select>
-                                </div>
-                                <div class="form-group"><label>Payment Due Date</label><input type="date" id="pmDueDate"></div>
-                                <div class="form-group">
-                                    <label>Payment Method</label>
-                                    <select id="pmPaymentMethod">
-                                        <option value="Bank Transfer">Bank Transfer</option>
-                                        <option value="Cheque">Cheque</option>
-                                        <option value="UPI">UPI</option>
-                                        <option value="NEFT/RTGS">NEFT/RTGS</option>
-                                        <option value="Cash">Cash</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Dynamic Payment Entry -->
-                            <div class="dynamic-entry" id="dynamicPaymentEntry">
-                                <!-- Populated by JS -->
-                            </div>
-
-                            <div class="form-actions" id="paymentActionsBar">
-                                <button type="button" class="btn btn-save" onclick="processPayment()"><i class="fas fa-check-circle"></i> Process Payment</button>
-                                <button type="button" class="btn btn-reset" onclick="resetPaymentForm()"><i class="fas fa-sync-alt"></i> Reset</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Notes & History -->
-                    <div class="notes-history-container">
-                        <!-- Finance Notes -->
-                        <div class="panel">
-                            <div class="panel-header"><i class="fas fa-comments"></i> Finance Notes / Comments</div>
-                            <div class="panel-body" id="pmNotesList"></div>
-                            <div class="panel-footer">
-                                <div class="note-input-area">
-                                    <textarea id="pmNewNote" rows="2" placeholder="Add a finance note/comment..."></textarea>
-                                </div>
-                                <div class="note-controls">
-                                    <select id="pmNoteType">
-                                        <option value="General">General</option>
-                                        <option value="Payment Processing">Payment Processing</option>
-                                        <option value="Partial Payment">Partial Payment</option>
-                                        <option value="Payment Delay">Payment Delay</option>
-                                        <option value="Payment Discrepancy">Payment Discrepancy</option>
-                                        <option value="Payment Hold">Payment Hold</option>
-                                        <option value="PO Closure">PO Closure</option>
-                                        <option value="PO Reopening">PO Reopening</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                    <button class="btn btn-save" style="padding: 4px 10px; font-size: 11px;" onclick="addNote()"><i class="fas fa-plus"></i> Add Note</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Payment History -->
-                        <div class="panel">
-                            <div class="panel-header"><i class="fas fa-history"></i> Payment History</div>
-                            <div class="panel-body" style="max-height: 340px;">
-                                <table class="data-table" id="pmHistoryTable">
-                                    <thead>
-                                        <tr>
-                                            <th>Payment No.</th>
-                                            <th>Payment Date</th>
-                                            <th>Payment Term</th>
-                                            <th>Payment Amount</th>
-                                            <th>Reference No.</th>
-                                            <th>Status</th>
-                                            <th>Added By</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="pmHistoryBody"></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Pagination Bar -->
+                <div class="pagination-bar" style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 12px; color: #64748b;">
+                    <div id="financePaginationInfo">Showing 1 to 0 of 0 records</div>
+                    <div class="pagination-controls" id="financePaginationControls"></div>
                 </div>
             </main>
         </div>
     </div>
 
-    <!-- ========== MODAL ========== -->
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-box">
-            <h3 id="modalTitle">Confirm Action</h3>
-            <p id="modalMessage"></p>
-            <div class="form-grid" id="modalExtraFields" style="margin-bottom: 10px; grid-template-columns: 1fr 1fr;"></div>
-            <textarea id="modalReason" rows="3" placeholder="Enter reason / notes (Mandatory)..."></textarea>
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                <button class="btn btn-save" id="modalConfirmBtn" onclick="confirmModalAction()">Confirm</button>
+    <!-- ========================================================= -->
+    <!-- OPEN CLICK MODAL: PO Summary + Line Items + Invoices     -->
+    <!-- ========================================================= -->
+    <div class="modal-overlay" id="financeOpenModal">
+        <div class="modal-box" style="max-width: 1020px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-eye"></i> PO Details &amp; Invoices — <span id="finModalHeaderPo"></span></h3>
+                <button class="modal-close-btn" onclick="closeFinanceModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- 1. PO Summary (Header Level) -->
+                <div class="summary-card">
+                    <div class="summary-card-title"><i class="fas fa-file-invoice-dollar"></i> Purchase Order Summary</div>
+                    <div class="summary-grid-5">
+                        <div class="summary-item">
+                            <span class="label">PO Number</span>
+                            <span class="value highlight" id="finSumPoNo">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">PO Date</span>
+                            <span class="value" id="finSumPoDate">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Requested By</span>
+                            <span class="value" id="finSumRequester">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Supplier Name</span>
+                            <span class="value" id="finSumSupplier">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Total Cost</span>
+                            <span class="value highlight" id="finSumTotalCost">-</span>
+                        </div>
+                    </div>
+                    <div class="summary-grid-4" style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed #cbd5e1;">
+                        <div class="summary-item">
+                            <span class="label">Payment Term</span>
+                            <span class="value" id="finSumPayTerm">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Payment Status</span>
+                            <span class="value" id="finSumPayStatus">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Amount Paid</span>
+                            <span class="value success" id="finSumAmountPaid">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Remaining Balance</span>
+                            <span class="value alert" id="finSumRemaining">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Line Item Table with Clickable Invoice Badges (Row 52-55 in Excel) -->
+                <div class="summary-card" style="background: #ffffff; padding: 12px; margin-bottom: 0;">
+                    <div class="summary-card-title" style="color: #0f172a; margin-bottom: 8px;">
+                        <i class="fas fa-list"></i> Line Item Breakdown &amp; Invoices
+                    </div>
+                    <div class="table-container" style="margin: 0;">
+                        <table class="data-table" id="finLineItemsTable">
+                            <thead>
+                                <tr>
+                                    <th>ITEM KEY</th>
+                                    <th>ITEM NAME</th>
+                                    <th style="text-align: right;">QTY</th>
+                                    <th style="text-align: right;">REC QTY</th>
+                                    <th>UOM</th>
+                                    <th style="text-align: right;">COST (₹)</th>
+                                    <th style="text-align: right;">BALANCE</th>
+                                    <th>STATUS</th>
+                                    <th>INVOICES (CLICK TO VIEW)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="finLineItemsBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 3. Record Payment & Approval Section -->
+                    <div class="payment-record-box">
+                        <h5 style="font-size: 12px; font-weight: 700; color: #1e40af; margin-bottom: 10px;">
+                            <i class="fas fa-credit-card"></i> Record Payment Against Invoices
+                        </h5>
+                        <div class="payment-record-grid">
+                            <div class="form-group" style="margin:0;">
+                                <label>Payment Amount (₹)</label>
+                                <input type="number" id="finPayAmount" placeholder="Enter amount...">
+                            </div>
+                            <div class="form-group" style="margin:0;">
+                                <label>Payment Term</label>
+                                <select id="finPayTerm">
+                                    <option value="Full Payment">Full Payment</option>
+                                    <option value="50% Payment">50% Payment</option>
+                                    <option value="Partial Payment">Partial Payment</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin:0;">
+                                <label>Payment Mode</label>
+                                <select id="finPayMode">
+                                    <option value="Bank Transfer (NEFT/RTGS)">Bank Transfer (NEFT/RTGS)</option>
+                                    <option value="Cheque">Cheque</option>
+                                    <option value="UPI / Online">UPI / Online</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin:0;">
+                                <label>Reference / UTR No</label>
+                                <input type="text" id="finPayRef" placeholder="e.g. UTR-9827361">
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-primary" onclick="handleRecordPayment()" style="white-space: nowrap; height: 34px;">
+                                    <i class="fas fa-check-circle"></i> Approve &amp; Pay
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeFinanceModal()">Close</button>
             </div>
         </div>
     </div>
 
+    <!-- Invoice Preview Modal -->
+    <div class="modal-overlay" id="invoicePreviewModal">
+        <div class="modal-box" style="max-width: 520px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-invoice"></i> Invoice Document — <span id="invModalTitle"></span></h3>
+                <button class="modal-close-btn" onclick="closeInvoiceModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="invModalContent">
+                <!-- Dynamic invoice details -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-export" onclick="alert('Downloading invoice PDF attachment...')">
+                    <i class="fas fa-download"></i> Download Invoice
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="closeInvoiceModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="shared_data.js"></script>
     <script>
-    // ==================== DATA ====================
-    let financePOs = [
-        {
-            poNo: '5655', projectCode: 'PRJ-006', projectName: 'Infrastructure Expansion', project: 'Infrastructure Expansion',
-            itemCode: 'ITM-606', itemName: 'Server Rack', supplier: 'Global Enterprises',
-            poDate: '20/08/2023', poValue: 150000, paymentTerm: 'Partial Payment',
-            amountPaid: 0, dueDate: '2023-09-20', paymentStatus: 'Pending', poStatus: 'OPEN',
-            closedBy: '', closedDate: '', closureReason: '',
-            reopenedBy: '', reopenedDate: '', reopenReason: '',
-            history: [],
-            notes: []
-        },
-        {
-            poNo: 'PO-1001', projectCode: 'PRJ-001', projectName: 'ERP Implementation', project: 'ERP Implementation',
-            itemCode: 'ITM-101', itemName: 'Laptop', supplier: 'ABC Tech Solutions',
-            poDate: '15/01/2023', poValue: 2500000, paymentTerm: 'Full Payment',
-            amountPaid: 0, dueDate: '2023-02-15', paymentStatus: 'Pending', poStatus: 'OPEN',
-            closedBy: '', closedDate: '', closureReason: '',
-            reopenedBy: '', reopenedDate: '', reopenReason: '',
-            history: [],
-            notes: []
-        },
-        {
-            poNo: 'PO-1002', projectCode: 'PRJ-002', projectName: 'Office Renovation', project: 'Office Renovation',
-            itemCode: 'ITM-202', itemName: 'Printer Paper', supplier: 'Office Supplies Co.',
-            poDate: '01/03/2023', poValue: 100000, paymentTerm: '50% Payment',
-            amountPaid: 50000, dueDate: '2023-03-15', paymentStatus: 'Partially Paid', poStatus: 'OPEN',
-            closedBy: '', closedDate: '', closureReason: '',
-            reopenedBy: '', reopenedDate: '', reopenReason: '',
-            history: [
-                { no: 1, date: '10/03/2023', term: '50% Payment', amount: 50000, ref: 'PAY-001', status: 'Paid', addedBy: 'Finance User' }
-            ],
-            notes: [
-                { type: 'Payment Processing', text: 'First 50% payment of ₹50,000 processed successfully.', by: 'Finance User', date: '10/03/2023, 10:30 AM' }
-            ]
-        },
-        {
-            poNo: 'PO-1003', projectCode: 'PRJ-003', projectName: 'Server Infrastructure', project: 'Server Infrastructure',
-            itemCode: 'ITM-303', itemName: 'Server Rack', supplier: 'CloudNet India Pvt Ltd',
-            poDate: '20/04/2023', poValue: 500000, paymentTerm: 'Partial Payment',
-            amountPaid: 0, dueDate: '2023-05-20', paymentStatus: 'Overdue', poStatus: 'OPEN',
-            closedBy: '', closedDate: '', closureReason: '',
-            reopenedBy: '', reopenedDate: '', reopenReason: '',
-            history: [],
-            notes: [
-                { type: 'Payment Delay', text: 'Payment delayed due to budget approval pending.', by: 'Anish', date: '21/05/2023, 09:00 AM' }
-            ]
-        },
-        {
-            poNo: 'PO-1004', projectCode: 'PRJ-004', projectName: 'Security System', project: 'Security System',
-            itemCode: 'ITM-404', itemName: 'CCTV Camera', supplier: 'SafeGuard Technologies',
-            poDate: '05/06/2023', poValue: 75000, paymentTerm: 'Full Payment',
-            amountPaid: 75000, dueDate: '2023-07-05', paymentStatus: 'Fully Paid', poStatus: 'CLOSED',
-            closedBy: 'Anish', closedDate: '06/07/2023', closureReason: 'All payments completed and verified.',
-            reopenedBy: '', reopenedDate: '', reopenReason: '',
-            history: [
-                { no: 1, date: '03/07/2023', term: 'Full Payment', amount: 75000, ref: 'PAY-004', status: 'Paid', addedBy: 'Anish' }
-            ],
-            notes: [
-                { type: 'Payment Processing', text: 'Full payment of ₹75,000 processed.', by: 'Anish', date: '03/07/2023, 02:15 PM' },
-                { type: 'PO Closure', text: 'PO closed. Reason: All payments completed and verified.', by: 'Anish', date: '06/07/2023, 04:00 PM' }
-            ]
-        },
-        {
-            poNo: 'PO-1005', projectCode: 'PRJ-005', projectName: 'Software Licenses', project: 'Software Licenses',
-            itemCode: 'ITM-505', itemName: 'Software License', supplier: 'TechSoft Global',
-            poDate: '01/09/2026', poValue: 120000, paymentTerm: 'Full Payment',
-            amountPaid: 120000, dueDate: '2026-09-15', paymentStatus: 'Fully Paid', poStatus: 'CLOSED',
-            closedBy: 'Anish', closedDate: '05/09/2026', closureReason: 'Licenses delivered and payment cleared.',
-            reopenedBy: '', reopenedDate: '', reopenReason: '',
-            history: [
-                { no: 1, date: '04/09/2026', term: 'Full Payment', amount: 120000, ref: 'PAY-005', status: 'Paid', addedBy: 'Anish' }
-            ],
-            notes: [
-                { type: 'Payment Processing', text: 'Full payment of ₹1,20,000 processed.', by: 'Anish', date: '04/09/2026, 11:00 AM' },
-                { type: 'PO Closure', text: 'PO closed. Reason: Licenses delivered and payment cleared.', by: 'Anish', date: '05/09/2026, 02:30 PM' }
-            ]
-        }
-    ];
+        let currentFinTab = 'All';
+        let currentFinPoNo = null;
 
-    let currentPO = null;
-    let modalAction = null;
+        document.addEventListener('DOMContentLoaded', () => {
+            renderFinanceTable();
+        });
 
-    // ==================== FORMATTING ====================
-    function formatCurrency(val) {
-        return '₹' + Number(val).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-
-    function getPaymentStatusClass(status) {
-        return status.toLowerCase().replace(/\s+/g, '-');
-    }
-
-    function getPoStatusClass(status) {
-        return status.toLowerCase();
-    }
-
-    function getCurrentDateTime() {
-        const now = new Date();
-        const dd = String(now.getDate()).padStart(2, '0');
-        const mm = String(now.getMonth() + 1).padStart(2, '0');
-        const yyyy = now.getFullYear();
-        let hh = now.getHours();
-        const min = String(now.getMinutes()).padStart(2, '0');
-        const ampm = hh >= 12 ? 'PM' : 'AM';
-        hh = hh % 12 || 12;
-        return `${dd}/${mm}/${yyyy}, ${String(hh).padStart(2, '0')}:${min} ${ampm}`;
-    }
-
-    function getTodayFormatted() {
-        const now = new Date();
-        const dd = String(now.getDate()).padStart(2, '0');
-        const mm = String(now.getMonth() + 1).padStart(2, '0');
-        return `${dd}/${mm}/${now.getFullYear()}`;
-    }
-
-    function generatePayRef(po) {
-        return 'PAY-' + String(po.history.length + 1).padStart(3, '0');
-    }
-
-    // ==================== RENDER PO TABLE ====================
-    function renderPoTable(data) {
-        data = data || financePOs;
-        const tbody = document.getElementById('financePoTableBody');
-        tbody.innerHTML = '';
-
-        if (data.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="15" style="text-align:center; padding:20px; color:#888;">No records found matching the filters.</td></tr>';
-            return;
+        function switchFinanceTab(status) {
+            currentFinTab = status;
+            document.querySelectorAll('.status-tab').forEach(t => {
+                const isActive = t.dataset.status === status;
+                t.classList.toggle('active', isActive);
+            });
+            const statusDropdown = document.getElementById('filterFinStatus');
+            if (statusDropdown) {
+                statusDropdown.value = (status === 'All') ? '' : status;
+            }
+            renderFinanceTable();
         }
 
-        data.forEach(po => {
-            const balance = po.poValue - po.amountPaid;
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><a href="#" onclick="openPaymentManagement('${po.poNo}'); return false;" style="color:var(--primary-blue); font-weight:bold;">${po.poNo}</a></td>
-                <td>${po.projectCode}</td>
-                <td>${po.projectName}</td>
-                <td>${po.itemCode}</td>
-                <td>${po.itemName}</td>
-                <td>${po.supplier}</td>
-                <td>${po.poDate}</td>
-                <td style="text-align:right;">${formatCurrency(po.poValue)}</td>
-                <td>${po.paymentTerm}</td>
-                <td style="text-align:right;">${formatCurrency(po.amountPaid)}</td>
-                <td style="text-align:right;">${formatCurrency(balance)}</td>
-                <td>${po.dueDate}</td>
-                <td><span class="badge ${getPaymentStatusClass(po.paymentStatus)}">${po.paymentStatus}</span></td>
-                <td><span class="badge ${getPoStatusClass(po.poStatus)}">${po.poStatus}</span></td>
-                <td>
-                    <div class="action-icons">
-                        <i class="fas fa-edit icon-edit" title="Manage Payment" onclick="openPaymentManagement('${po.poNo}')"></i>
+        function onFinStatusDropdownChange() {
+            const val = document.getElementById('filterFinStatus').value || 'All';
+            switchFinanceTab(val);
+        }
+
+        function applyFinanceFilters() {
+            renderFinanceTable();
+        }
+
+        function clearFinanceFilters() {
+            document.getElementById('filterFinPoNo').value = '';
+            document.getElementById('filterFinRequester').value = '';
+            document.getElementById('filterFinSupplier').value = '';
+            document.getElementById('filterFinStatus').value = '';
+            switchFinanceTab('All');
+        }
+
+        function renderFinanceTable() {
+            const tbody = document.getElementById('financeTableBody');
+            tbody.innerHTML = '';
+
+            const pos = window.PurchaseData.getAllPOs();
+
+            // Counts
+            const countAll = pos.length;
+            const countPartial = pos.filter(p => p.status === 'Partial').length;
+            const countComplete = pos.filter(p => p.status === 'Complete').length;
+            const countNew = pos.filter(p => p.status === 'New').length;
+
+            document.getElementById('finBadgeAll').textContent = countAll;
+            document.getElementById('finBadgePartial').textContent = countPartial;
+            document.getElementById('finBadgeComplete').textContent = countComplete;
+            document.getElementById('finBadgeNew').textContent = countNew;
+
+            // Filter
+            const fPo = document.getElementById('filterFinPoNo').value.trim().toLowerCase();
+            const fReq = document.getElementById('filterFinRequester').value.trim().toLowerCase();
+            const fSup = document.getElementById('filterFinSupplier').value.trim().toLowerCase();
+            const fStatus = currentFinTab !== 'All' ? currentFinTab : document.getElementById('filterFinStatus').value;
+
+            const filtered = pos.filter(p => {
+                if (fPo && !p.poNo.toLowerCase().includes(fPo)) return false;
+                if (fReq && !p.requestedBy.toLowerCase().includes(fReq)) return false;
+                if (fSup && !p.supplierName.toLowerCase().includes(fSup)) return false;
+                if (fStatus && p.status.toLowerCase() !== fStatus.toLowerCase()) return false;
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 30px; color: #64748b;">
+                    <i class="fas fa-inbox" style="font-size: 28px; color: #cbd5e1; display: block; margin-bottom: 6px;"></i>
+                    No purchase orders found matching the filter criteria.
+                </td></tr>`;
+                document.getElementById('financePaginationInfo').textContent = 'Showing 0 to 0 of 0 records';
+                return;
+            }
+
+            filtered.forEach(p => {
+                const tr = document.createElement('tr');
+                const statusClass = p.status.toLowerCase();
+                const payStatusClass = (p.paymentStatus || 'Pending').toLowerCase().replace(/\s+/g, '-');
+                const formattedCost = '₹' + Number(p.totalCost).toLocaleString('en-IN');
+                const formattedPaid = '₹' + Number(p.amountPaid || 0).toLocaleString('en-IN');
+
+                tr.innerHTML = `
+                    <td><strong>${p.poNo}</strong></td>
+                    <td>${p.poDate}</td>
+                    <td>${p.requestedBy}</td>
+                    <td>${p.supplierName}</td>
+                    <td style="text-align: right; font-weight: 700;">${formattedCost}</td>
+                    <td style="text-align: right; color: #16a34a; font-weight: 600;">${formattedPaid}</td>
+                    <td><span class="badge ${statusClass}">${p.status}</span></td>
+                    <td><span class="badge ${payStatusClass}">${p.paymentStatus || 'Pending'}</span></td>
+                    <td style="text-align: center;">
+                        <button class="action-btn action-btn-view" onclick="openFinanceModal('${p.poNo}')" title="View PO Details & Invoices">
+                            <i class="fas fa-eye"></i> View
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('financePaginationInfo').textContent = `Showing 1 to ${filtered.length} of ${filtered.length} records`;
+        }
+
+        // =========================================================
+        // OPEN CLICK WORKFLOW (Jisan's View)
+        // =========================================================
+        function openFinanceModal(poNo) {
+            currentFinPoNo = poNo;
+            const po = window.PurchaseData.getPO(poNo);
+            if (!po) return;
+
+            document.getElementById('finModalHeaderPo').textContent = `${po.poNo} — ${po.supplierName}`;
+            document.getElementById('finSumPoNo').textContent = po.poNo;
+            document.getElementById('finSumPoDate').textContent = po.poDate;
+            document.getElementById('finSumRequester').textContent = po.requestedBy;
+            document.getElementById('finSumSupplier').textContent = po.supplierName;
+            document.getElementById('finSumTotalCost').textContent = '₹' + Number(po.totalCost).toLocaleString('en-IN');
+
+            document.getElementById('finSumPayTerm').textContent = po.paymentTerm || 'Full Payment';
+            document.getElementById('finSumPayStatus').innerHTML = `<span class="badge ${(po.paymentStatus || 'pending').toLowerCase().replace(/\s+/g, '-')}">${po.paymentStatus || 'Pending'}</span>`;
+            document.getElementById('finSumAmountPaid').textContent = '₹' + Number(po.amountPaid || 0).toLocaleString('en-IN');
+
+            const remaining = Math.max(0, po.totalCost - (po.amountPaid || 0));
+            document.getElementById('finSumRemaining').textContent = '₹' + Number(remaining).toLocaleString('en-IN');
+
+            // Prefill payment amount with remaining
+            const payInput = document.getElementById('finPayAmount');
+            if (payInput) {
+                payInput.value = remaining > 0 ? remaining : 0;
+                payInput.max = remaining;
+            }
+            document.getElementById('finPayRef').value = `UTR-${Date.now().toString().slice(-6)}`;
+
+            renderFinanceLineItems(po);
+
+            document.getElementById('financeOpenModal').classList.add('active');
+        }
+
+        function closeFinanceModal() {
+            document.getElementById('financeOpenModal').classList.remove('active');
+            renderFinanceTable();
+        }
+
+        function renderFinanceLineItems(po) {
+            const tbody = document.getElementById('finLineItemsBody');
+            tbody.innerHTML = '';
+
+            po.lineItems.forEach(li => {
+                const tr = document.createElement('tr');
+                const lineStatusClass = li.status.toLowerCase();
+
+                // Extract all unique invoice numbers from batches
+                const invoices = [];
+                if (li.batches && li.batches.length > 0) {
+                    li.batches.forEach(b => {
+                        if (b.invoiceNo && b.invoiceNo !== 'N/A' && !invoices.includes(b.invoiceNo)) {
+                            invoices.push(b.invoiceNo);
+                        }
+                    });
+                }
+
+                let invoiceHtml = '-';
+                if (invoices.length > 0) {
+                    invoiceHtml = invoices.map(inv => 
+                        `<span class="inv-chip" onclick="showInvoiceDetails('${inv}', '${po.poNo}', '${li.itemKey}')" title="Click to view invoice details">
+                            <i class="fas fa-file-invoice"></i> ${inv}
+                        </span>`
+                    ).join('');
+                }
+
+                tr.innerHTML = `
+                    <td><span class="badge open" style="font-size: 10px;">${li.itemKey}</span></td>
+                    <td><strong>${li.itemName}</strong></td>
+                    <td style="text-align: right; font-weight: 600;">${li.reqQty}</td>
+                    <td style="text-align: right; color: #16a34a; font-weight: 600;">${li.recQty}</td>
+                    <td>${li.uom}</td>
+                    <td style="text-align: right; font-weight: 600;">₹${Number(li.cost).toLocaleString('en-IN')}</td>
+                    <td style="text-align: right;">
+                        <span class="balance-badge ${li.balance === 0 ? 'zero' : 'positive'}">${li.balance}</span>
+                    </td>
+                    <td><span class="badge ${lineStatusClass}">${li.status === 'Full' ? 'Full' : li.status}</span></td>
+                    <td>${invoiceHtml}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function handleRecordPayment() {
+            if (!currentFinPoNo) return;
+            const po = window.PurchaseData.getPO(currentFinPoNo);
+            if (!po) return;
+
+            const amt = Number(document.getElementById('finPayAmount').value);
+            const term = document.getElementById('finPayTerm').value;
+            const ref = document.getElementById('finPayRef').value.trim();
+
+            if (!amt || amt <= 0) {
+                alert('Please enter a valid payment amount greater than 0.');
+                return;
+            }
+
+            const remaining = po.totalCost - (po.amountPaid || 0);
+            if (amt > remaining) {
+                alert(`Payment amount (₹${amt}) cannot exceed remaining balance (₹${remaining}).`);
+                return;
+            }
+
+            const res = window.PurchaseData.recordPayment(currentFinPoNo, amt, term, ref);
+            if (res.success) {
+                alert(`Payment of ₹${amt.toLocaleString('en-IN')} recorded successfully against ${currentFinPoNo}!`);
+                openFinanceModal(currentFinPoNo);
+            }
+        }
+
+        function showInvoiceDetails(invoiceNo, poNo, itemKey) {
+            const po = window.PurchaseData.getPO(poNo);
+            if (!po) return;
+            const li = po.lineItems.find(i => i.itemKey === itemKey);
+            const batch = (li.batches || []).find(b => b.invoiceNo === invoiceNo);
+
+            document.getElementById('invModalTitle').textContent = `${invoiceNo} (${po.poNo})`;
+            document.getElementById('invModalContent').innerHTML = `
+                <div class="summary-card" style="margin-bottom: 0;">
+                    <div style="text-align: center; margin-bottom: 12px;">
+                        <i class="fas fa-file-invoice-dollar" style="font-size: 36px; color: #0284c7;"></i>
+                        <h4 style="margin-top: 6px; color: #0f172a;">TAX INVOICE: ${invoiceNo}</h4>
                     </div>
-                </td>
-            `;
-            tbody.appendChild(tr);
-        });
-    }
-
-    // ==================== FILTERS ====================
-    function applyFilters() {
-        const poNo = document.getElementById('filter-po-no').value.toLowerCase().trim();
-        const projCode = document.getElementById('filter-project-code').value.toLowerCase().trim();
-        const projName = document.getElementById('filter-project-name').value.toLowerCase().trim();
-        const itemCode = document.getElementById('filter-item-code').value.toLowerCase().trim();
-        const itemName = document.getElementById('filter-item-name').value.toLowerCase().trim();
-        const supplier = document.getElementById('filter-supplier').value.toLowerCase().trim();
-        const payStatus = document.getElementById('filter-payment-status').value;
-        const poStatus = document.getElementById('filter-po-status').value;
-        const payTerm = document.getElementById('filter-payment-term').value;
-        const dateFrom = document.getElementById('filter-date-from').value;
-        const dateTo = document.getElementById('filter-date-to').value;
-
-        const filtered = financePOs.filter(po => {
-            if (poNo && !po.poNo.toLowerCase().includes(poNo)) return false;
-            if (projCode && !po.projectCode.toLowerCase().includes(projCode)) return false;
-            if (projName && !po.projectName.toLowerCase().includes(projName)) return false;
-            if (itemCode && !po.itemCode.toLowerCase().includes(itemCode)) return false;
-            if (itemName && !po.itemName.toLowerCase().includes(itemName)) return false;
-            if (supplier && !po.supplier.toLowerCase().includes(supplier)) return false;
-            if (payStatus && po.paymentStatus !== payStatus) return false;
-            if (poStatus && po.poStatus !== poStatus) return false;
-            if (payTerm && po.paymentTerm !== payTerm) return false;
-            if (dateFrom && po.dueDate < dateFrom) return false;
-            if (dateTo && po.dueDate > dateTo) return false;
-            return true;
-        });
-        renderPoTable(filtered);
-    }
-
-    function clearFilters() {
-        document.getElementById('filter-po-no').value = '';
-        document.getElementById('filter-project-code').value = '';
-        document.getElementById('filter-project-name').value = '';
-        document.getElementById('filter-item-code').value = '';
-        document.getElementById('filter-item-name').value = '';
-        document.getElementById('filter-supplier').value = '';
-        document.getElementById('filter-payment-status').value = '';
-        document.getElementById('filter-po-status').value = '';
-        document.getElementById('filter-payment-term').value = '';
-        document.getElementById('filter-date-from').value = '';
-        document.getElementById('filter-date-to').value = '';
-        renderPoTable();
-    }
-
-    // ==================== OPEN PAYMENT MANAGEMENT ====================
-    function openPaymentManagement(poNo) {
-        currentPO = financePOs.find(p => p.poNo === poNo);
-        if (!currentPO) return;
-
-        document.getElementById('paymentManagementSection').style.display = 'block';
-        document.getElementById('pmPoHeader').textContent = currentPO.poNo;
-
-        // Status Badge
-        const badge = document.getElementById('pmPoStatusBadge');
-        badge.textContent = currentPO.poStatus;
-        badge.className = 'badge ' + getPoStatusClass(currentPO.poStatus);
-
-        // Action Button
-        const actionBtn = document.getElementById('btnPoAction');
-        if (currentPO.poStatus === 'OPEN') {
-            actionBtn.innerHTML = '<i class="fas fa-lock"></i> Close PO';
-            actionBtn.className = 'btn btn-danger';
-        } else {
-            actionBtn.innerHTML = '<i class="fas fa-unlock"></i> Reopen PO';
-            actionBtn.className = 'btn btn-warning';
-        }
-
-        // Enable/Disable payment entry
-        const entrySection = document.getElementById('paymentEntrySection');
-        if (currentPO.poStatus === 'CLOSED') {
-            entrySection.style.opacity = '0.5';
-            entrySection.style.pointerEvents = 'none';
-        } else {
-            entrySection.style.opacity = '1';
-            entrySection.style.pointerEvents = 'auto';
-        }
-
-        // Summary fields
-        const remaining = currentPO.poValue - currentPO.amountPaid;
-        document.getElementById('pmPoNo').value = currentPO.poNo;
-        document.getElementById('pmProjectCode').value = currentPO.projectCode;
-        document.getElementById('pmProjectName').value = currentPO.projectName;
-        document.getElementById('pmItemCode').value = currentPO.itemCode;
-        document.getElementById('pmItemName').value = currentPO.itemName;
-        document.getElementById('pmSupplier').value = currentPO.supplier;
-        document.getElementById('pmPoDate').value = currentPO.poDate;
-        document.getElementById('pmTotalValue').value = formatCurrency(currentPO.poValue);
-        document.getElementById('pmTotalPaid').value = formatCurrency(currentPO.amountPaid);
-        document.getElementById('pmRemainingAmt').value = formatCurrency(remaining);
-        document.getElementById('pmPaymentStatus').value = currentPO.paymentStatus;
-        document.getElementById('pmPoStatus').value = currentPO.poStatus;
-
-        // Payment Term
-        document.getElementById('pmPaymentTerm').value = currentPO.paymentTerm;
-        document.getElementById('pmDueDate').value = currentPO.dueDate;
-
-        onPaymentTermChange();
-        renderNotes();
-        renderHistory();
-
-        // Scroll to section
-        document.getElementById('paymentManagementSection').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function closePaymentSection() {
-        document.getElementById('paymentManagementSection').style.display = 'none';
-        currentPO = null;
-    }
-
-    // ==================== PAYMENT TERM CHANGE ====================
-    function onPaymentTermChange() {
-        if (!currentPO) return;
-        const term = document.getElementById('pmPaymentTerm').value;
-        const container = document.getElementById('dynamicPaymentEntry');
-        const remaining = currentPO.poValue - currentPO.amountPaid;
-
-        let html = '';
-
-        if (remaining <= 0) {
-            html = '<p style="color: #28a745; font-weight: bold; text-align: center; padding: 10px;"><i class="fas fa-check-circle"></i> All payments have been completed for this PO.</p>';
-            document.getElementById('paymentActionsBar').style.display = 'none';
-            container.innerHTML = html;
-            return;
-        } else {
-            document.getElementById('paymentActionsBar').style.display = 'flex';
-        }
-
-        if (term === 'Full Payment') {
-            html = `
-                <div class="form-grid" style="grid-template-columns: repeat(3, 1fr);">
-                    <div class="form-group"><label>Payment Value</label><input type="text" id="dynPayValue" value="${remaining.toFixed(2)}" class="readonly-field" readonly></div>
-                    <div class="form-group"><label>Payment Date</label><input type="date" id="dynPayDate" required></div>
-                    <div class="form-group"><label>Reference No.</label><input type="text" id="dynPayRef" placeholder="e.g. UTR / Cheque No"></div>
-                </div>
-                <div class="form-grid" style="grid-template-columns: 2fr 1fr; margin-top: 8px;">
-                    <div class="form-group tall"><label>Finance Remarks</label><textarea id="dynRemarks" rows="2" placeholder="Enter payment remarks..."></textarea></div>
-                    <div class="form-group"><label>Attach Invoices</label><input type="file" id="dynInvoices" multiple style="padding-top: 5px;"></div>
+                    <div class="summary-grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; font-size: 12px;">
+                        <div><strong>Supplier:</strong> ${po.supplierName}</div>
+                        <div><strong>PO Number:</strong> ${po.poNo}</div>
+                        <div><strong>Invoice Date:</strong> ${batch ? batch.recDate : po.poDate}</div>
+                        <div><strong>Item Name:</strong> ${li.itemName}</div>
+                        <div><strong>Billed Quantity:</strong> ${batch ? batch.recQty : li.recQty} ${li.uom}</div>
+                        <div><strong>Batch Reference:</strong> ${batch ? batch.batchNo : 'B001'}</div>
+                    </div>
+                    <div style="background: #eff6ff; padding: 10px; border-radius: 6px; border: 1px dashed #93c5fd; font-size: 11px; color: #1e40af;">
+                        <i class="fas fa-info-circle"></i> Goods received and verified at dock. Invoice certified for payment release.
+                    </div>
                 </div>
             `;
-        } else if (term === '50% Payment') {
-            const half = currentPO.poValue / 2;
-            const isFirstPaid = currentPO.amountPaid >= half;
-            const payLabel = isFirstPaid ? 'Second Payment (50%)' : 'First Payment (50%)';
-            const payValue = isFirstPaid ? (currentPO.poValue - currentPO.amountPaid) : half;
-
-            html = `
-                <div style="background: #e8f4f8; padding: 8px 12px; border-radius: 3px; margin-bottom: 10px; font-size: 12px;">
-                    <strong>PO Value:</strong> ${formatCurrency(currentPO.poValue)} |
-                    <strong>First 50%:</strong> ${formatCurrency(half)} |
-                    <strong>Second 50%:</strong> ${formatCurrency(half)} |
-                    <strong>Paid So Far:</strong> ${formatCurrency(currentPO.amountPaid)}
-                </div>
-                <div class="form-grid" style="grid-template-columns: repeat(3, 1fr);">
-                    <div class="form-group"><label>${payLabel}</label><input type="text" id="dynPayValue" value="${payValue.toFixed(2)}" class="readonly-field" readonly></div>
-                    <div class="form-group"><label>Payment Date</label><input type="date" id="dynPayDate" required></div>
-                    <div class="form-group"><label>Reference No.</label><input type="text" id="dynPayRef" placeholder="e.g. UTR / Cheque No"></div>
-                </div>
-                <div class="form-grid" style="grid-template-columns: 2fr 1fr; margin-top: 8px;">
-                    <div class="form-group tall"><label>Finance Remarks</label><textarea id="dynRemarks" rows="2" placeholder="Enter payment remarks..."></textarea></div>
-                    <div class="form-group"><label>Attach Invoices</label><input type="file" id="dynInvoices" multiple style="padding-top: 5px;"></div>
-                </div>
-            `;
-        } else {
-            // Partial or Custom
-            html = `
-                <div class="form-grid" style="grid-template-columns: repeat(3, 1fr);">
-                    <div class="form-group"><label>Payment Value</label><input type="number" id="dynPayValue" step="0.01" max="${remaining}" placeholder="Max: ${formatCurrency(remaining)}" required></div>
-                    <div class="form-group"><label>Payment Date</label><input type="date" id="dynPayDate" required></div>
-                    <div class="form-group"><label>Reference No.</label><input type="text" id="dynPayRef" placeholder="e.g. UTR / Cheque No"></div>
-                </div>
-                <div class="form-grid" style="grid-template-columns: 2fr 1fr; margin-top: 8px;">
-                    <div class="form-group tall"><label>Finance Remarks</label><textarea id="dynRemarks" rows="2" placeholder="Enter payment remarks..."></textarea></div>
-                    <div class="form-group"><label>Attach Invoices</label><input type="file" id="dynInvoices" multiple style="padding-top: 5px;"></div>
-                </div>
-            `;
+            document.getElementById('invoicePreviewModal').classList.add('active');
         }
 
-        container.innerHTML = html;
-    }
-
-    // ==================== PROCESS PAYMENT ====================
-    function processPayment() {
-        if (!currentPO || currentPO.poStatus === 'CLOSED') {
-            alert('Cannot process payment for a closed PO.');
-            return;
+        function closeInvoiceModal() {
+            document.getElementById('invoicePreviewModal').classList.remove('active');
         }
 
-        const payDateEl = document.getElementById('dynPayDate');
-        const payValueEl = document.getElementById('dynPayValue');
-        const payRefEl = document.getElementById('dynPayRef');
-        const remarksEl = document.getElementById('dynRemarks');
-        const term = document.getElementById('pmPaymentTerm').value;
-        const method = document.getElementById('pmPaymentMethod').value;
-
-        if (!payDateEl || !payDateEl.value) {
-            alert('Please enter the Payment Date.');
-            return;
+        function exportFinanceData() {
+            const pos = window.PurchaseData.getAllPOs();
+            const headers = ["PO No", "PO Date", "Requested By", "Supplier Name", "Total Cost", "Amount Paid", "Status", "Payment Status"];
+            const rows = pos.map(p => [
+                p.poNo, p.poDate, `"${p.requestedBy}"`, `"${p.supplierName}"`, p.totalCost, p.amountPaid || 0, p.status, `"${p.paymentStatus || 'Pending'}"`
+            ]);
+            let csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Finance_PO_Summary_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
-        if (!payValueEl || !payValueEl.value || parseFloat(payValueEl.value) <= 0) {
-            alert('Please enter a valid Payment Value.');
-            return;
-        }
-
-        const amount = parseFloat(payValueEl.value);
-        const remaining = currentPO.poValue - currentPO.amountPaid;
-
-        if (amount > remaining + 0.01) {
-            alert('Payment value cannot exceed the remaining amount of ' + formatCurrency(remaining));
-            return;
-        }
-
-        const refNo = payRefEl.value.trim() || generatePayRef(currentPO);
-        const remarks = remarksEl ? remarksEl.value.trim() : '';
-
-        // Update PO
-        currentPO.amountPaid += amount;
-        currentPO.paymentTerm = term;
-
-        if (currentPO.amountPaid >= currentPO.poValue) {
-            currentPO.paymentStatus = 'Fully Paid';
-        } else if (currentPO.amountPaid > 0) {
-            currentPO.paymentStatus = 'Partially Paid';
-        }
-
-        // Format date for display
-        const dateParts = payDateEl.value.split('-');
-        const displayDate = dateParts[2] + '/' + dateParts[1] + '/' + dateParts[0];
-
-        // Add history entry
-        currentPO.history.push({
-            no: currentPO.history.length + 1,
-            date: displayDate,
-            term: term,
-            amount: amount,
-            ref: refNo,
-            status: 'Paid',
-            addedBy: 'Finance User'
-        });
-
-        // Add note
-        let noteText = `Payment of ${formatCurrency(amount)} processed via ${method}. Ref: ${refNo}.`;
-        if (remarks) noteText += ` Remarks: ${remarks}`;
-        addNoteInternal('Payment Processing', noteText);
-
-        alert('Payment of ' + formatCurrency(amount) + ' processed successfully!');
-        renderPoTable();
-        openPaymentManagement(currentPO.poNo);
-    }
-
-    function resetPaymentForm() {
-        if (currentPO) onPaymentTermChange();
-    }
-
-    // ==================== PO CLOSE / REOPEN ====================
-    function handlePoAction() {
-        if (!currentPO) return;
-
-        document.getElementById('modalReason').value = '';
-        document.getElementById('modalExtraFields').innerHTML = '';
-
-        if (currentPO.poStatus === 'OPEN') {
-            modalAction = 'CLOSE';
-            document.getElementById('modalTitle').textContent = 'Close PO — ' + currentPO.poNo;
-            document.getElementById('modalMessage').textContent = 'Are you sure you want to close this PO?';
-            document.getElementById('modalReason').placeholder = 'Enter closure reason/notes (Mandatory)...';
-
-            // Extra fields for closure
-            document.getElementById('modalExtraFields').innerHTML = `
-                <div class="form-group"><label>Final Payment Amt</label><input type="text" value="${formatCurrency(currentPO.amountPaid)}" class="readonly-field" readonly></div>
-                <div class="form-group"><label>Remaining Amt</label><input type="text" value="${formatCurrency(currentPO.poValue - currentPO.amountPaid)}" class="readonly-field" readonly></div>
-            `;
-
-            document.getElementById('modalConfirmBtn').className = 'btn btn-danger';
-            document.getElementById('modalConfirmBtn').innerHTML = '<i class="fas fa-lock"></i> Close PO';
-        } else {
-            modalAction = 'REOPEN';
-            document.getElementById('modalTitle').textContent = 'Reopen PO — ' + currentPO.poNo;
-            document.getElementById('modalMessage').textContent = 'Are you sure you want to reopen this PO?';
-            document.getElementById('modalReason').placeholder = 'Enter reason for reopening (Mandatory)...';
-
-            document.getElementById('modalConfirmBtn').className = 'btn btn-warning';
-            document.getElementById('modalConfirmBtn').innerHTML = '<i class="fas fa-unlock"></i> Reopen PO';
-        }
-
-        document.getElementById('modalOverlay').style.display = 'flex';
-    }
-
-    function closeModal() {
-        document.getElementById('modalOverlay').style.display = 'none';
-        modalAction = null;
-    }
-
-    function confirmModalAction() {
-        const reason = document.getElementById('modalReason').value.trim();
-        if (!reason) {
-            alert('Reason/Note is mandatory. Please enter a reason.');
-            return;
-        }
-
-        if (modalAction === 'CLOSE') {
-            currentPO.poStatus = 'CLOSED';
-            currentPO.closedBy = 'Anish';
-            currentPO.closedDate = getTodayFormatted();
-            currentPO.closureReason = reason;
-            addNoteInternal('PO Closure', `PO Closed by Anish. Closure Date: ${getTodayFormatted()}. Final Payment: ${formatCurrency(currentPO.amountPaid)}. Remaining: ${formatCurrency(currentPO.poValue - currentPO.amountPaid)}. Reason: ${reason}`);
-        } else if (modalAction === 'REOPEN') {
-            currentPO.poStatus = 'OPEN';
-            currentPO.reopenedBy = 'Anish';
-            currentPO.reopenedDate = getTodayFormatted();
-            currentPO.reopenReason = reason;
-            addNoteInternal('PO Reopening', `PO Reopened by Anish. Reopened Date: ${getTodayFormatted()}. Previous closure maintained. Reason: ${reason}`);
-        }
-
-        closeModal();
-        renderPoTable();
-        openPaymentManagement(currentPO.poNo);
-    }
-
-    // ==================== NOTES ====================
-    function addNoteInternal(type, text) {
-        if (!currentPO) return;
-        currentPO.notes.push({
-            type: type,
-            text: text,
-            by: 'Anish',
-            date: getCurrentDateTime()
-        });
-    }
-
-    function addNote() {
-        if (!currentPO) return;
-        const noteText = document.getElementById('pmNewNote').value.trim();
-        const noteType = document.getElementById('pmNoteType').value;
-        if (!noteText) {
-            alert('Please enter a note.');
-            return;
-        }
-        addNoteInternal(noteType, noteText);
-        document.getElementById('pmNewNote').value = '';
-        renderNotes();
-    }
-
-    function renderNotes() {
-        if (!currentPO) return;
-        const list = document.getElementById('pmNotesList');
-        list.innerHTML = '';
-
-        if (currentPO.notes.length === 0) {
-            list.innerHTML = '<p style="text-align:center; color:#aaa; padding:20px; font-size:12px;">No notes yet.</p>';
-            return;
-        }
-
-        currentPO.notes.forEach(note => {
-            const div = document.createElement('div');
-            div.className = 'note-item';
-            div.innerHTML = `
-                <div class="note-meta">
-                    <span><strong>${note.by}</strong> — ${note.type}</span>
-                    <span>${note.date}</span>
-                </div>
-                <div class="note-text">${note.text}</div>
-            `;
-            list.appendChild(div);
-        });
-
-        list.scrollTop = list.scrollHeight;
-    }
-
-    // ==================== PAYMENT HISTORY ====================
-    function renderHistory() {
-        if (!currentPO) return;
-        const tbody = document.getElementById('pmHistoryBody');
-        tbody.innerHTML = '';
-
-        if (currentPO.history.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#aaa; padding:15px;">No payment history.</td></tr>';
-            return;
-        }
-
-        currentPO.history.forEach(h => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${h.no}</td>
-                <td>${h.date}</td>
-                <td>${h.term}</td>
-                <td style="text-align:right;">${formatCurrency(h.amount)}</td>
-                <td>${h.ref}</td>
-                <td><span class="badge fully-paid">${h.status}</span></td>
-                <td>${h.addedBy}</td>
-            `;
-            tbody.appendChild(tr);
-        });
-    }
-
-    // ==================== EXPORT ====================
-    function exportFinanceData() {
-        let csv = 'PO Number,Project Code,Project Name,Item Code,Item Name,Supplier/Vendor,PO Date,PO Value,Payment Term,Amount Paid,Balance,Due Date,Payment Status,PO Status\n';
-        financePOs.forEach(po => {
-            const balance = po.poValue - po.amountPaid;
-            csv += `"${po.poNo}","${po.projectCode}","${po.projectName}","${po.itemCode}","${po.itemName}","${po.supplier}","${po.poDate}",${po.poValue},"${po.paymentTerm}",${po.amountPaid},${balance},"${po.dueDate}","${po.paymentStatus}","${po.poStatus}"\n`;
-        });
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'finance_po_list.csv';
-        a.click();
-        URL.revokeObjectURL(url);
-    }
-
-    // ==================== INIT ====================
-    document.addEventListener('DOMContentLoaded', () => {
-        renderPoTable();
-    });
     </script>
 </body>
-
 </html>

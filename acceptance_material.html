@@ -8,436 +8,71 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Acceptance Module Specific Styles */
-        .acceptance-filters {
-            background-color: #f9fbfd;
-            padding: 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            margin-bottom: 16px;
-            transition: all 0.3s ease;
-        }
-        .acceptance-filters h3 {
-            margin-bottom: 0;
-            font-size: 14px;
-            color: var(--header-blue);
-        }
-        .filter-actions {
-            margin-top: 10px;
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
+        .filter-grid-acceptance {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr) auto;
+            gap: 15px;
+            align-items: flex-end;
         }
 
-        /* Filter collapsible header */
-        .filter-header-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            user-select: none;
-            margin-bottom: 10px;
-        }
-        .filter-header-bar h3 {
-            margin: 0;
-            font-size: 14px;
-            color: var(--header-blue);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .filter-toggle-text {
-            font-size: 12px;
-            color: var(--header-blue);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 3px 8px;
-            border-radius: 4px;
-            background: #eef6f9;
-            transition: background 0.2s;
-        }
-        .filter-toggle-text:hover {
-            background: #dbeaf0;
-        }
-
-        /* ==================== STATUS TABS BAR ==================== */
-        .status-tabs-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 8px 14px;
-            margin-bottom: 12px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .status-tabs-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .status-tab {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 7px 16px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #4a5568;
-            background: #f8fafc;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            outline: none;
-            user-select: none;
-        }
-
-        .status-tab:hover {
-            background: #edf2f7;
-            color: #1a202c;
-            border-color: #94a3b8;
-            transform: translateY(-1px);
-        }
-
-        /* Active states */
-        .status-tab.active {
-            color: #ffffff !important;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-            transform: translateY(-1px);
-        }
-
-        .status-tab.tab-all.active {
-            background: linear-gradient(135deg, #2c729c, #3b8ab2);
-            border-color: #2c729c;
-        }
-
-        .status-tab.tab-accepted.active {
-            background: linear-gradient(135deg, #16a34a, #28a745);
-            border-color: #15803d;
-        }
-
-        .status-tab.tab-pending.active {
-            background: linear-gradient(135deg, #d97706, #f59e0b);
-            border-color: #b45309;
-        }
-
-        .status-tab.tab-rejected.active {
-            background: linear-gradient(135deg, #dc2626, #ef4444);
-            border-color: #b91c1c;
-        }
-
-        /* Tab Counter Badges */
-        .tab-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2px 8px;
-            font-size: 11px;
-            font-weight: 700;
-            border-radius: 12px;
-            min-width: 22px;
-            line-height: 1.2;
-            transition: all 0.2s ease;
-        }
-
-        .status-tab.tab-all:not(.active) .tab-badge {
-            background: #e2e8f0;
-            color: #334155;
-        }
-
-        .status-tab.tab-accepted:not(.active) .tab-badge {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .status-tab.tab-pending:not(.active) .tab-badge {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .status-tab.tab-rejected:not(.active) .tab-badge {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .status-tab.active .tab-badge {
-            background: rgba(255, 255, 255, 0.28);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-        }
-
-        .status-tabs-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Table enhancements */
-        .data-table th.sortable {
-            cursor: pointer;
-            user-select: none;
-            position: relative;
-        }
-        .data-table th.sortable:hover {
-            background-color: #1a6a7a;
-        }
-        .data-table th.sortable::after {
-            content: ' \25B2\25BC';
-            font-size: 8px;
-            opacity: 0.5;
-            margin-left: 3px;
-        }
-        .data-table th.sortable.asc::after {
-            content: ' \25B2';
-            opacity: 1;
-        }
-        .data-table th.sortable.desc::after {
-            content: ' \25BC';
-            opacity: 1;
-        }
-
-        /* Status Badges */
-        .badge.pending { background-color: #ffc107; color: #212529; }
-        .badge.accepted { background-color: #28a745; }
-        .badge.rejected { background-color: #dc3545; }
-        .badge.completed { background-color: #007bff; }
-        .badge.inward { background-color: #28a745; }
-        .badge.partial { background-color: #fd7e14; }
-        .badge.open { background-color: #28a745; }
-        .badge.closed { background-color: #6c757d; }
-
-        /* Action Buttons in table */
-        .action-btn-group {
-            display: flex;
-            gap: 4px;
-            flex-wrap: nowrap;
-        }
-        .action-btn {
-            padding: 3px 7px;
-            font-size: 10px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            color: white;
-            font-weight: 600;
-            white-space: nowrap;
-            transition: opacity 0.2s;
-        }
-        .action-btn:hover { opacity: 0.85; }
-        .action-btn-view { background-color: #17a2b8; }
-        .action-btn-accept { background-color: #28a745; }
-        .action-btn-reject { background-color: #dc3545; }
-        .action-btn-history { background-color: #6c757d; }
-
-        /* Pagination */
-        .pagination-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            font-size: 12px;
-            color: #555;
-        }
-        .pagination-controls {
-            display: flex;
-            gap: 4px;
-            align-items: center;
-        }
-        .pagination-controls button {
-            padding: 4px 10px;
-            font-size: 11px;
-            border: 1px solid #ccc;
-            background: white;
-            cursor: pointer;
-            border-radius: 3px;
-            color: #333;
-        }
-        .pagination-controls button.active-page {
-            background-color: var(--primary-blue);
-            color: white;
-            border-color: var(--primary-blue);
-        }
-        .pagination-controls button:hover:not(.active-page) {
-            background-color: #f0f0f0;
-        }
-        .pagination-controls button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Detail View */
-        .detail-section {
-            display: none;
-        }
-        .detail-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--primary-blue);
-        }
-        .detail-header h3 {
-            color: var(--header-blue);
-            font-size: 15px;
-        }
-        .detail-header-badges {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        .detail-header-actions {
-            display: flex;
-            gap: 8px;
-        }
-        .info-card {
-            border: 1px solid var(--border-color);
-            border-top: 3px solid var(--primary-blue);
-            padding: 15px;
-            border-radius: 0 0 4px 4px;
-            margin-bottom: 20px;
-            background: white;
-        }
-        .info-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        .info-card-header h4 {
-            font-size: 13px;
-            color: #555;
-            text-transform: uppercase;
-            font-weight: bold;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-            margin: 0;
-        }
-
-        /* Btn styles */
-        .btn-success { background-color: #28a745; border-color: #1e7e34; }
-        .btn-success:hover { background-color: #1e7e34; }
-        .btn-danger { background-color: #dc3545; border-color: #c82333; }
-        .btn-danger:hover { background-color: #c82333; }
-        .btn-secondary { background-color: #6c757d; border-color: #5a6268; }
-        .btn-secondary:hover { background-color: #5a6268; }
-        .btn-info { background-color: #17a2b8; border-color: #138496; }
-        .btn-info:hover { background-color: #138496; }
-        .btn-export { background-color: #28a745; border-color: #1e7e34; }
-
-        /* Modal */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-box {
-            background: white;
-            padding: 25px;
-            border-radius: 5px;
-            width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-        }
-        .modal-box h3 {
-            margin-bottom: 15px;
-            color: var(--header-blue);
-            border-bottom: 1px solid #eee;
-            padding-bottom: 8px;
-        }
-        .modal-box textarea {
+        .confirm-modal-box {
+            background: #fff;
+            border-radius: 8px;
             width: 100%;
-            border: 1px solid #ccc;
-            padding: 8px;
-            margin-bottom: 15px;
-            font-size: 12px;
-            border-radius: 3px;
-            font-family: inherit;
-            resize: none;
-        }
-        .modal-actions {
-            text-align: right;
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
+            max-width: 480px;
+            padding: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25);
         }
 
-        /* History timeline */
-        .history-item {
-            padding: 8px 10px;
-            border-left: 3px solid var(--primary-blue);
-            background: #f9fbfd;
-            margin-bottom: 8px;
-            border-radius: 0 3px 3px 0;
-            font-size: 12px;
+        .confirm-modal-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 700;
         }
-        .history-item .history-meta {
+
+        .confirm-modal-header.accept { color: #16a34a; }
+        .confirm-modal-header.reject { color: #dc2626; }
+
+        .timeline-container {
+            border-left: 2px solid #cbd5e1;
+            padding-left: 14px;
+            margin-top: 10px;
+        }
+
+        .timeline-step {
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .timeline-step::before {
+            content: '';
+            position: absolute;
+            left: -19px;
+            top: 4px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #0284c7;
+        }
+
+        .timeline-date {
             font-size: 10px;
-            color: #888;
-            margin-bottom: 3px;
-        }
-        .history-item .history-text {
-            color: #444;
+            color: #64748b;
+            font-weight: 600;
         }
 
-        /* Acceptance action area */
-        .acceptance-action-area {
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 4px;
-            background: #f9fbfd;
-            margin-top: 15px;
-        }
-        .acceptance-action-area h4 {
-            margin-bottom: 10px;
-            font-size: 13px;
-            color: var(--header-blue);
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        /* Search bar */
-        .search-bar {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-        .search-bar input {
-            flex: 1;
-            padding: 7px 12px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
+        .timeline-title {
             font-size: 12px;
+            font-weight: 700;
+            color: #0f172a;
         }
 
-        .form-group textarea {
-            flex: 1;
-            border: none;
-            padding: 6px 8px;
-            font-size: 12px;
-            outline: none;
-            background-color: #f6fafd;
-            color: #333;
-            font-family: inherit;
-            resize: none;
-        }
-        .form-group textarea:focus {
-            background-color: #fff;
-            box-shadow: inset 0 0 4px rgba(59, 138, 178, 0.4);
+        .timeline-desc {
+            font-size: 11px;
+            color: #475569;
         }
     </style>
 </head>
@@ -476,7 +111,7 @@
                 <nav class="sidebar-nav">
                     <ul class="nav-list">
                         <li class="nav-item">
-                            <a href="#" class="nav-link active">
+                            <a href="#" class="nav-link">
                                 <i class="fas fa-list"></i> Purchase Masters <i class="fas fa-chevron-down arrow"></i>
                             </a>
                             <ul class="sub-nav-list">
@@ -519,1191 +154,467 @@
 
             <!-- Content Area -->
             <main class="content">
-                <!-- ========== LIST VIEW ========== -->
-                <div id="listView">
-                    <div class="breadcrumb">
-                        <i class="fas fa-home"></i> User Acceptance Material <i class="fas fa-chevron-right"></i> <span class="current">User Acceptance Material</span>
-                    </div>
+                <div class="breadcrumb">
+                    <i class="fas fa-home"></i> User Acceptance Material <i class="fas fa-chevron-right"></i> 
+                    <span class="current">Desk User Verification</span>
+                </div>
 
-                    <!-- Filters -->
-                    <div class="acceptance-filters">
-                        <div class="filter-header-bar" onclick="toggleFilterCard()">
-                            <h3><i class="fas fa-filter"></i> Filters</h3>
-                            <span class="filter-toggle-text" id="filterToggleBtn"><i class="fas fa-chevron-up"></i> Collapse Filters</span>
+                <!-- Filters Card (Prioritized for Requesters per BA Vimal) -->
+                <div class="form-container" style="margin-bottom: 15px; padding: 15px;">
+                    <div class="filter-grid-acceptance">
+                        <div class="form-group" style="margin: 0;">
+                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">PR NUMBER</label>
+                            <input type="text" id="filterAccPrNo" placeholder="Search PR No (e.g. PR-501)..." oninput="applyAcceptanceFilters()">
                         </div>
-                        <div id="filterBody">
-                            <div class="form-grid" style="grid-template-columns: repeat(4, 1fr);">
-                                <div class="form-group">
-                                    <label>PO Number</label>
-                                    <input type="text" id="f-poNo" list="poList" placeholder="Search PO..." oninput="autoPopulateFromPo()">
-                                    <datalist id="poList">
-                                        <option value="PO-1001">
-                                        <option value="PO-1002">
-                                        <option value="PO-1003">
-                                        <option value="PO-1004">
-                                        <option value="PO-1005">
-                                    </datalist>
-                                </div>
-                                <div class="form-group">
-                                    <label>PR Number</label>
-                                    <input type="text" id="f-prNo" list="prList" placeholder="Search PR..." oninput="autoPopulateFromPr()">
-                                    <datalist id="prList">
-                                        <option value="PR-501">
-                                        <option value="PR-502">
-                                        <option value="PR-503">
-                                        <option value="PR-504">
-                                        <option value="PR-506">
-                                    </datalist>
-                                </div>
-                                <div class="form-group">
-                                    <label>PO Status</label>
-                                    <select id="f-poStatus" onchange="applyFilters()">
-                                        <option value="">All</option>
-                                        <option value="Pending">Pending</option>
-                                        <option value="Closed">Closed</option>
-                                    </select>
-                                </div>
-                                <div class="form-group"><label>GRN Number</label><input type="text" id="f-grnNo" placeholder="Search GRN..."></div>
-                                <div class="form-group"><label>Vendor</label><input type="text" id="f-vendor" placeholder="Search Vendor..."></div>
-                                <div class="form-group"><label>Project Code</label><input type="text" id="f-project" placeholder="Search Project Code..."></div>
-                                <div class="form-group"><label>Department</label><input type="text" id="f-dept" placeholder="Search Department..."></div>
-                                <div class="form-group"><label>Requesting User</label><input type="text" id="f-reqUser" placeholder="Search User..."></div>
-                                <div class="form-group">
-                                    <label>Material</label>
-                                    <input type="text" id="f-material" list="materialList" placeholder="Search Material(s)..." oninput="applyFilters()">
-                                    <datalist id="materialList">
-                                        <option value="Laptop">
-                                        <option value="Monitor">
-                                        <option value="Server Rack">
-                                        <option value="Power Strip">
-                                        <option value="Network Switch">
-                                        <option value="Patch Panel">
-                                        <option value="Cat6 Cable Roll">
-                                        <option value="RJ45 Connectors">
-                                        <option value="Wireless Mouse">
-                                        <option value="Keyboard">
-                                    </datalist>
-                                </div>
-                                <div class="form-group"><label>Item Code</label><input type="text" id="f-itemCode" placeholder="Search Item Code..."></div>
-                                <div class="form-group">
-                                    <label>Acceptance Status</label>
-                                    <select id="f-status" onchange="onStatusFilterChange()">
-                                        <option value="">All</option>
-                                        <option value="Accepted">Accepted</option>
-                                        <option value="Pending">Pending</option>
-                                        <option value="Rejected">Rejected</option>
-                                    </select>
-                                </div>
-                                <div class="form-group"><label>Store Location</label><input type="text" id="f-storeLocation" placeholder="Search Location..."></div>
-                                <div class="form-group"><label>GRN Date From</label><input type="date" id="f-grnDateFrom"></div>
-                                <div class="form-group"><label>GRN Date To</label><input type="date" id="f-grnDateTo"></div>
-                                <div class="form-group"><label>Acceptance Date From</label><input type="date" id="f-accDateFrom"></div>
-                                <div class="form-group"><label>Acceptance Date To</label><input type="date" id="f-accDateTo"></div>
-                            </div>
-                            <div class="filter-actions">
-                                <button class="btn btn-save" onclick="applyFilters()"><i class="fas fa-search"></i> Apply</button>
-                                <button class="btn btn-reset" onclick="clearFilters()"><i class="fas fa-times"></i> Clear</button>
-                            </div>
+                        <div class="form-group" style="margin: 0;">
+                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">ITEM NAME</label>
+                            <input type="text" id="filterAccItem" placeholder="Search Item (e.g. MacBook)..." oninput="applyAcceptanceFilters()">
                         </div>
-                    </div>
-
-                    <!-- Status Tabs & Actions Bar -->
-                    <div class="status-tabs-container">
-                        <div class="status-tabs-group" role="tablist">
-                            <button type="button" class="status-tab tab-all active" data-status="All" onclick="switchStatusTab('All')" role="tab" aria-selected="true" title="Show all material records">
-                                <i class="fas fa-layer-group"></i> All
-                                <span class="tab-badge" id="badge-all">0</span>
-                            </button>
-                            <button type="button" class="status-tab tab-accepted" data-status="Accepted" onclick="switchStatusTab('Accepted')" role="tab" aria-selected="false" title="Show accepted material records">
-                                <i class="fas fa-check-circle"></i> Accepted
-                                <span class="tab-badge" id="badge-accepted">0</span>
-                            </button>
-                            <button type="button" class="status-tab tab-pending" data-status="Pending" onclick="switchStatusTab('Pending')" role="tab" aria-selected="false" title="Show pending material records">
-                                <i class="fas fa-clock"></i> Pending
-                                <span class="tab-badge" id="badge-pending">0</span>
-                            </button>
-                            <button type="button" class="status-tab tab-rejected" data-status="Rejected" onclick="switchStatusTab('Rejected')" role="tab" aria-selected="false" title="Show rejected material records">
-                                <i class="fas fa-times-circle"></i> Rejected
-                                <span class="tab-badge" id="badge-rejected">0</span>
-                            </button>
+                        <div class="form-group" style="margin: 0;">
+                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">PO NUMBER</label>
+                            <input type="text" id="filterAccPoNo" placeholder="Search PO No..." oninput="applyAcceptanceFilters()">
                         </div>
-                        <div class="status-tabs-actions">
-                            <button class="btn btn-export" onclick="exportData()"><i class="fas fa-file-export"></i> Export</button>
+                        <div class="form-group" style="margin: 0;">
+                            <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; display: block;">ACCEPTANCE STATUS</label>
+                            <select id="filterAccStatus" onchange="onAccStatusDropdownChange()">
+                                <option value="">All Statuses</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Accepted">Accepted</option>
+                                <option value="Rejected">Rejected</option>
+                            </select>
                         </div>
-                    </div>
-
-                    <!-- Data Table -->
-                    <div class="table-container">
-                        <table class="data-table" id="acceptanceTable">
-                            <thead>
-                                <tr>
-                                    <th class="sortable" data-col="accId">Acceptance ID</th>
-                                    <th class="sortable" data-col="poNo">PO Number</th>
-                                    <th class="sortable" data-col="poStatus">PO Status</th>
-                                    <th class="sortable" data-col="poDate">PO Date</th>
-                                    <th class="sortable" data-col="prNo">PR Number</th>
-                                    <th class="sortable" data-col="projectCode">Project Code</th>
-                                    <th class="sortable" data-col="department">Department</th>
-                                    <th class="sortable" data-col="reqUser">Requesting User</th>
-                                    <th class="sortable" data-col="vendor">Vendor</th>
-                                    <th class="sortable" data-col="itemCode">Item Code</th>
-                                    <th class="sortable" data-col="materialName">Material Name</th>
-                                    <th>Ordered Qty</th>
-                                    <th>Received Qty</th>
-                                    <th>UOM</th>
-                                    <th class="sortable" data-col="grnNo">GRN Number</th>
-                                    <th class="sortable" data-col="grnDate">GRN Date</th>
-                                    <th>Stock Inward</th>
-                                    <th class="sortable" data-col="accStatus">Acceptance Status</th>
-                                    <th class="sortable" data-col="accDueDate">Acceptance Due Date</th>
-                                    <th>Accepted/Rejected By</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="acceptanceTableBody"></tbody>
-                        </table>
-                    </div>
-
-                    <!-- Pagination -->
-                    <div class="pagination-bar">
-                        <span id="paginationInfo">Showing 0 of 0 records</span>
-                        <div class="pagination-controls" id="paginationControls"></div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-primary" onclick="applyAcceptanceFilters()"><i class="fas fa-search"></i> Apply</button>
+                            <button class="btn btn-secondary" onclick="clearAcceptanceFilters()"><i class="fas fa-undo"></i> Reset</button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- ========== DETAIL VIEW ========== -->
-                <div id="detailView" class="detail-section">
-                    <!-- Header -->
-                    <div class="detail-header">
-                        <h3><i class="fas fa-clipboard-check"></i> User Acceptance Material</h3>
-                        <div class="detail-header-actions">
-                            <button class="btn btn-secondary" onclick="backToList()"><i class="fas fa-arrow-left"></i> Back to List</button>
-                        </div>
+                <!-- Status Tabs Bar -->
+                <div class="status-tabs-container">
+                    <div class="status-tabs-group" role="tablist">
+                        <button type="button" class="status-tab tab-all active" data-status="All" onclick="switchAcceptanceTab('All')">
+                            <i class="fas fa-layer-group"></i> All Items <span class="tab-badge" id="accBadgeAll">0</span>
+                        </button>
+                        <button type="button" class="status-tab tab-pending" data-status="Pending" onclick="switchAcceptanceTab('Pending')">
+                            <i class="fas fa-clock"></i> Pending <span class="tab-badge" id="accBadgePending">0</span>
+                        </button>
+                        <button type="button" class="status-tab tab-accepted" data-status="Accepted" onclick="switchAcceptanceTab('Accepted')">
+                            <i class="fas fa-check-circle"></i> Accepted <span class="tab-badge" id="accBadgeAccepted">0</span>
+                        </button>
+                        <button type="button" class="status-tab tab-rejected" data-status="Rejected" onclick="switchAcceptanceTab('Rejected')">
+                            <i class="fas fa-times-circle"></i> Rejected <span class="tab-badge" id="accBadgeRejected">0</span>
+                        </button>
                     </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-export" onclick="exportAcceptanceData()"><i class="fas fa-file-export"></i> Export</button>
+                    </div>
+                </div>
 
-                    <!-- Acceptance Summary -->
-                    <div class="info-card">
-                        <div class="info-card-header">
-                            <h4><i class="fas fa-id-badge"></i> Acceptance Summary</h4>
-                            <div class="detail-header-badges">
-                                <span id="detAccStatusBadge" class="badge"></span>
-                            </div>
-                        </div>
-                        <div class="form-grid" style="grid-template-columns: repeat(5, 1fr);">
-                            <div class="form-group"><label>Acceptance ID</label><input type="text" id="det-accId" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>PO Number</label><input type="text" id="det-poNo" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>GRN Number</label><input type="text" id="det-grnNo" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>PR Number</label><input type="text" id="det-prNo" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Acceptance Status</label><input type="text" id="det-accStatus" class="readonly-field" readonly></div>
-                        </div>
-                    </div>
+                <!-- Main Line Item Level Table (End-User Clean View per BA Vimal) -->
+                <div class="table-container">
+                    <table class="data-table" id="acceptanceTable">
+                        <thead>
+                            <tr>
+                                <th>PR NUMBER</th>
+                                <th>PO NUMBER</th>
+                                <th>ITEM KEY</th>
+                                <th>ITEM NAME</th>
+                                <th style="text-align: right;">REQ QTY</th>
+                                <th style="text-align: right;">REC AT DOCK</th>
+                                <th style="text-align: right;">USER ACCEPTED</th>
+                                <th>UOM</th>
+                                <th>SUPPLIER/VENDOR</th>
+                                <th>ACCEPTANCE STATUS</th>
+                                <th style="text-align: center;">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody id="acceptanceTableBody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
 
-                    <!-- PO Information -->
-                    <div class="info-card">
-                        <div class="info-card-header">
-                            <h4><i class="fas fa-file-invoice"></i> PO Information</h4>
-                            <button class="btn btn-info" style="padding: 4px 10px; font-size: 11px;" onclick="viewFullPO()"><i class="fas fa-external-link-alt"></i> View PO</button>
-                        </div>
-                        <div class="form-grid" style="grid-template-columns: repeat(4, 1fr);">
-                            <div class="form-group"><label>PO Number</label><input type="text" id="det-po-poNo" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>PO Date</label><input type="text" id="det-po-poDate" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>PO Status</label><input type="text" id="det-po-poStatus" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Vendor Name</label><input type="text" id="det-po-vendorName" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Vendor Code</label><input type="text" id="det-po-vendorCode" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Project Code</label><input type="text" id="det-po-project" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Department</label><input type="text" id="det-po-department" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Requested By</label><input type="text" id="det-po-reqBy" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Cost Centre</label><input type="text" id="det-po-costCentre" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Delivery Location</label><input type="text" id="det-po-deliveryLoc" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>Payment Terms</label><input type="text" id="det-po-payTerms" class="readonly-field" readonly></div>
-                            <div class="form-group"><label>PO Total Value</label><input type="text" id="det-po-totalValue" class="readonly-field" readonly></div>
-                        </div>
-                    </div>
-
-                    <!-- Material Information -->
-                    <div class="info-card">
-                        <div class="info-card-header">
-                            <h4><i class="fas fa-boxes"></i> Material Information (Received)</h4>
-                        </div>
-                        <div class="table-container" style="margin: 0;">
-                            <table class="data-table" id="materialInfoTable">
-                                <thead>
-                                    <tr>
-                                        <th>Item Code</th>
-                                        <th>Material Name</th>
-                                        <th>Description</th>
-                                        <th>Specification</th>
-                                        <th>Ordered Qty</th>
-                                        <th>Prev Received Qty</th>
-                                        <th>Current Received Qty</th>
-                                        <th>Total Received Qty</th>
-                                        <th>Pending Qty</th>
-                                        <th>UOM</th>
-                                        <th>Batch No.</th>
-                                        <th>Mfg Date</th>
-                                        <th>Expiry Date</th>
-                                        <th>Store Location</th>
-                                        <th>GRN Number</th>
-                                        <th>GRN Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="materialInfoBody"></tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Acceptance Action Area -->
-                    <div class="acceptance-action-area" id="acceptanceActionArea">
-                        <h4><i class="fas fa-check-double"></i> Acceptance Decision</h4>
-                        <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
-                            <div class="form-group">
-                                <label>Accepted Quantity</label>
-                                <input type="number" id="det-acceptedQty" step="1" min="0" placeholder="Enter accepted quantity...">
-                            </div>
-                            <div class="form-group">
-                                <label>Rejection Reason (if any)</label>
-                                <select id="det-rejectReason">
-                                    <option value="">Select Reason...</option>
-                                    <option value="Quality Issue">Quality Issue</option>
-                                    <option value="Specification Mismatch">Specification Mismatch</option>
-                                    <option value="Damaged Goods">Damaged Goods</option>
-                                    <option value="Wrong Item">Wrong Item</option>
-                                    <option value="Expired Material">Expired Material</option>
-                                    <option value="Short Quantity">Short Quantity</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-grid" style="grid-template-columns: 1fr; margin-top: 8px;">
-                            <div class="form-group" style="height: auto;">
-                                <label>Remarks / Comments</label>
-                                <textarea id="det-remarks" rows="2" placeholder="Enter remarks or comments..."></textarea>
-                            </div>
-                        </div>
-                        <div class="form-actions" style="margin-top: 10px;">
-                            <button class="btn btn-success" onclick="acceptMaterial()"><i class="fas fa-check-circle"></i> Accept</button>
-                            <button class="btn btn-danger" onclick="rejectMaterial()"><i class="fas fa-times-circle"></i> Reject</button>
-                        </div>
-                    </div>
-
-                    <!-- History -->
-                    <div class="info-card" style="margin-top: 20px;">
-                        <div class="info-card-header">
-                            <h4><i class="fas fa-history"></i> Acceptance History / Audit Trail</h4>
-                        </div>
-                        <div id="detHistoryList" style="max-height: 300px; overflow-y: auto; padding: 5px;"></div>
-                    </div>
+                <!-- Pagination Bar -->
+                <div class="pagination-bar" style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 12px; color: #64748b;">
+                    <div id="accPaginationInfo">Showing 1 to 0 of 0 records</div>
+                    <div class="pagination-controls" id="accPaginationControls"></div>
                 </div>
             </main>
         </div>
     </div>
 
-    <!-- ========== CONFIRMATION MODAL ========== -->
-    <div class="modal-overlay" id="confirmModal">
-        <div class="modal-box" style="width: 450px;">
-            <h3 id="confirmModalTitle" style="display: flex; align-items: center; gap: 8px;"><i class="fas fa-question-circle"></i> Confirm Action</h3>
-            <p id="confirmModalMessage" style="font-size: 13px; color: #555; margin-bottom: 15px;"></p>
-            <div id="confirmModalReasonGroup" style="display: none; margin-bottom: 15px;">
-                <label style="font-size: 12px; font-weight: bold; color: #555; display: block; margin-bottom: 5px;">Reason <span style="color: #dc3545;">*</span></label>
-                <select id="confirmModalReasonSelect" style="width: 100%; padding: 7px 10px; border: 1px solid #ccc; border-radius: 3px; font-size: 12px; margin-bottom: 8px;">
-                    <option value="">Select Reason...</option>
-                    <option value="Quality Issue">Quality Issue</option>
-                    <option value="Specification Mismatch">Specification Mismatch</option>
-                    <option value="Damaged Goods">Damaged Goods</option>
-                    <option value="Wrong Item">Wrong Item</option>
-                    <option value="Expired Material">Expired Material</option>
-                    <option value="Short Quantity">Short Quantity</option>
-                    <option value="Other">Other</option>
-                </select>
-                <textarea id="confirmModalReasonText" rows="2" placeholder="Additional remarks (optional)..." style="width: 100%; border: 1px solid #ccc; padding: 7px 10px; font-size: 12px; border-radius: 3px; font-family: inherit; resize: none;"></textarea>
+    <!-- ========================================================= -->
+    <!-- VIEW MORE MODAL (Full GRN, Batches, PO & Audit Info)     -->
+    <!-- ========================================================= -->
+    <div class="modal-overlay" id="viewMoreModal">
+        <div class="modal-box" style="max-width: 860px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-info-circle"></i> Item Details &amp; Goods-In History — <span id="vmHeaderTitle"></span></h3>
+                <button class="modal-close-btn" onclick="closeViewMoreModal()">&times;</button>
             </div>
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeConfirmModal()"><i class="fas fa-times"></i> Cancel</button>
-                <button class="btn" id="confirmModalBtn" onclick="executeConfirmAction()"><i class="fas fa-check"></i> Confirm</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========== SUCCESS/ALERT MODAL ========== -->
-    <div class="modal-overlay" id="alertModal">
-        <div class="modal-box" style="width: 400px; text-align: center;">
-            <div id="alertModalIcon" style="font-size: 48px; margin-bottom: 12px;"></div>
-            <h3 id="alertModalTitle" style="border-bottom: none; padding-bottom: 0;"></h3>
-            <p id="alertModalMessage" style="font-size: 13px; color: #555; margin: 10px 0 20px;"></p>
-            <div class="modal-actions" style="justify-content: center;">
-                <button class="btn btn-save" onclick="closeAlertModal()"><i class="fas fa-check"></i> OK</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========== HISTORY MODAL ========== -->
-    <div class="modal-overlay" id="historyModal">
-        <div class="modal-box">
-            <h3><i class="fas fa-history"></i> Acceptance History — <span id="histModalTitle"></span></h3>
-            <div id="histModalBody" style="max-height: 400px; overflow-y: auto;"></div>
-            <div class="modal-actions" style="margin-top: 15px;">
-                <button class="btn btn-secondary" onclick="closeHistoryModal()">Close</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========== PO DETAIL MODAL ========== -->
-    <div class="modal-overlay" id="poDetailModal">
-        <div class="modal-box" style="width: 600px;">
-            <h3><i class="fas fa-file-invoice"></i> Full PO Details — <span id="poModalTitle"></span></h3>
-            <div id="poModalBody"></div>
-            <div class="modal-actions" style="margin-top: 15px;">
-                <button class="btn btn-secondary" onclick="closePoModal()">Close</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-    // ==================== DATA ====================
-    const acceptanceData = [
-        {
-            accId: 'ACC-001', poNo: 'PO-1001', poDate: '2023-01-15', prNo: 'PR-501',
-            projectCode: 'PRJ-001', project: 'ERP Implementation', department: 'IT', reqUser: 'John Doe',
-            vendor: 'ABC Tech Solutions', vendorCode: 'V-1001',
-            itemCode: 'ITM-101, ITM-102', materialName: 'Laptop, Monitor', description: 'Dell Latitude 5530, Dell 24" FHD Monitor',
-            specification: 'i7, 16GB RAM, 512GB SSD / 1080p IPS', orderedQty: 50, receivedQty: 50,
-            prevReceivedQty: 0, uom: 'Nos', grnNo: 'GRN-001', grnDate: '2023-02-10',
-            stockInwardStatus: 'Completed', accStatus: 'Accepted', accDueDate: '2023-02-17',
-            acceptedRejectedBy: 'John Doe', acceptedQty: 50,
-            batchNo: 'BATCH-2023-001', mfgDate: '2023-01-01', expiryDate: '2026-01-01',
-            storeLocation: 'Warehouse A - Rack 1',
-            poStatus: 'Closed', costCentre: 'CC-IT-01', deliveryLoc: 'Head Office - IT Dept',
-            payTerms: 'Net 30', poTotalValue: 2500000,
-            history: [
-                { date: '10/02/2023, 10:00 AM', action: 'Material Received', by: 'Store Keeper', detail: 'GRN-001 created. 50 Nos received.' },
-                { date: '12/02/2023, 02:30 PM', action: 'Accepted', by: 'John Doe', detail: 'All 50 units accepted. Quality verified.' }
-            ]
-        },
-        {
-            accId: 'ACC-002', poNo: 'PO-1003', poDate: '2023-04-20', prNo: 'PR-503',
-            projectCode: 'PRJ-003', project: 'Server Infrastructure', department: 'IT', reqUser: 'Rahul Kumar',
-            vendor: 'CloudNet India Pvt Ltd', vendorCode: 'V-1003',
-            itemCode: 'ITM-303, ITM-304', materialName: 'Server Rack, Power Strip', description: '42U Server Rack, 16A Rack PDU',
-            specification: '42U, 600mm x 1000mm / 8-Way PDU', orderedQty: 5, receivedQty: 5,
-            prevReceivedQty: 0, uom: 'Nos', grnNo: 'GRN-003', grnDate: '2023-05-15',
-            stockInwardStatus: 'Completed', accStatus: 'Pending', accDueDate: '2023-05-22',
-            acceptedRejectedBy: '-', acceptedQty: 0,
-            batchNo: 'BATCH-2023-003', mfgDate: '2023-04-01', expiryDate: '-',
-            storeLocation: 'Data Centre - Floor 2',
-            poStatus: 'Pending', costCentre: 'CC-IT-03', deliveryLoc: 'Data Centre Building',
-            payTerms: 'Net 60', poTotalValue: 500000,
-            history: [
-                { date: '15/05/2023, 03:00 PM', action: 'Material Received', by: 'Store Keeper', detail: 'GRN-003 created. 5 Nos received.' }
-            ]
-        },
-        {
-            accId: 'ACC-006', poNo: 'PO-1003', poDate: '2023-04-20', prNo: 'PR-506',
-            projectCode: 'PRJ-003', project: 'Server Infrastructure', department: 'IT', reqUser: 'Rahul Kumar',
-            vendor: 'CloudNet India Pvt Ltd', vendorCode: 'V-1003',
-            itemCode: 'ITM-306, ITM-307', materialName: 'Network Switch, Patch Panel', description: '48-Port Managed Switch, 24-Port Cat6 Patch Panel',
-            specification: 'Gigabit, Layer 3, PoE+ / 1U Cat6 UTP', orderedQty: 10, receivedQty: 10,
-            prevReceivedQty: 0, uom: 'Nos', grnNo: 'GRN-006', grnDate: '2023-05-18',
-            stockInwardStatus: 'Completed', accStatus: 'Pending', accDueDate: '2023-05-25',
-            acceptedRejectedBy: '-', acceptedQty: 0,
-            batchNo: 'BATCH-2023-006', mfgDate: '2023-03-15', expiryDate: '-',
-            storeLocation: 'Data Centre - Floor 1',
-            poStatus: 'Pending', costCentre: 'CC-IT-03', deliveryLoc: 'Data Centre Building',
-            payTerms: 'Net 60', poTotalValue: 500000,
-            history: [
-                { date: '18/05/2023, 02:00 PM', action: 'Material Received', by: 'Store Keeper', detail: 'GRN-006 created. 10 Nos received.' }
-            ]
-        },
-        {
-            accId: 'ACC-004', poNo: 'PO-1002', poDate: '2023-02-18', prNo: 'PR-502',
-            projectCode: 'PRJ-002', project: 'Network Upgrade', department: 'IT', reqUser: 'Priya Sharma',
-            vendor: 'TechnoSource Pvt Ltd', vendorCode: 'V-1002',
-            itemCode: 'ITM-202, ITM-203', materialName: 'Cat6 Cable Roll, RJ45 Connectors', description: 'Cat6 UTP 305m Cable Roll, RJ45 Modular Plugs 100pk',
-            specification: 'Copper 23AWG High Speed / Cat6 Pass-Through', orderedQty: 20, receivedQty: 20,
-            prevReceivedQty: 0, uom: 'Nos', grnNo: 'GRN-002', grnDate: '2023-03-05',
-            stockInwardStatus: 'Completed', accStatus: 'Rejected', accDueDate: '2023-03-12',
-            acceptedRejectedBy: 'Priya Sharma', acceptedQty: 0,
-            batchNo: 'BATCH-2023-002', mfgDate: '2023-02-01', expiryDate: '-',
-            storeLocation: 'Warehouse B - Shelf 4',
-            poStatus: 'Pending', costCentre: 'CC-IT-02', deliveryLoc: 'Head Office - IT Dept',
-            payTerms: 'Net 30', poTotalValue: 80000,
-            history: [
-                { date: '05/03/2023, 11:15 AM', action: 'Material Received', by: 'Store Keeper', detail: 'GRN-002 created. 20 Nos received.' },
-                { date: '08/03/2023, 04:00 PM', action: 'Rejected', by: 'Priya Sharma', detail: 'All 20 Nos rejected. Reason: Specification Mismatch (CCA instead of Pure Copper).' }
-            ]
-        },
-        {
-            accId: 'ACC-005', poNo: 'PO-1004', poDate: '2023-05-10', prNo: 'PR-504',
-            projectCode: 'PRJ-001', project: 'ERP Implementation', department: 'IT', reqUser: 'John Doe',
-            vendor: 'ABC Tech Solutions', vendorCode: 'V-1001',
-            itemCode: 'ITM-105, ITM-106', materialName: 'Wireless Mouse, Keyboard', description: 'Logitech Optical Mouse, Logitech K120 USB Keyboard',
-            specification: '2.4GHz Wireless / Spill-resistant Wired', orderedQty: 50, receivedQty: 50,
-            prevReceivedQty: 0, uom: 'Nos', grnNo: 'GRN-004', grnDate: '2023-05-25',
-            stockInwardStatus: 'Completed', accStatus: 'Accepted', accDueDate: '2023-06-01',
-            acceptedRejectedBy: 'John Doe', acceptedQty: 50,
-            batchNo: 'BATCH-2023-005', mfgDate: '2023-04-10', expiryDate: '-',
-            storeLocation: 'Warehouse A - Rack 2',
-            poStatus: 'Closed', costCentre: 'CC-IT-01', deliveryLoc: 'Head Office - IT Dept',
-            payTerms: 'Net 30', poTotalValue: 45000,
-            history: [
-                { date: '25/05/2023, 09:30 AM', action: 'Material Received', by: 'Store Keeper', detail: 'GRN-004 created. 50 Nos received.' },
-                { date: '27/05/2023, 11:00 AM', action: 'Accepted', by: 'John Doe', detail: 'All 50 units accepted. Quality verified.' }
-            ]
-        }
-    ];
-
-    let currentActiveTab = 'All';
-    let filteredData = [...acceptanceData];
-    let currentPage = 1;
-    const pageSize = 10;
-    let currentSort = { col: null, dir: null };
-    let currentDetailItem = null;
-
-    // ==================== FILTER COLLAPSE TOGGLE ====================
-    function toggleFilterCard() {
-        const body = document.getElementById('filterBody');
-        const btn = document.getElementById('filterToggleBtn');
-        if (!body) return;
-        if (body.style.display === 'none') {
-            body.style.display = 'block';
-            if (btn) btn.innerHTML = '<i class="fas fa-chevron-up"></i> Collapse Filters';
-        } else {
-            body.style.display = 'none';
-            if (btn) btn.innerHTML = '<i class="fas fa-chevron-down"></i> Expand Filters';
-        }
-    }
-
-    // ==================== STATUS TABS ====================
-    function switchStatusTab(status) {
-        currentActiveTab = status;
-
-        document.querySelectorAll('.status-tab').forEach(btn => {
-            const isActive = btn.dataset.status === status;
-            btn.classList.toggle('active', isActive);
-            btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
-        });
-
-        const fStatus = document.getElementById('f-status');
-        if (fStatus) {
-            fStatus.value = (status === 'All') ? '' : status;
-        }
-
-        applyFilters();
-    }
-
-    function onStatusFilterChange() {
-        const val = document.getElementById('f-status').value || 'All';
-        currentActiveTab = val;
-        document.querySelectorAll('.status-tab').forEach(btn => {
-            const isActive = btn.dataset.status === val;
-            btn.classList.toggle('active', isActive);
-            btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
-        });
-        applyFilters();
-    }
-
-    function updateTabCounts() {
-        const totalAll = acceptanceData.length;
-        const totalAccepted = acceptanceData.filter(i => i.accStatus === 'Accepted').length;
-        const totalPending = acceptanceData.filter(i => i.accStatus === 'Pending').length;
-        const totalRejected = acceptanceData.filter(i => i.accStatus === 'Rejected').length;
-
-        const badgeAll = document.getElementById('badge-all');
-        const badgeAccepted = document.getElementById('badge-accepted');
-        const badgePending = document.getElementById('badge-pending');
-        const badgeRejected = document.getElementById('badge-rejected');
-
-        if (badgeAll) badgeAll.textContent = totalAll;
-        if (badgeAccepted) badgeAccepted.textContent = totalAccepted;
-        if (badgePending) badgePending.textContent = totalPending;
-        if (badgeRejected) badgeRejected.textContent = totalRejected;
-    }
-
-    // ==================== FORMATTING ====================
-    function escapeHtml(text) {
-        if (!text) return '';
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-
-    function formatMultiPills(val) {
-        if (!val) return '-';
-        const parts = String(val).split(',').map(s => s.trim()).filter(Boolean);
-        if (parts.length === 0) return '-';
-        const pills = parts.map(p => `<span class="table-value-pill">${escapeHtml(p)}</span>`).join('');
-        return `<div class="table-multi-values">${pills}</div>`;
-    }
-
-    function formatCurrency(val) {
-        return '₹' + Number(val).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-
-    function getStatusClass(status) {
-        return status.toLowerCase().replace(/\s+/g, '-');
-    }
-
-    function getCurrentDateTime() {
-        const now = new Date();
-        const dd = String(now.getDate()).padStart(2, '0');
-        const mm = String(now.getMonth() + 1).padStart(2, '0');
-        const yyyy = now.getFullYear();
-        let hh = now.getHours();
-        const min = String(now.getMinutes()).padStart(2, '0');
-        const ampm = hh >= 12 ? 'PM' : 'AM';
-        hh = hh % 12 || 12;
-        return `${dd}/${mm}/${yyyy}, ${String(hh).padStart(2, '0')}:${min} ${ampm}`;
-    }
-
-    // ==================== SORTING ====================
-    document.querySelectorAll('.data-table th.sortable').forEach(th => {
-        th.addEventListener('click', () => {
-            const col = th.dataset.col;
-            let dir = 'asc';
-            if (currentSort.col === col && currentSort.dir === 'asc') dir = 'desc';
-            else if (currentSort.col === col && currentSort.dir === 'desc') { dir = null; }
-
-            currentSort = { col: dir ? col : null, dir };
-
-            document.querySelectorAll('.data-table th.sortable').forEach(h => h.classList.remove('asc', 'desc'));
-            if (dir) th.classList.add(dir);
-
-            sortData();
-            renderTable();
-        });
-    });
-
-    function sortData() {
-        if (!currentSort.col || !currentSort.dir) return;
-        const col = currentSort.col;
-        const dir = currentSort.dir === 'asc' ? 1 : -1;
-        filteredData.sort((a, b) => {
-            let va = a[col] || '';
-            let vb = b[col] || '';
-            if (typeof va === 'number') return (va - vb) * dir;
-            return String(va).localeCompare(String(vb)) * dir;
-        });
-    }
-
-    // ==================== FILTERS ====================
-    function applyFilters() {
-        const globalSearchEl = document.getElementById('globalSearch');
-        const globalSearch = globalSearchEl ? globalSearchEl.value.toLowerCase().trim() : '';
-        const fPoNo = document.getElementById('f-poNo').value.toLowerCase().trim();
-        const fPrNo = document.getElementById('f-prNo').value.toLowerCase().trim();
-        const fPoStatus = document.getElementById('f-poStatus') ? document.getElementById('f-poStatus').value : '';
-        const fGrnNo = document.getElementById('f-grnNo').value.toLowerCase().trim();
-        const fVendor = document.getElementById('f-vendor').value.toLowerCase().trim();
-        const fProject = document.getElementById('f-project').value.toLowerCase().trim();
-        const fDept = document.getElementById('f-dept').value.toLowerCase().trim();
-        const fReqUser = document.getElementById('f-reqUser').value.toLowerCase().trim();
-        const fMaterial = document.getElementById('f-material').value.toLowerCase().trim();
-        const fItemCode = document.getElementById('f-itemCode').value.toLowerCase().trim();
-        const fStatus = currentActiveTab !== 'All' ? currentActiveTab : document.getElementById('f-status').value;
-        const fGrnDateFrom = document.getElementById('f-grnDateFrom').value;
-        const fGrnDateTo = document.getElementById('f-grnDateTo').value;
-        const fAccDateFrom = document.getElementById('f-accDateFrom').value;
-        const fAccDateTo = document.getElementById('f-accDateTo').value;
-        const fStoreLoc = document.getElementById('f-storeLocation').value.toLowerCase().trim();
-
-        filteredData = acceptanceData.filter(item => {
-            // Global search
-            if (globalSearch) {
-                const searchStr = [item.poNo, item.grnNo, item.materialName, item.vendor, item.prNo, item.itemCode, item.accId].join(' ').toLowerCase();
-                if (!searchStr.includes(globalSearch)) return false;
-            }
-            if (fPoNo && !item.poNo.toLowerCase().includes(fPoNo)) return false;
-            if (fPrNo && !item.prNo.toLowerCase().includes(fPrNo)) return false;
-            if (fPoStatus && item.poStatus.toLowerCase() !== fPoStatus.toLowerCase()) return false;
-            if (fGrnNo && !item.grnNo.toLowerCase().includes(fGrnNo)) return false;
-            if (fVendor && !item.vendor.toLowerCase().includes(fVendor)) return false;
-            if (fProject && !(item.projectCode && item.projectCode.toLowerCase().includes(fProject)) && !(item.project && item.project.toLowerCase().includes(fProject))) return false;
-            if (fDept && !item.department.toLowerCase().includes(fDept)) return false;
-            if (fReqUser && !item.reqUser.toLowerCase().includes(fReqUser)) return false;
-            if (fMaterial) {
-                const searchTerms = fMaterial.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
-                const itemMatLower = item.materialName.toLowerCase();
-                const matched = searchTerms.some(term => itemMatLower.includes(term));
-                if (!matched) return false;
-            }
-            if (fItemCode) {
-                const searchTerms = fItemCode.split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
-                const itemCodeLower = item.itemCode.toLowerCase();
-                const matched = searchTerms.some(term => itemCodeLower.includes(term));
-                if (!matched) return false;
-            }
-            if (fStatus && item.accStatus !== fStatus) return false;
-            if (fGrnDateFrom && item.grnDate < fGrnDateFrom) return false;
-            if (fGrnDateTo && item.grnDate > fGrnDateTo) return false;
-            if (fAccDateFrom && item.accDueDate < fAccDateFrom) return false;
-            if (fAccDateTo && item.accDueDate > fAccDateTo) return false;
-            if (fStoreLoc && !item.storeLocation.toLowerCase().includes(fStoreLoc)) return false;
-            return true;
-        });
-
-        sortData();
-        currentPage = 1;
-        renderTable();
-        updateTabCounts();
-    }
-
-    // Auto-populate when searching / entering PR Number
-    function autoPopulateFromPr() {
-        const prVal = document.getElementById('f-prNo').value.trim().toLowerCase();
-        if (prVal) {
-            const item = acceptanceData.find(d => d.prNo && (d.prNo.toLowerCase() === prVal || d.prNo.toLowerCase().includes(prVal)));
-            if (item) {
-                document.getElementById('f-poNo').value = item.poNo || '';
-                const poStatusEl = document.getElementById('f-poStatus');
-                if (poStatusEl) poStatusEl.value = item.poStatus || '';
-                document.getElementById('f-grnNo').value = item.grnNo || '';
-                document.getElementById('f-vendor').value = item.vendor || '';
-                document.getElementById('f-project').value = item.projectCode || '';
-                document.getElementById('f-dept').value = item.department || '';
-                document.getElementById('f-reqUser').value = item.reqUser || '';
-                document.getElementById('f-material').value = item.materialName || '';
-                document.getElementById('f-itemCode').value = item.itemCode || '';
-                document.getElementById('f-storeLocation').value = item.storeLocation || '';
-            }
-        }
-        applyFilters();
-    }
-
-    // Auto-populate when searching / entering PO Number
-    function autoPopulateFromPo() {
-        const poVal = document.getElementById('f-poNo').value.trim().toLowerCase();
-        if (poVal) {
-            const item = acceptanceData.find(d => d.poNo && (d.poNo.toLowerCase() === poVal || d.poNo.toLowerCase().includes(poVal)));
-            if (item) {
-                document.getElementById('f-prNo').value = item.prNo || '';
-                const poStatusEl = document.getElementById('f-poStatus');
-                if (poStatusEl) poStatusEl.value = item.poStatus || '';
-                document.getElementById('f-grnNo').value = item.grnNo || '';
-                document.getElementById('f-vendor').value = item.vendor || '';
-                document.getElementById('f-project').value = item.projectCode || '';
-                document.getElementById('f-dept').value = item.department || '';
-                document.getElementById('f-reqUser').value = item.reqUser || '';
-                document.getElementById('f-material').value = item.materialName || '';
-                document.getElementById('f-itemCode').value = item.itemCode || '';
-                document.getElementById('f-storeLocation').value = item.storeLocation || '';
-            }
-        }
-        applyFilters();
-    }
-
-    function clearFilters() {
-        const globalSearchEl = document.getElementById('globalSearch');
-        if (globalSearchEl) globalSearchEl.value = '';
-        document.getElementById('f-poNo').value = '';
-        document.getElementById('f-prNo').value = '';
-        if (document.getElementById('f-poStatus')) document.getElementById('f-poStatus').value = '';
-        document.getElementById('f-grnNo').value = '';
-        document.getElementById('f-vendor').value = '';
-        document.getElementById('f-project').value = '';
-        document.getElementById('f-dept').value = '';
-        document.getElementById('f-reqUser').value = '';
-        document.getElementById('f-material').value = '';
-        document.getElementById('f-itemCode').value = '';
-        document.getElementById('f-status').value = '';
-        document.getElementById('f-grnDateFrom').value = '';
-        document.getElementById('f-grnDateTo').value = '';
-        document.getElementById('f-accDateFrom').value = '';
-        document.getElementById('f-accDateTo').value = '';
-        document.getElementById('f-storeLocation').value = '';
-
-        currentActiveTab = 'All';
-        document.querySelectorAll('.status-tab').forEach(btn => {
-            const isActive = btn.dataset.status === 'All';
-            btn.classList.toggle('active', isActive);
-            btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
-        });
-
-        filteredData = [...acceptanceData];
-        currentPage = 1;
-        renderTable();
-        updateTabCounts();
-    }
-
-    // ==================== RENDER TABLE ====================
-    function renderTable() {
-        const tbody = document.getElementById('acceptanceTableBody');
-        tbody.innerHTML = '';
-
-        const totalRecords = filteredData.length;
-        const totalPages = Math.ceil(totalRecords / pageSize) || 1;
-        if (currentPage > totalPages) currentPage = totalPages;
-
-        const start = (currentPage - 1) * pageSize;
-        const end = Math.min(start + pageSize, totalRecords);
-        const pageData = filteredData.slice(start, end);
-
-        if (pageData.length === 0) {
-            const statusLabel = currentActiveTab === 'All' ? 'No records' : `No ${currentActiveTab} material records`;
-            tbody.innerHTML = `<tr><td colspan="21" style="text-align:center; padding:35px 20px; color:#64748b;">
-                <i class="fas fa-inbox" style="font-size: 32px; color: #cbd5e1; margin-bottom: 8px; display: block;"></i>
-                <span style="font-weight: 600; font-size: 13px;">${statusLabel} found</span>
-                <p style="font-size: 11px; margin-top: 4px; color: #94a3b8;">Try changing filter criteria or selecting another tab.</p>
-            </td></tr>`;
-        } else {
-            pageData.forEach(item => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><strong>${item.accId}</strong></td>
-                    <td>${item.poNo}</td>
-                    <td><span class="badge ${getStatusClass(item.poStatus)}">${item.poStatus}</span></td>
-                    <td>${item.poDate}</td>
-                    <td>${item.prNo}</td>
-                    <td>${item.projectCode || item.project}</td>
-                    <td>${item.department}</td>
-                    <td>${item.reqUser}</td>
-                    <td>${item.vendor}</td>
-                    <td>${formatMultiPills(item.itemCode)}</td>
-                    <td>${formatMultiPills(item.materialName)}</td>
-                    <td style="text-align:right;">${item.orderedQty}</td>
-                    <td style="text-align:right;">${item.receivedQty}</td>
-                    <td>${item.uom}</td>
-                    <td>${item.grnNo}</td>
-                    <td>${item.grnDate}</td>
-                    <td><span class="badge ${getStatusClass(item.stockInwardStatus)}">${item.stockInwardStatus}</span></td>
-                    <td><span class="badge ${getStatusClass(item.accStatus)}">${item.accStatus}</span></td>
-                    <td>${item.accDueDate}</td>
-                    <td>${item.acceptedRejectedBy}</td>
-                    <td>
-                        <div class="action-btn-group">
-                            <button class="action-btn action-btn-view" onclick="viewDetail('${item.accId}')" title="View"><i class="fas fa-eye"></i></button>
-                            ${currentActiveTab !== 'Accepted' ? `<button class="action-btn action-btn-accept" onclick="quickAccept('${item.accId}')" title="Accept"><i class="fas fa-check"></i></button>` : ''}
-                            ${currentActiveTab !== 'Rejected' ? `<button class="action-btn action-btn-reject" onclick="quickReject('${item.accId}')" title="Reject"><i class="fas fa-times"></i></button>` : ''}
-                            <button class="action-btn action-btn-history" onclick="showHistory('${item.accId}')" title="History"><i class="fas fa-history"></i></button>
+            <div class="modal-body">
+                <!-- Summary -->
+                <div class="summary-card">
+                    <div class="summary-card-title"><i class="fas fa-file-invoice"></i> Tracking &amp; Requisition Details</div>
+                    <div class="summary-grid-5">
+                        <div class="summary-item">
+                            <span class="label">PR Number</span>
+                            <span class="value highlight" id="vmPrNo">-</span>
                         </div>
-                    </td>
+                        <div class="summary-item">
+                            <span class="label">PO Number</span>
+                            <span class="value" id="vmPoNo">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Requested By</span>
+                            <span class="value" id="vmRequester">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Supplier Name</span>
+                            <span class="value" id="vmSupplier">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Current Status</span>
+                            <span class="value" id="vmStatusBadge">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Received Batches & Goods-In Dock Receipts -->
+                <div class="summary-card" style="background: #ffffff; padding: 12px;">
+                    <div class="summary-card-title" style="color: #0369a1;">
+                        <i class="fas fa-warehouse"></i> Goods-In Dock Receipts &amp; Batches (Japan's Entry)
+                    </div>
+                    <div class="table-container" style="margin: 0;">
+                        <table class="data-table" id="vmBatchesTable">
+                            <thead>
+                                <tr>
+                                    <th>RCVD DATE</th>
+                                    <th style="text-align: right;">QTY</th>
+                                    <th>BATCH NO</th>
+                                    <th>EXPIRY DATE</th>
+                                    <th>INVOICE NO</th>
+                                    <th>ATTACHMENT</th>
+                                </tr>
+                            </thead>
+                            <tbody id="vmBatchesBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Verification Remarks / Audit Timeline -->
+                <div class="summary-card" style="background: #ffffff; padding: 12px; margin-bottom: 0;">
+                    <div class="summary-card-title" style="color: #0f172a;">
+                        <i class="fas fa-history"></i> User Verification Remarks &amp; Audit Log
+                    </div>
+                    <div class="timeline-container" id="vmAuditTimeline">
+                        <!-- Dynamic timeline events -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeViewMoreModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- ACTION CONFIRMATION MODAL (Accept / Reject with Remarks)   -->
+    <!-- ========================================================= -->
+    <div class="modal-overlay" id="confirmActionModal">
+        <div class="confirm-modal-box">
+            <div class="confirm-modal-header" id="confirmModalHeader">
+                <i class="fas fa-question-circle"></i> <span id="confirmModalTitle">Confirm Action</span>
+            </div>
+            <p id="confirmModalText" style="font-size: 13px; color: #334155; margin-bottom: 12px;"></p>
+
+            <div id="rejectReasonSection" style="display: none; margin-bottom: 12px;">
+                <label style="font-size: 11px; font-weight: 700; color: #b91c1c; display: block; margin-bottom: 4px;">REJECTION REASON</label>
+                <select id="confirmRejectReason" style="width: 100%; padding: 7px; font-size: 12px; border: 1px solid #cbd5e1; border-radius: 4px; margin-bottom: 8px;">
+                    <option value="Damaged during transit / transit defect">Damaged during transit / transit defect</option>
+                    <option value="Specification mismatch with PO">Specification mismatch with PO</option>
+                    <option value="Missing accessory / incomplete unit">Missing accessory / incomplete unit</option>
+                    <option value="Quality defect / failed on testing">Quality defect / failed on testing</option>
+                    <option value="Incorrect item model delivered">Incorrect item model delivered</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">VERIFICATION REMARKS</label>
+                <textarea id="confirmRemarks" rows="2" style="width: 100%; padding: 8px; font-size: 12px; border: 1px solid #cbd5e1; border-radius: 4px;" placeholder="Optional remarks..."></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                <button type="button" class="btn btn-secondary" onclick="closeConfirmModal()">Cancel</button>
+                <button type="button" id="confirmSubmitBtn" class="btn btn-primary">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="shared_data.js"></script>
+    <script>
+        let currentAccTab = 'All';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAcceptanceTable();
+        });
+
+        function switchAcceptanceTab(status) {
+            currentAccTab = status;
+            document.querySelectorAll('.status-tab').forEach(t => {
+                const isActive = t.dataset.status === status;
+                t.classList.toggle('active', isActive);
+            });
+            const statusDropdown = document.getElementById('filterAccStatus');
+            if (statusDropdown) {
+                statusDropdown.value = (status === 'All') ? '' : status;
+            }
+            renderAcceptanceTable();
+        }
+
+        function onAccStatusDropdownChange() {
+            const val = document.getElementById('filterAccStatus').value || 'All';
+            switchAcceptanceTab(val);
+        }
+
+        function applyAcceptanceFilters() {
+            renderAcceptanceTable();
+        }
+
+        function clearAcceptanceFilters() {
+            document.getElementById('filterAccPrNo').value = '';
+            document.getElementById('filterAccItem').value = '';
+            document.getElementById('filterAccPoNo').value = '';
+            document.getElementById('filterAccStatus').value = '';
+            switchAcceptanceTab('All');
+        }
+
+        function renderAcceptanceTable() {
+            const tbody = document.getElementById('acceptanceTableBody');
+            tbody.innerHTML = '';
+
+            const items = window.PurchaseData.getUserAcceptanceItems();
+
+            // Counts
+            const countAll = items.length;
+            const countPending = items.filter(i => i.userAcceptanceStatus === 'Pending').length;
+            const countAccepted = items.filter(i => i.userAcceptanceStatus === 'Accepted').length;
+            const countRejected = items.filter(i => i.userAcceptanceStatus === 'Rejected').length;
+
+            document.getElementById('accBadgeAll').textContent = countAll;
+            document.getElementById('accBadgePending').textContent = countPending;
+            document.getElementById('accBadgeAccepted').textContent = countAccepted;
+            document.getElementById('accBadgeRejected').textContent = countRejected;
+
+            // Filter
+            const fPr = document.getElementById('filterAccPrNo').value.trim().toLowerCase();
+            const fItem = document.getElementById('filterAccItem').value.trim().toLowerCase();
+            const fPo = document.getElementById('filterAccPoNo').value.trim().toLowerCase();
+            const fStatus = currentAccTab !== 'All' ? currentAccTab : document.getElementById('filterAccStatus').value;
+
+            const filtered = items.filter(item => {
+                if (fPr && !item.prNo.toLowerCase().includes(fPr)) return false;
+                if (fItem && !item.itemName.toLowerCase().includes(fItem) && !item.itemKey.toLowerCase().includes(fItem)) return false;
+                if (fPo && !item.poNo.toLowerCase().includes(fPo)) return false;
+                if (fStatus && item.userAcceptanceStatus.toLowerCase() !== fStatus.toLowerCase()) return false;
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="11" style="text-align: center; padding: 30px; color: #64748b;">
+                    <i class="fas fa-inbox" style="font-size: 28px; color: #cbd5e1; display: block; margin-bottom: 6px;"></i>
+                    No requisition items found matching the filter criteria.
+                </td></tr>`;
+                document.getElementById('accPaginationInfo').textContent = 'Showing 0 to 0 of 0 records';
+                return;
+            }
+
+            filtered.forEach(item => {
+                const tr = document.createElement('tr');
+                const statusClass = item.userAcceptanceStatus.toLowerCase();
+
+                // Buttons logic:
+                // On Accepted tab only: Accept button omitted
+                // On Rejected tab only: Reject button omitted
+                // On All and Pending tabs: Both buttons available!
+                const showAcceptBtn = (currentAccTab !== 'Accepted');
+                const showRejectBtn = (currentAccTab !== 'Rejected');
+
+                let actionsHtml = `
+                    <div class="action-btn-group" style="justify-content: center;">
+                        ${showAcceptBtn ? `
+                            <button class="action-btn action-btn-accept" onclick="openConfirmModal('${item.poNo}', '${item.itemKey}', 'Accept')" title="Accept Material at Desk">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        ` : ''}
+                        ${showRejectBtn ? `
+                            <button class="action-btn action-btn-reject" onclick="openConfirmModal('${item.poNo}', '${item.itemKey}', 'Reject')" title="Reject Material">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        ` : ''}
+                        <button class="action-btn action-btn-view" onclick="openViewMoreModal('${item.poNo}', '${item.itemKey}')" title="View More Details & Goods-In History">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                `;
+
+                tr.innerHTML = `
+                    <td><strong>${item.prNo}</strong></td>
+                    <td>${item.poNo}</td>
+                    <td><span class="badge open" style="font-size: 10px;">${item.itemKey}</span></td>
+                    <td><strong>${item.itemName}</strong></td>
+                    <td style="text-align: right; font-weight: 600;">${item.reqQty}</td>
+                    <td style="text-align: right; color: #0284c7; font-weight: 600;">${item.recQty}</td>
+                    <td style="text-align: right; color: #16a34a; font-weight: 700;">${item.userAcceptedQty}</td>
+                    <td>${item.uom}</td>
+                    <td>${item.supplierName}</td>
+                    <td><span class="badge ${statusClass}">${item.userAcceptanceStatus}</span></td>
+                    <td style="text-align: center;">${actionsHtml}</td>
                 `;
                 tbody.appendChild(tr);
             });
+
+            document.getElementById('accPaginationInfo').textContent = `Showing 1 to ${filtered.length} of ${filtered.length} records`;
         }
 
-        // Pagination info
-        document.getElementById('paginationInfo').textContent = totalRecords === 0
-            ? 'No records found'
-            : `Showing ${start + 1} to ${end} of ${totalRecords} records`;
+        // =========================================================
+        // CONFIRM ACCEPT / REJECT MODAL
+        // =========================================================
+        function openConfirmModal(poNo, itemKey, actionType) {
+            const po = window.PurchaseData.getPO(poNo);
+            if (!po) return;
+            const li = po.lineItems.find(i => i.itemKey === itemKey);
+            if (!li) return;
 
-        // Pagination controls
-        const pagCtrl = document.getElementById('paginationControls');
-        pagCtrl.innerHTML = '';
-        const prevBtn = document.createElement('button');
-        prevBtn.innerHTML = '&laquo; Prev';
-        prevBtn.disabled = currentPage === 1;
-        prevBtn.onclick = () => { currentPage--; renderTable(); };
-        pagCtrl.appendChild(prevBtn);
+            const modalHeader = document.getElementById('confirmModalHeader');
+            const modalTitle = document.getElementById('confirmModalTitle');
+            const modalText = document.getElementById('confirmModalText');
+            const submitBtn = document.getElementById('confirmSubmitBtn');
+            const rejectSection = document.getElementById('rejectReasonSection');
+            const remarksInput = document.getElementById('confirmRemarks');
 
-        for (let i = 1; i <= totalPages; i++) {
-            const btn = document.createElement('button');
-            btn.textContent = i;
-            if (i === currentPage) btn.classList.add('active-page');
-            btn.onclick = () => { currentPage = i; renderTable(); };
-            pagCtrl.appendChild(btn);
-        }
+            remarksInput.value = '';
 
-        const nextBtn = document.createElement('button');
-        nextBtn.innerHTML = 'Next &raquo;';
-        nextBtn.disabled = currentPage === totalPages;
-        nextBtn.onclick = () => { currentPage++; renderTable(); };
-        pagCtrl.appendChild(nextBtn);
-    }
-
-    // ==================== CONFIRMATION MODAL ====================
-    let confirmActionCallback = null;
-
-    function showConfirmModal(title, message, btnText, btnClass, showReason, callback) {
-        document.getElementById('confirmModalTitle').innerHTML = `<i class="fas fa-question-circle"></i> ${title}`;
-        document.getElementById('confirmModalMessage').textContent = message;
-        const btn = document.getElementById('confirmModalBtn');
-        btn.innerHTML = `<i class="fas fa-check"></i> ${btnText}`;
-        btn.className = 'btn ' + btnClass;
-        const reasonGroup = document.getElementById('confirmModalReasonGroup');
-        reasonGroup.style.display = showReason ? 'block' : 'none';
-        if (showReason) {
-            document.getElementById('confirmModalReasonSelect').value = '';
-            document.getElementById('confirmModalReasonText').value = '';
-        }
-        confirmActionCallback = callback;
-        document.getElementById('confirmModal').style.display = 'flex';
-    }
-
-    function closeConfirmModal() {
-        document.getElementById('confirmModal').style.display = 'none';
-        confirmActionCallback = null;
-    }
-
-    function executeConfirmAction() {
-        if (confirmActionCallback) {
-            const reasonGroup = document.getElementById('confirmModalReasonGroup');
-            if (reasonGroup.style.display === 'block') {
-                const reason = document.getElementById('confirmModalReasonSelect').value;
-                const remarks = document.getElementById('confirmModalReasonText').value.trim();
-                if (!reason) {
-                    showAlertModal('warning', 'Reason Required', 'Please select a rejection reason before confirming.');
-                    return;
-                }
-                confirmActionCallback(reason, remarks);
+            if (actionType === 'Accept') {
+                modalHeader.className = 'confirm-modal-header accept';
+                modalHeader.innerHTML = '<i class="fas fa-check-circle"></i> <span>Accept Material at Desk</span>';
+                modalText.innerHTML = `Are you sure you want to accept all <strong>${li.recQty} ${li.uom}</strong> of <strong>${li.itemName}</strong> delivered against ${po.poNo} (${po.prNo})?`;
+                rejectSection.style.display = 'none';
+                submitBtn.className = 'btn btn-primary';
+                submitBtn.textContent = 'Accept Material';
+                submitBtn.onclick = () => {
+                    const remarks = remarksInput.value.trim() || 'Accepted by user at desk.';
+                    window.PurchaseData.updateUserAcceptance(poNo, itemKey, 'Accepted', remarks, li.recQty);
+                    closeConfirmModal();
+                    renderAcceptanceTable();
+                };
             } else {
-                confirmActionCallback();
+                modalHeader.className = 'confirm-modal-header reject';
+                modalHeader.innerHTML = '<i class="fas fa-times-circle"></i> <span>Reject Delivered Material</span>';
+                modalText.innerHTML = `Are you sure you want to reject <strong>${li.recQty} ${li.uom}</strong> of <strong>${li.itemName}</strong> for ${po.poNo} (${po.prNo})?`;
+                rejectSection.style.display = 'block';
+                submitBtn.className = 'btn btn-danger';
+                submitBtn.style.backgroundColor = '#dc2626';
+                submitBtn.textContent = 'Reject Material';
+                submitBtn.onclick = () => {
+                    const reason = document.getElementById('confirmRejectReason').value;
+                    const remarks = remarksInput.value.trim();
+                    const fullReason = reason + (remarks ? ` — ${remarks}` : '');
+                    window.PurchaseData.updateUserAcceptance(poNo, itemKey, 'Rejected', fullReason, 0);
+                    closeConfirmModal();
+                    renderAcceptanceTable();
+                };
             }
+
+            document.getElementById('confirmActionModal').classList.add('active');
         }
-        closeConfirmModal();
-    }
 
-    function showAlertModal(type, title, message) {
-        const iconEl = document.getElementById('alertModalIcon');
-        if (type === 'success') {
-            iconEl.innerHTML = '<i class="fas fa-check-circle" style="color: #28a745;"></i>';
-        } else if (type === 'error') {
-            iconEl.innerHTML = '<i class="fas fa-times-circle" style="color: #dc3545;"></i>';
-        } else if (type === 'warning') {
-            iconEl.innerHTML = '<i class="fas fa-exclamation-triangle" style="color: #ffc107;"></i>';
+        function closeConfirmModal() {
+            document.getElementById('confirmActionModal').classList.remove('active');
         }
-        document.getElementById('alertModalTitle').textContent = title;
-        document.getElementById('alertModalMessage').textContent = message;
-        document.getElementById('alertModal').style.display = 'flex';
-    }
 
-    function closeAlertModal() {
-        document.getElementById('alertModal').style.display = 'none';
-    }
+        // =========================================================
+        // VIEW MORE MODAL (Full Goods-In Batches & Audit Trail)
+        // =========================================================
+        function openViewMoreModal(poNo, itemKey) {
+            const po = window.PurchaseData.getPO(poNo);
+            if (!po) return;
+            const li = po.lineItems.find(i => i.itemKey === itemKey);
+            if (!li) return;
 
-    // ==================== QUICK ACTIONS ====================
-    function quickAccept(accId) {
-        const item = acceptanceData.find(i => i.accId === accId);
-        if (!item) return;
+            document.getElementById('vmHeaderTitle').textContent = `${po.prNo} — ${li.itemName}`;
+            document.getElementById('vmPrNo').textContent = po.prNo;
+            document.getElementById('vmPoNo').textContent = po.poNo;
+            document.getElementById('vmRequester').textContent = po.requestedBy;
+            document.getElementById('vmSupplier').textContent = po.supplierName;
+            document.getElementById('vmStatusBadge').innerHTML = `<span class="badge ${li.userAcceptanceStatus.toLowerCase()}">${li.userAcceptanceStatus}</span>`;
 
-        showConfirmModal(
-            'Accept Material',
-            `Are you sure you want to accept all ${item.receivedQty} ${item.uom} of "${item.materialName}" for ${accId}?`,
-            'Accept',
-            'btn-success',
-            false,
-            function() {
-                item.accStatus = 'Accepted';
-                item.acceptedQty = item.receivedQty;
-                item.acceptedRejectedBy = 'Anish';
-                item.history.push({
-                    date: getCurrentDateTime(),
-                    action: 'Accepted',
-                    by: 'Anish',
-                    detail: `All ${item.receivedQty} ${item.uom} accepted via quick action.`
+            // Batches Table
+            const tbody = document.getElementById('vmBatchesBody');
+            tbody.innerHTML = '';
+            if (!li.batches || li.batches.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #94a3b8; padding: 12px;">No warehouse dock receipts logged yet.</td></tr>`;
+            } else {
+                li.batches.forEach(b => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${b.recDate}</td>
+                        <td style="text-align: right; font-weight: 600; color: #0284c7;">${b.recQty}</td>
+                        <td><span class="table-value-pill">${b.batchNo}</span></td>
+                        <td>${b.expiryDate || 'N/A'}</td>
+                        <td><span class="table-value-pill">${b.invoiceNo}</span></td>
+                        <td><span class="table-value-pill"><i class="fas fa-paperclip"></i> ${b.attachment}</span></td>
+                    `;
+                    tbody.appendChild(tr);
                 });
-                applyFilters();
-                showAlertModal('success', 'Material Accepted', `${accId} — Material accepted successfully!`);
             }
-        );
-    }
 
-    function quickReject(accId) {
-        const item = acceptanceData.find(i => i.accId === accId);
-        if (!item) return;
-
-        showConfirmModal(
-            'Reject Material',
-            `Are you sure you want to reject all ${item.receivedQty} ${item.uom} of "${item.materialName}" for ${accId}?`,
-            'Reject',
-            'btn-danger',
-            true,
-            function(reason, remarks) {
-                item.accStatus = 'Rejected';
-                item.acceptedQty = 0;
-                item.acceptedRejectedBy = 'Anish';
-                let detail = `All ${item.receivedQty} ${item.uom} rejected. Reason: ${reason}.`;
-                if (remarks) detail += ` Remarks: ${remarks}`;
-                item.history.push({
-                    date: getCurrentDateTime(),
-                    action: 'Rejected',
-                    by: 'Anish',
-                    detail: detail
-                });
-                applyFilters();
-                showAlertModal('error', 'Material Rejected', `${accId} — Material has been rejected.`);
-            }
-        );
-    }
-
-    // ==================== VIEW DETAIL ====================
-    function viewDetail(accId) {
-        const item = acceptanceData.find(i => i.accId === accId);
-        if (!item) return;
-        currentDetailItem = item;
-
-        document.getElementById('listView').style.display = 'none';
-        document.getElementById('detailView').style.display = 'block';
-
-        // Acceptance Summary
-        document.getElementById('det-accId').value = item.accId;
-        document.getElementById('det-poNo').value = item.poNo;
-        document.getElementById('det-grnNo').value = item.grnNo;
-        document.getElementById('det-prNo').value = item.prNo;
-        document.getElementById('det-accStatus').value = item.accStatus;
-        const badge = document.getElementById('detAccStatusBadge');
-        badge.textContent = item.accStatus;
-        badge.className = 'badge ' + getStatusClass(item.accStatus);
-
-        // PO Information
-        document.getElementById('det-po-poNo').value = item.poNo;
-        document.getElementById('det-po-poDate').value = item.poDate;
-        document.getElementById('det-po-poStatus').value = item.poStatus;
-        document.getElementById('det-po-vendorName').value = item.vendor;
-        document.getElementById('det-po-vendorCode').value = item.vendorCode;
-        document.getElementById('det-po-project').value = item.projectCode || item.project;
-        document.getElementById('det-po-department').value = item.department;
-        document.getElementById('det-po-reqBy').value = item.reqUser;
-        document.getElementById('det-po-costCentre').value = item.costCentre;
-        document.getElementById('det-po-deliveryLoc').value = item.deliveryLoc;
-        document.getElementById('det-po-payTerms').value = item.payTerms;
-        document.getElementById('det-po-totalValue').value = formatCurrency(item.poTotalValue);
-
-        // Material Information Table
-        const matBody = document.getElementById('materialInfoBody');
-        const totalReceived = item.prevReceivedQty + item.receivedQty;
-        const pending = item.orderedQty - totalReceived;
-        matBody.innerHTML = `
-            <tr>
-                <td>${formatMultiPills(item.itemCode)}</td>
-                <td>${formatMultiPills(item.materialName)}</td>
-                <td>${item.description}</td>
-                <td>${item.specification}</td>
-                <td style="text-align:right;">${item.orderedQty}</td>
-                <td style="text-align:right;">${item.prevReceivedQty}</td>
-                <td style="text-align:right;">${item.receivedQty}</td>
-                <td style="text-align:right;">${totalReceived}</td>
-                <td style="text-align:right;">${pending < 0 ? 0 : pending}</td>
-                <td>${item.uom}</td>
-                <td>${item.batchNo}</td>
-                <td>${item.mfgDate}</td>
-                <td>${item.expiryDate}</td>
-                <td>${item.storeLocation}</td>
-                <td>${item.grnNo}</td>
-                <td>${item.grnDate}</td>
-            </tr>
-        `;
-
-        // Acceptance Action Area
-        const actionArea = document.getElementById('acceptanceActionArea');
-        if (item.accStatus === 'Accepted' || item.accStatus === 'Rejected') {
-            actionArea.style.display = 'none';
-        } else {
-            actionArea.style.display = 'block';
-            document.getElementById('det-acceptedQty').value = '';
-            document.getElementById('det-acceptedQty').max = item.receivedQty;
-            document.getElementById('det-acceptedQty').placeholder = `Max: ${item.receivedQty}`;
-            document.getElementById('det-rejectReason').value = '';
-            document.getElementById('det-remarks').value = '';
-        }
-
-        // History
-        renderDetailHistory();
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function renderDetailHistory() {
-        if (!currentDetailItem) return;
-        const container = document.getElementById('detHistoryList');
-        container.innerHTML = '';
-        if (currentDetailItem.history.length === 0) {
-            container.innerHTML = '<p style="text-align:center; color:#aaa; padding:15px; font-size:12px;">No history records.</p>';
-            return;
-        }
-        currentDetailItem.history.forEach(h => {
-            const div = document.createElement('div');
-            div.className = 'history-item';
-            div.innerHTML = `
-                <div class="history-meta"><strong>${h.by}</strong> — ${h.action} — ${h.date}</div>
-                <div class="history-text">${h.detail}</div>
+            // Timeline
+            const timeline = document.getElementById('vmAuditTimeline');
+            timeline.innerHTML = `
+                <div class="timeline-step">
+                    <div class="timeline-date">${po.poDate}</div>
+                    <div class="timeline-title">Purchase Order Raised</div>
+                    <div class="timeline-desc">PO ${po.poNo} released to ${po.supplierName} for ${li.reqQty} ${li.uom} of ${li.itemName}.</div>
+                </div>
+                ${li.batches && li.batches.length > 0 ? `
+                    <div class="timeline-step">
+                        <div class="timeline-date">${li.batches[0].recDate}</div>
+                        <div class="timeline-title">Goods Received at Dock (Japan's Entry)</div>
+                        <div class="timeline-desc">${li.recQty} ${li.uom} received and logged under batch ${li.batches.map(b => b.batchNo).join(', ')}.</div>
+                    </div>
+                ` : ''}
+                <div class="timeline-step">
+                    <div class="timeline-date">Current Status</div>
+                    <div class="timeline-title">User Acceptance: ${li.userAcceptanceStatus}</div>
+                    <div class="timeline-desc">${li.acceptanceRemarks || 'Awaiting final verification by desk user.'}</div>
+                </div>
             `;
-            container.appendChild(div);
-        });
-    }
 
-    function backToList() {
-        document.getElementById('detailView').style.display = 'none';
-        document.getElementById('listView').style.display = 'block';
-        currentDetailItem = null;
-        applyFilters();
-    }
-
-    // ==================== DETAIL ACTIONS ====================
-    function acceptMaterial() {
-        if (!currentDetailItem) return;
-        const qty = parseInt(document.getElementById('det-acceptedQty').value);
-        const remarks = document.getElementById('det-remarks').value.trim();
-
-        if (!qty || qty <= 0) {
-            alert('Please enter a valid accepted quantity.');
-            return;
-        }
-        if (qty > currentDetailItem.receivedQty) {
-            alert(`Accepted quantity cannot exceed received quantity (${currentDetailItem.receivedQty}).`);
-            return;
+            document.getElementById('viewMoreModal').classList.add('active');
         }
 
-        currentDetailItem.accStatus = 'Accepted';
-        currentDetailItem.acceptedQty = qty;
-        currentDetailItem.acceptedRejectedBy = 'Anish';
-
-        let detail = `${qty} ${currentDetailItem.uom} accepted out of ${currentDetailItem.receivedQty} received.`;
-        if (remarks) detail += ` Remarks: ${remarks}`;
-        currentDetailItem.history.push({
-            date: getCurrentDateTime(), action: currentDetailItem.accStatus,
-            by: 'Anish', detail: detail
-        });
-
-        alert(`Material ${currentDetailItem.accStatus.toLowerCase()} successfully!`);
-        viewDetail(currentDetailItem.accId);
-    }
-
-    function rejectMaterial() {
-        if (!currentDetailItem) return;
-        const reason = document.getElementById('det-rejectReason').value;
-        const remarks = document.getElementById('det-remarks').value.trim();
-
-        if (!reason) {
-            alert('Please select a rejection reason.');
-            return;
+        function closeViewMoreModal() {
+            document.getElementById('viewMoreModal').classList.remove('active');
         }
 
-        currentDetailItem.accStatus = 'Rejected';
-        currentDetailItem.acceptedQty = 0;
-        currentDetailItem.acceptedRejectedBy = 'Anish';
-
-        let detail = `All ${currentDetailItem.receivedQty} ${currentDetailItem.uom} rejected. Reason: ${reason}.`;
-        if (remarks) detail += ` Remarks: ${remarks}`;
-        currentDetailItem.history.push({
-            date: getCurrentDateTime(), action: 'Rejected',
-            by: 'Anish', detail: detail
-        });
-
-        alert('Material rejected.');
-        viewDetail(currentDetailItem.accId);
-    }
-
-    function markUnderReview() {
-        if (!currentDetailItem) return;
-        const remarks = document.getElementById('det-remarks').value.trim();
-        if (!remarks) {
-            alert('Please enter remarks explaining why this is under review.');
-            return;
+        function exportAcceptanceData() {
+            const items = window.PurchaseData.getUserAcceptanceItems();
+            const headers = ["PR Number", "PO Number", "Item Key", "Item Name", "Req Qty", "Rec At Dock", "User Accepted Qty", "UOM", "Supplier", "Status"];
+            const rows = items.map(i => [
+                i.prNo, i.poNo, i.itemKey, `"${i.itemName}"`, i.reqQty, i.recQty, i.userAcceptedQty, i.uom, `"${i.supplierName}"`, i.userAcceptanceStatus
+            ]);
+            let csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `User_Acceptance_Requester_View_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
-
-        currentDetailItem.accStatus = 'Under Review';
-        currentDetailItem.acceptedRejectedBy = '-';
-
-        currentDetailItem.history.push({
-            date: getCurrentDateTime(), action: 'Under Review',
-            by: 'Anish', detail: `Marked for review. Remarks: ${remarks}`
-        });
-
-        alert('Material marked as Under Review.');
-        viewDetail(currentDetailItem.accId);
-    }
-
-    // ==================== HISTORY MODAL ====================
-    function showHistory(accId) {
-        const item = acceptanceData.find(i => i.accId === accId);
-        if (!item) return;
-
-        document.getElementById('histModalTitle').textContent = accId;
-        const body = document.getElementById('histModalBody');
-        body.innerHTML = '';
-
-        if (item.history.length === 0) {
-            body.innerHTML = '<p style="text-align:center; color:#aaa; padding:15px;">No history records.</p>';
-        } else {
-            item.history.forEach(h => {
-                const div = document.createElement('div');
-                div.className = 'history-item';
-                div.innerHTML = `
-                    <div class="history-meta"><strong>${h.by}</strong> — ${h.action} — ${h.date}</div>
-                    <div class="history-text">${h.detail}</div>
-                `;
-                body.appendChild(div);
-            });
-        }
-
-        document.getElementById('historyModal').style.display = 'flex';
-    }
-
-    function closeHistoryModal() {
-        document.getElementById('historyModal').style.display = 'none';
-    }
-
-    // ==================== PO MODAL ====================
-    function viewFullPO() {
-        if (!currentDetailItem) return;
-        const item = currentDetailItem;
-        document.getElementById('poModalTitle').textContent = item.poNo;
-
-        document.getElementById('poModalBody').innerHTML = `
-            <div style="font-size: 12px; line-height: 1.8;">
-                <table style="width:100%; border-collapse: collapse;">
-                    <tr><td style="padding:4px 8px; font-weight:bold; color:#555; width:40%;">PO Number</td><td style="padding:4px 8px;">${item.poNo}</td></tr>
-                    <tr style="background:#f9f9f9;"><td style="padding:4px 8px; font-weight:bold; color:#555;">PO Date</td><td style="padding:4px 8px;">${item.poDate}</td></tr>
-                    <tr><td style="padding:4px 8px; font-weight:bold; color:#555;">PO Status</td><td style="padding:4px 8px;"><span class="badge ${getStatusClass(item.poStatus)}">${item.poStatus}</span></td></tr>
-                    <tr style="background:#f9f9f9;"><td style="padding:4px 8px; font-weight:bold; color:#555;">Vendor Name</td><td style="padding:4px 8px;">${item.vendor}</td></tr>
-                    <tr><td style="padding:4px 8px; font-weight:bold; color:#555;">Vendor Code</td><td style="padding:4px 8px;">${item.vendorCode}</td></tr>
-                    <tr style="background:#f9f9f9;"><td style="padding:4px 8px; font-weight:bold; color:#555;">Project</td><td style="padding:4px 8px;">${item.project}</td></tr>
-                    <tr><td style="padding:4px 8px; font-weight:bold; color:#555;">Department</td><td style="padding:4px 8px;">${item.department}</td></tr>
-                    <tr style="background:#f9f9f9;"><td style="padding:4px 8px; font-weight:bold; color:#555;">Requested By</td><td style="padding:4px 8px;">${item.reqUser}</td></tr>
-                    <tr><td style="padding:4px 8px; font-weight:bold; color:#555;">Cost Centre</td><td style="padding:4px 8px;">${item.costCentre}</td></tr>
-                    <tr style="background:#f9f9f9;"><td style="padding:4px 8px; font-weight:bold; color:#555;">Delivery Location</td><td style="padding:4px 8px;">${item.deliveryLoc}</td></tr>
-                    <tr><td style="padding:4px 8px; font-weight:bold; color:#555;">Payment Terms</td><td style="padding:4px 8px;">${item.payTerms}</td></tr>
-                    <tr style="background:#f9f9f9;"><td style="padding:4px 8px; font-weight:bold; color:#555;">PO Total Value</td><td style="padding:4px 8px; font-weight:bold; color:#28a745;">${formatCurrency(item.poTotalValue)}</td></tr>
-                </table>
-                <hr style="margin: 15px 0;">
-                <h4 style="font-size: 12px; color: #555; margin-bottom: 8px;">Line Items</h4>
-                <table style="width:100%; border-collapse: collapse; border: 1px solid #ddd;">
-                    <thead>
-                        <tr style="background: var(--label-bg); color: white;">
-                            <th style="padding: 5px 8px; font-size: 11px;">Item Code</th>
-                            <th style="padding: 5px 8px; font-size: 11px;">Material</th>
-                            <th style="padding: 5px 8px; font-size: 11px;">Qty</th>
-                            <th style="padding: 5px 8px; font-size: 11px;">UOM</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="padding: 5px 8px; border: 1px solid #eee;">${item.itemCode}</td>
-                            <td style="padding: 5px 8px; border: 1px solid #eee;">${item.materialName}</td>
-                            <td style="padding: 5px 8px; border: 1px solid #eee; text-align:right;">${item.orderedQty}</td>
-                            <td style="padding: 5px 8px; border: 1px solid #eee;">${item.uom}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        `;
-
-        document.getElementById('poDetailModal').style.display = 'flex';
-    }
-
-    function closePoModal() {
-        document.getElementById('poDetailModal').style.display = 'none';
-    }
-
-    // ==================== EXPORT ====================
-    function exportData() {
-        let csv = 'Acceptance ID,PO Number,PO Status,PO Date,PR Number,Project Code,Department,Requesting User,Vendor,Item Code,Material Name,Ordered Qty,Received Qty,UOM,GRN Number,GRN Date,Stock Inward Status,Acceptance Status,Acceptance Due Date,Accepted/Rejected By\n';
-        filteredData.forEach(item => {
-            csv += `${item.accId},${item.poNo},${item.poStatus},${item.poDate},${item.prNo},${item.projectCode || item.project},${item.department},${item.reqUser},${item.vendor},${item.itemCode},${item.materialName},${item.orderedQty},${item.receivedQty},${item.uom},${item.grnNo},${item.grnDate},${item.stockInwardStatus},${item.accStatus},${item.accDueDate},${item.acceptedRejectedBy}\n`;
-        });
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'acceptance_material_export.csv';
-        a.click();
-        URL.revokeObjectURL(url);
-    }
-
-    // ==================== INIT ====================
-    document.addEventListener('DOMContentLoaded', () => {
-        updateTabCounts();
-        applyFilters();
-    });
     </script>
 </body>
 </html>
