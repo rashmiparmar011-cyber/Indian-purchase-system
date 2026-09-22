@@ -381,6 +381,25 @@
     </div>
 
     <!-- Scripts -->
+    <!-- Invoice Preview Modal -->
+    <div class="modal-overlay" id="invoicePreviewModal">
+        <div class="modal-box" style="max-width: 520px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-invoice"></i> Invoice Document — <span id="invModalTitle"></span></h3>
+                <button class="modal-close-btn" onclick="closeInvoiceModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="invModalContent">
+                <!-- Dynamic invoice details -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-export" onclick="alert('Downloading invoice PDF attachment...')">
+                    <i class="fas fa-download"></i> Download Invoice
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="closeInvoiceModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
     <script src="shared_data.js"></script>
     <script>
         let currentAccTab = 'All';
@@ -592,7 +611,7 @@
                         <td><span class="table-value-pill">${b.batchNo}</span></td>
                         <td>${b.expiryDate || 'N/A'}</td>
                         <td><span class="table-value-pill">${b.invoiceNo}</span></td>
-                        <td><span class="table-value-pill"><i class="fas fa-paperclip"></i> ${b.attachment}</span></td>
+                        <td><span class="table-value-pill" style="cursor: pointer; color: #0284c7; text-decoration: underline;" onclick="showInvoiceDetails('${b.invoiceNo}', '${poNo}', '${itemKey}')"><i class="fas fa-paperclip"></i> ${b.attachment}</span></td>
                     `;
                     tbody.appendChild(tr);
                 });
@@ -625,6 +644,39 @@
 
         function closeViewMoreModal() {
             document.getElementById('viewMoreModal').classList.remove('active');
+        }
+
+        function showInvoiceDetails(invoiceNo, poNo, itemKey) {
+            const po = window.PurchaseData.getPO(poNo);
+            if (!po) return;
+            const li = po.lineItems.find(i => i.itemKey === itemKey);
+            const batch = (li.batches || []).find(b => b.invoiceNo === invoiceNo);
+
+            document.getElementById('invModalTitle').textContent = `${invoiceNo} (${po.poNo})`;
+            document.getElementById('invModalContent').innerHTML = `
+                <div class="summary-card" style="margin-bottom: 0;">
+                    <div style="text-align: center; margin-bottom: 12px;">
+                        <i class="fas fa-file-invoice-dollar" style="font-size: 36px; color: #0284c7;"></i>
+                        <h4 style="margin-top: 6px; color: #0f172a;">TAX INVOICE: ${invoiceNo}</h4>
+                    </div>
+                    <div class="summary-grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; font-size: 12px;">
+                        <div><strong>Supplier:</strong> ${po.supplierName}</div>
+                        <div><strong>PO Number:</strong> ${po.poNo}</div>
+                        <div><strong>Invoice Date:</strong> ${batch ? batch.recDate : po.poDate}</div>
+                        <div><strong>Item Name:</strong> ${li.itemName}</div>
+                        <div><strong>Billed Quantity:</strong> ${batch ? batch.recQty : li.recQty} ${li.uom}</div>
+                        <div><strong>Batch Reference:</strong> ${batch ? batch.batchNo : 'B001'}</div>
+                    </div>
+                    <div style="background: #eff6ff; padding: 10px; border-radius: 6px; border: 1px dashed #93c5fd; font-size: 11px; color: #1e40af;">
+                        <i class="fas fa-info-circle"></i> Goods received and verified at dock. Invoice certified for payment release.
+                    </div>
+                </div>
+            `;
+            document.getElementById('invoicePreviewModal').classList.add('active');
+        }
+
+        function closeInvoiceModal() {
+            document.getElementById('invoicePreviewModal').classList.remove('active');
         }
 
         function exportAcceptanceData() {
