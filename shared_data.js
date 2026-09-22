@@ -10,7 +10,7 @@ const STORAGE_KEY = 'indiaPurchaseSystem_v2_data';
 
 const DEFAULT_PURCHASE_DATA = [
     {
-        poNo: "PO01",
+        poNo: "PO01", company: "LSPL",
         poDate: "2026-09-11",
         prNo: "PR-501",
         requestedBy: "Rashmi Parmar",
@@ -21,7 +21,7 @@ const DEFAULT_PURCHASE_DATA = [
         projectName: "Enterprise Systems Upgrade",
         totalCost: 30000,
         status: "Partial", // New, Partial, Complete
-        paymentStatus: "Partially Paid", // Pending, Partially Paid, Fully Paid
+        paymentStatus: "Partially Paid", paymentDate: "2026-09-15", // Pending, Partially Paid, Fully Paid
         paymentTerm: "50% Payment",
         amountPaid: 15000,
         dueDate: "2026-09-30",
@@ -83,7 +83,7 @@ const DEFAULT_PURCHASE_DATA = [
         ]
     },
     {
-        poNo: "PO02",
+        poNo: "PO02", company: "GRPL",
         poDate: "2026-09-14",
         prNo: "PR-502",
         requestedBy: "Vimal Kumar",
@@ -94,7 +94,7 @@ const DEFAULT_PURCHASE_DATA = [
         projectName: "Data Center Modernization",
         totalCost: 100000,
         status: "Complete",
-        paymentStatus: "Fully Paid",
+        paymentStatus: "Fully Paid", paymentDate: "2026-09-12",
         paymentTerm: "Full Payment",
         amountPaid: 100000,
         dueDate: "2026-10-15",
@@ -148,7 +148,7 @@ const DEFAULT_PURCHASE_DATA = [
         ]
     },
     {
-        poNo: "PO03",
+        poNo: "PO03", company: "GHPL",
         poDate: "2026-09-15",
         prNo: "PR-503",
         requestedBy: "Priya Sharma",
@@ -195,7 +195,7 @@ const DEFAULT_PURCHASE_DATA = [
         ]
     },
     {
-        poNo: "PO04",
+        poNo: "PO04", company: "LSPL",
         poDate: "2026-09-16",
         prNo: "PR-504",
         requestedBy: "John Doe",
@@ -237,7 +237,7 @@ const DEFAULT_PURCHASE_DATA = [
         ]
     },
     {
-        poNo: "PO05",
+        poNo: "PO05", company: "GRPL",
         poDate: "2026-09-17",
         prNo: "PR-505",
         requestedBy: "Anish Patel",
@@ -360,6 +360,7 @@ class PurchaseDataManager {
                 items.push({
                     poNo: po.poNo,
                     poDate: po.poDate,
+                    company: po.company,
                     supplierName: po.supplierName,
                     requestedBy: po.requestedBy,
                     totalCost: po.totalCost,
@@ -391,6 +392,7 @@ class PurchaseDataManager {
                 items.push({
                     poNo: po.poNo,
                     poDate: po.poDate,
+                    company: po.company,
                     prNo: po.prNo,
                     supplierName: po.supplierName,
                     requestedBy: po.requestedBy,
@@ -576,3 +578,6 @@ class PurchaseDataManager {
 
 // Global instance
 window.PurchaseData = new PurchaseDataManager();
+
+
+

@@ -138,21 +138,24 @@
                             </a>
                             <ul class="sub-nav-list">
                                 <li><a href="#" class="sub-nav-link">Item Master</a></li>
-                                <li><a href="#" class="sub-nav-link">Supplier Master</a></li>
+                                <li><a href="#" class="sub-nav-link nav-item-disabled">Supplier Master</a></li>
                                 <li><a href="index.html" class="sub-nav-link">Project Master</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="#" class="nav-link nav-item-disabled">
                                 <i class="fas fa-exchange-alt"></i> Purchase Transactions <i
                                     class="fas fa-chevron-down arrow"></i>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="fas fa-file-invoice"></i> Purchase Reports <i
-                                    class="fas fa-chevron-down arrow"></i>
+                                <i class="fas fa-file-invoice"></i> Purchase Reports <i class="fas fa-chevron-down arrow"></i>
                             </a>
+                            <ul class="sub-nav-list">
+                                <li><a href="reports.html#goods-in" class="sub-nav-link">Goods-In Report</a></li>
+                                <li><a href="reports.html#finance" class="sub-nav-link">Finance Report</a></li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a href="stock_management.html" class="nav-link">
@@ -187,6 +190,15 @@
                 <div class="filter-card">
                     <div class="filter-grid filter-grid-finance">
                         <div class="form-group">
+                            <label for="filterFinCompany">Company</label>
+                            <select id="filterFinCompany" onchange="applyFinanceFilters()">
+                                <option value="">All</option>
+                                <option value="LSPL">LSPL</option>
+                                <option value="GRPL">GRPL</option>
+                                <option value="GHPL">GHPL</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="filterFinPoNo">PO No.</label>
                             <input type="text" id="filterFinPoNo" placeholder="Search PO No (e.g. PO01)..." oninput="applyFinanceFilters()">
                         </div>
@@ -199,13 +211,16 @@
                             <input type="text" id="filterFinSupplier" placeholder="Search Supplier..." oninput="applyFinanceFilters()">
                         </div>
                         <div class="form-group">
-                            <label for="filterFinStatus">PO Status</label>
-                            <select id="filterFinStatus" onchange="onFinStatusDropdownChange()">
-                                <option value="">All Statuses</option>
-                                <option value="Partial">Partial</option>
-                                <option value="Complete">Complete</option>
-                                <option value="New">New</option>
-                            </select>
+                            <label for="filterFinPoDateStart">PO Start Date</label>
+                            <input type="date" id="filterFinPoDateStart" onchange="applyFinanceFilters()">
+                        </div>
+                        <div class="form-group">
+                            <label for="filterFinPoDateEnd">PO End Date</label>
+                            <input type="date" id="filterFinPoDateEnd" onchange="applyFinanceFilters()">
+                        </div>
+                        <div class="form-group">
+                            <label for="filterFinPayDate">Payment Date</label>
+                            <input type="date" id="filterFinPayDate" onchange="applyFinanceFilters()">
                         </div>
                         <div class="filter-actions">
                             <button type="button" class="btn btn-primary" onclick="applyFinanceFilters()"><i class="fas fa-search"></i> Apply</button>
@@ -221,11 +236,6 @@
                             onclick="switchFinanceTab('All')">
                             <i class="fas fa-layer-group"></i> All POs <span class="tab-badge" id="finBadgeAll">0</span>
                         </button>
-                        <button type="button" class="status-tab tab-partial" data-status="Partial"
-                            onclick="switchFinanceTab('Partial')">
-                            <i class="fas fa-hourglass-half"></i> Partial <span class="tab-badge"
-                                id="finBadgePartial">0</span>
-                        </button>
                         <button type="button" class="status-tab tab-complete" data-status="Complete"
                             onclick="switchFinanceTab('Complete')">
                             <i class="fas fa-check-circle"></i> Complete <span class="tab-badge"
@@ -233,7 +243,7 @@
                         </button>
                         <button type="button" class="status-tab tab-new" data-status="New"
                             onclick="switchFinanceTab('New')">
-                            <i class="fas fa-sparkles"></i> New <span class="tab-badge" id="finBadgeNew">0</span>
+                            <i class="fas fa-sparkles"></i> Pending <span class="tab-badge" id="finBadgeNew">0</span>
                         </button>
                     </div>
                     <div style="display: flex; gap: 8px;">
@@ -253,7 +263,6 @@
                                 <th>SUPPLIER NAME</th>
                                 <th style="text-align: right;">TOTAL COST (₹)</th>
                                 <th style="text-align: right;">AMOUNT PAID (₹)</th>
-                                <th>PO STATUS</th>
                                 <th>PAYMENT STATUS</th>
                                 <th style="text-align: center;">ACTION</th>
                             </tr>
@@ -306,7 +315,7 @@
                             <span class="value" id="finSumSupplier">-</span>
                         </div>
                         <div class="summary-item">
-                            <span class="label">Total Cost</span>
+                            <span class="label">Total Value</span>
                             <span class="value highlight" id="finSumTotalCost">-</span>
                         </div>
                     </div>
@@ -346,9 +355,13 @@
                                     <th style="text-align: right;">REC QTY</th>
                                     <th>UOM</th>
                                     <th style="text-align: right;">COST (₹)</th>
+                                    <th>GST RATE (%)</th>
+                                    <th style="text-align: right;">GST AMOUNT (₹)</th>
+                                    <th style="text-align: right;">TOTAL VALUE (₹)</th>
                                     <th style="text-align: right;">BALANCE</th>
                                     <th>STATUS</th>
                                     <th>INVOICES (CLICK TO VIEW)</th>
+                                    <th>ACTION</th>
                                 </tr>
                             </thead>
                             <tbody id="finLineItemsBody">
@@ -392,7 +405,7 @@
                                 <div style="height: 34px;">
                                     <button type="button" id="btnApprovePay" class="btn btn-primary" onclick="handleRecordPayment()"
                                         style="white-space: nowrap; height: 34px; padding: 0 16px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px; width: 100%; cursor: pointer; position: relative; z-index: 10;">
-                                        <i class="fas fa-check-circle" id="btnApprovePayIcon" style="pointer-events: none;"></i> <span id="btnApprovePayText" style="pointer-events: none;">Approve &amp; Pay</span>
+                                        <i class="fas fa-check-circle" id="btnApprovePayIcon" style="pointer-events: none;"></i> <span id="btnApprovePayText" style="pointer-events: none;">Pay</span>
                                     </button>
                                 </div>
                             </div>
@@ -401,6 +414,7 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="closePoAction()">Close PO</button>
                 <button type="button" class="btn btn-secondary" onclick="closeFinanceModal()">Close</button>
             </div>
         </div>
@@ -473,26 +487,41 @@
 
             // Counts
             const countAll = pos.length;
-            const countPartial = pos.filter(p => p.status === 'Partial').length;
             const countComplete = pos.filter(p => p.status === 'Complete').length;
-            const countNew = pos.filter(p => p.status === 'New').length;
+            const countNew = pos.filter(p => p.status === 'New' || p.status === 'Partial').length;
 
             document.getElementById('finBadgeAll').textContent = countAll;
-            document.getElementById('finBadgePartial').textContent = countPartial;
             document.getElementById('finBadgeComplete').textContent = countComplete;
             document.getElementById('finBadgeNew').textContent = countNew;
 
             // Filter
+            const fCompany = (document.getElementById('filterFinCompany').value || '').trim();
             const fPo = document.getElementById('filterFinPoNo').value.trim().toLowerCase();
             const fReq = document.getElementById('filterFinRequester').value.trim().toLowerCase();
             const fSup = document.getElementById('filterFinSupplier').value.trim().toLowerCase();
-            const fStatus = currentFinTab !== 'All' ? currentFinTab : document.getElementById('filterFinStatus').value;
+            
+            const fPoStart = document.getElementById('filterFinPoDateStart').value;
+            const fPoEnd = document.getElementById('filterFinPoDateEnd').value;
+            const fPayDate = document.getElementById('filterFinPayDate').value;
+            
+            const fStatus = currentFinTab !== 'All' ? currentFinTab : '';
 
             const filtered = pos.filter(p => {
+                if (fCompany && p.company !== fCompany) return false;
                 if (fPo && !p.poNo.toLowerCase().includes(fPo)) return false;
                 if (fReq && !p.requestedBy.toLowerCase().includes(fReq)) return false;
                 if (fSup && !p.supplierName.toLowerCase().includes(fSup)) return false;
-                if (fStatus && p.status.toLowerCase() !== fStatus.toLowerCase()) return false;
+                
+                if (fPoStart && p.poDate < fPoStart) return false;
+                if (fPoEnd && p.poDate > fPoEnd) return false;
+                if (fPayDate && p.paymentDate !== fPayDate) return false;
+                
+                if (fStatus === 'New') {
+                    if (p.status !== 'New' && p.status !== 'Partial') return false;
+                } else if (fStatus && p.status.toLowerCase() !== fStatus.toLowerCase()) {
+                    return false;
+                }
+                
                 return true;
             });
 
@@ -519,7 +548,6 @@
                     <td>${p.supplierName}</td>
                     <td style="text-align: right; font-weight: 700;">${formattedCost}</td>
                     <td style="text-align: right; color: #16a34a; font-weight: 600;">${formattedPaid}</td>
-                    <td><span class="badge ${statusClass}">${p.status}</span></td>
                     <td><span class="badge ${payStatusClass}">${p.paymentStatus || 'Pending'}</span></td>
                     <td style="text-align: center;">
                         <button class="action-btn action-btn-view" onclick="openFinanceModal('${p.poNo}')" title="View PO Details & Invoices">
@@ -565,13 +593,13 @@
                 if (remaining > 0) {
                     payInput.value = remaining;
                     payInput.placeholder = 'Enter amount...';
-                    if (approveBtnText) approveBtnText.textContent = 'Approve & Pay';
+                    if (approveBtnText) approveBtnText.textContent = 'Pay';
                     if (approveBtnIcon) approveBtnIcon.className = 'fas fa-check-circle';
                 } else {
                     payInput.value = '';
                     payInput.placeholder = 'Fully Paid (₹0 Balance)';
-                    if (approveBtnText) approveBtnText.textContent = 'Approve & Close PO';
-                    if (approveBtnIcon) approveBtnIcon.className = 'fas fa-check-double';
+                    if (approveBtnText) approveBtnText.textContent = 'Pay';
+                    if (approveBtnIcon) approveBtnIcon.className = 'fas fa-check-circle';
                 }
             }
             document.getElementById('finPayRef').value = `UTR-${Date.now().toString().slice(-6)}`;
@@ -584,6 +612,16 @@
         function closeFinanceModal() {
             document.getElementById('financeOpenModal').classList.remove('active');
             renderFinanceTable();
+        }
+
+        function closePoAction() {
+            if (!currentFinPoNo) return;
+            const po = window.PurchaseData.getPO(currentFinPoNo);
+            if (!po) return;
+            po.status = 'Complete';
+            window.PurchaseData.saveData(window.PurchaseData.data);
+            alert(`PO ${currentFinPoNo} has been closed successfully!`);
+            closeFinanceModal();
         }
 
         function renderFinanceLineItems(po) {
@@ -613,27 +651,108 @@
                     ).join('');
                 }
 
-                tr.innerHTML = `
-                    <td><span class="badge open" style="font-size: 10px;">${li.itemKey}</span></td>
-                    <td><strong>${li.itemName}</strong></td>
-                    <td style="text-align: right; font-weight: 600;">${li.reqQty}</td>
-                    <td style="text-align: right; color: #16a34a; font-weight: 600;">${li.recQty}</td>
-                    <td>${li.uom}</td>
-                    <td style="text-align: right; font-weight: 600;">₹${Number(li.cost).toLocaleString('en-IN')}</td>
-                    <td style="text-align: right;">
-                        <span class="balance-badge ${li.balance === 0 ? 'zero' : 'positive'}">${li.balance}</span>
-                    </td>
-                    <td><span class="badge ${lineStatusClass}">${li.status === 'Full' ? 'Full' : li.status}</span></td>
-                    <td>${invoiceHtml}</td>
-                `;
+                const isEditing = window.finEditingItemKey === li.itemKey;
+                const gstRate = li.gstRate || 0;
+                const gstAmt = li.gstAmount || (li.cost * gstRate / 100);
+                const totalVal = li.totalValue || (li.cost + gstAmt);
+
+                if (isEditing) {
+                    tr.innerHTML = `
+                        <td><span class="badge open" style="font-size: 10px;">${li.itemKey}</span></td>
+                        <td><strong>${li.itemName}</strong></td>
+                        <td style="text-align: right; font-weight: 600;">${li.reqQty}</td>
+                        <td style="text-align: right; color: #16a34a; font-weight: 600;">${li.recQty}</td>
+                        <td>${li.uom}</td>
+                        <td style="text-align: right; font-weight: 600;">₹${Number(li.cost).toLocaleString('en-IN')}</td>
+                        <td><input type="number" id="editGstRate_${li.itemKey}" value="${gstRate}" style="width: 60px;" oninput="calcGst('${li.itemKey}', ${li.cost})"></td>
+                        <td><input type="number" id="editGstAmt_${li.itemKey}" value="${gstAmt}" style="width: 80px;"></td>
+                        <td><input type="number" id="editTotalVal_${li.itemKey}" value="${totalVal}" style="width: 100px;"></td>
+                        <td style="text-align: right;">
+                            <span class="balance-badge ${li.balance === 0 ? 'zero' : 'positive'}">${li.balance}</span>
+                        </td>
+                        <td><span class="badge ${lineStatusClass}">${li.status === 'Full' ? 'Full' : li.status}</span></td>
+                        <td>${invoiceHtml}</td>
+                        <td>
+                            <button class="btn btn-save" style="padding: 4px 8px; font-size: 10px;" onclick="saveFinLineItem('${po.poNo}', '${li.itemKey}')">Save</button>
+                        </td>
+                    `;
+                } else {
+                    tr.innerHTML = `
+                        <td><span class="badge open" style="font-size: 10px;">${li.itemKey}</span></td>
+                        <td><strong>${li.itemName}</strong></td>
+                        <td style="text-align: right; font-weight: 600;">${li.reqQty}</td>
+                        <td style="text-align: right; color: #16a34a; font-weight: 600;">${li.recQty}</td>
+                        <td>${li.uom}</td>
+                        <td style="text-align: right; font-weight: 600;">₹${Number(li.cost).toLocaleString('en-IN')}</td>
+                        <td style="text-align: center;">${gstRate}%</td>
+                        <td style="text-align: right;">₹${Number(gstAmt).toLocaleString('en-IN')}</td>
+                        <td style="text-align: right; font-weight: 700; color: #1e3a8a;">₹${Number(totalVal).toLocaleString('en-IN')}</td>
+                        <td style="text-align: right;">
+                            <span class="balance-badge ${li.balance === 0 ? 'zero' : 'positive'}">${li.balance}</span>
+                        </td>
+                        <td><span class="badge ${lineStatusClass}">${li.status === 'Full' ? 'Full' : li.status}</span></td>
+                        <td>${invoiceHtml}</td>
+                        <td>
+                            <button class="action-btn action-btn-edit" onclick="editFinLineItem('${li.itemKey}')" title="Edit GST Details">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    `;
+                }
                 tbody.appendChild(tr);
             });
+        }
+
+        window.finEditingItemKey = null;
+
+        function editFinLineItem(itemKey) {
+            window.finEditingItemKey = itemKey;
+            renderFinanceLineItems(window.PurchaseData.getPO(currentFinPoNo));
+        }
+
+        function calcGst(itemKey, cost) {
+            const rateInput = document.getElementById(`editGstRate_${itemKey}`);
+            const amtInput = document.getElementById(`editGstAmt_${itemKey}`);
+            const totalInput = document.getElementById(`editTotalVal_${itemKey}`);
+            if (rateInput && amtInput && totalInput) {
+                const rate = Number(rateInput.value) || 0;
+                const amt = cost * rate / 100;
+                amtInput.value = amt;
+                totalInput.value = cost + amt;
+            }
+        }
+
+        function saveFinLineItem(poNo, itemKey) {
+            const po = window.PurchaseData.getPO(poNo);
+            if (!po) return;
+            const li = po.lineItems.find(i => i.itemKey === itemKey);
+            if (li) {
+                li.gstRate = Number(document.getElementById(`editGstRate_${itemKey}`).value) || 0;
+                li.gstAmount = Number(document.getElementById(`editGstAmt_${itemKey}`).value) || 0;
+                li.totalValue = Number(document.getElementById(`editTotalVal_${itemKey}`).value) || 0;
+                
+                // Also update PO total cost
+                let newPoTotal = 0;
+                po.lineItems.forEach(item => {
+                    const iGstRate = item.gstRate || 0;
+                    const iGstAmt = item.gstAmount || (item.cost * iGstRate / 100);
+                    const iTotal = item.totalValue || (item.cost + iGstAmt);
+                    newPoTotal += iTotal;
+                });
+                po.totalCost = newPoTotal;
+                window.PurchaseData.saveData(window.PurchaseData.data);
+            }
+            window.finEditingItemKey = null;
+            openFinanceModal(poNo); // Refresh modal fully
         }
 
         function handleRecordPayment() {
             if (!currentFinPoNo) return;
             const po = window.PurchaseData.getPO(currentFinPoNo);
             if (!po) return;
+
+            const isConfirmed = confirm(`Are you sure you want to make payment successfully for ${currentFinPoNo} and All invoices verified and marked complete.`);
+            if (!isConfirmed) return;
 
             const remaining = Math.max(0, po.totalCost - (po.amountPaid || 0));
             const amtVal = document.getElementById('finPayAmount').value.trim();
@@ -720,3 +839,4 @@
 </body>
 
 </html>
+

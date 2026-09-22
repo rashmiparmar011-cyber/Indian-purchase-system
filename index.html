@@ -47,9 +47,9 @@
                                 <i class="fas fa-list"></i> Purchase Masters <i class="fas fa-chevron-down arrow"></i>
                             </a>
                             <ul class="sub-nav-list">
-                                <li><a href="#" id="nav-item-master" class="sub-nav-link"
+                                <li><a href="#" id="nav-item-master" class="sub-nav-link nav-item-disabled"
                                         onclick="switchView('item-master-view'); return false;">Item Master</a></li>
-                                <li><a href="#" class="sub-nav-link">Supplier Master</a></li>
+                                <li><a href="#" class="sub-nav-link nav-item-disabled">Supplier Master</a></li>
                                 <li><a href="#" id="nav-project-master" class="sub-nav-link active"
                                         style="color: var(--primary-blue); font-weight: bold; background-color: #f5f9fc;"
                                         onclick="switchView('project-master-view'); return false;">
@@ -58,16 +58,19 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="#" class="nav-link nav-item-disabled">
                                 <i class="fas fa-exchange-alt"></i> Purchase Transactions <i
                                     class="fas fa-chevron-down arrow"></i>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="fas fa-file-invoice"></i> Purchase Reports <i
-                                    class="fas fa-chevron-down arrow"></i>
+                                <i class="fas fa-file-invoice"></i> Purchase Reports <i class="fas fa-chevron-down arrow"></i>
                             </a>
+                            <ul class="sub-nav-list">
+                                <li><a href="reports.html#goods-in" class="sub-nav-link">Goods-In Report</a></li>
+                                <li><a href="reports.html#finance" class="sub-nav-link">Finance Report</a></li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a href="stock_management.html" class="nav-link">
@@ -114,6 +117,15 @@
                                         placeholder="Enter Project Name">
                                 </div>
                                 <div class="form-group">
+                                    <label for="projectManager">Project Manager</label>
+                                    <select id="projectManager" name="projectManager">
+                                        <option value="">Select Manager</option>
+                                        <option value="John Doe">John Doe</option>
+                                        <option value="Jane Smith">Jane Smith</option>
+                                        <option value="Alice Johnson">Alice Johnson</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label for="budgetYear">Budget Year</label>
                                     <select id="budgetYear" name="budgetYear">
                                         <option value="">Select Budget Year</option>
@@ -123,15 +135,6 @@
                                         <option value="2024-2025">2024-2025</option>
                                         <option value="2025-2026">2025-2026</option>
                                         <option value="2026-2027">2026-2027</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="projectManager">Project Manager</label>
-                                    <select id="projectManager" name="projectManager">
-                                        <option value="">Select Manager</option>
-                                        <option value="John Doe">John Doe</option>
-                                        <option value="Jane Smith">Jane Smith</option>
-                                        <option value="Alice Johnson">Alice Johnson</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -147,11 +150,6 @@
                                     <input type="number" id="budget" name="budget" placeholder="0.00" step="0.01">
                                 </div>
                                 <div class="form-group">
-                                    <label for="budgetExtension">Budget Extension</label>
-                                    <input type="number" id="budgetExtension" name="budgetExtension" placeholder="0.00"
-                                        step="0.01">
-                                </div>
-                                <div class="form-group">
                                     <label for="utilized">Utilized Budget</label>
                                     <input type="number" id="utilized" name="utilized" placeholder="0.00" step="0.01">
                                 </div>
@@ -159,6 +157,11 @@
                                     <label for="available">Available Budget</label>
                                     <input type="number" id="available" name="available" placeholder="0.00" readonly
                                         class="readonly-field">
+                                </div>
+                                <div class="form-group">
+                                    <label for="budgetExtension">Budget Extension</label>
+                                    <input type="number" id="budgetExtension" name="budgetExtension" placeholder="0.00"
+                                        step="0.01">
                                 </div>
                                 <div class="form-group has-textarea" style="grid-column: span 2;">
                                     <label for="comment">Comment</label>
@@ -564,3 +567,4 @@
 </body>
 
 </html>
+

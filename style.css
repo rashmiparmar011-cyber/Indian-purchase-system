@@ -1724,3 +1724,5 @@ body {
     justify-content: flex-end;
     gap: 8px;
 }
+.nav-item-disabled { pointer-events: none !important; opacity: 0.5 !important; }
+

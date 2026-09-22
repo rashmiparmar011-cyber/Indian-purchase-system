@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>India Purchase System - Reports</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-section">
+                <div class="logo-custom">
+                    <div class="logo-pill">
+                        <div class="pill-left">B</div>
+                        <div class="pill-right">&amp; S</div>
+                    </div>
+                    <div class="logo-text">
+                        <div class="logo-group-text">GROUP</div>
+                        <div class="logo-tagline-text">"Believe in us"</div>
+                    </div>
+                </div>
+            </div>
+            <div class="title-section">
+                <h1>India Purchase System</h1>
+            </div>
+            <div class="user-section">
+                <div class="user-info">
+                    <span class="welcome-text">Welcome,</span>
+                    <span class="username">ANISH <i class="fas fa-caret-down"></i></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Layout -->
+        <div class="main-wrapper">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-list"></i> Purchase Masters <i class="fas fa-chevron-down arrow"></i>
+                            </a>
+                            <ul class="sub-nav-list">
+                                <li><a href="index.html" class="sub-nav-link nav-item-disabled">Item Master</a></li>
+                                <li><a href="index.html" class="sub-nav-link nav-item-disabled">Supplier Master</a></li>
+                                <li><a href="index.html" class="sub-nav-link">Project Master</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link nav-item-disabled">
+                                <i class="fas fa-exchange-alt"></i> Purchase Transactions <i
+                                    class="fas fa-chevron-down arrow"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active">
+                                <i class="fas fa-file-invoice"></i> Purchase Reports <i class="fas fa-chevron-down arrow"></i>
+                            </a>
+                            <ul class="sub-nav-list">
+                                <li><a href="#" id="nav-goods-in" class="sub-nav-link active" onclick="switchReportTab('goods-in'); return false;" style="color: var(--primary-blue); font-weight: bold; background-color: #f5f9fc;">Goods-In Report</a></li>
+                                <li><a href="#" id="nav-finance" class="sub-nav-link" onclick="switchReportTab('finance'); return false;">Finance Report</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="stock_management.html" class="nav-link">
+                                <i class="fas fa-cubes"></i> Goods-In
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="acceptance_material.html" class="nav-link">
+                                <i class="fas fa-clipboard-check"></i> User Acceptance Material
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="finance_management.html" class="nav-link">
+                                <i class="fas fa-coins"></i> Finance Approval
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="sidebar-collapse">
+                    <i class="fas fa-angle-double-left"></i>
+                </div>
+            </aside>
+
+            <!-- Content Area -->
+            <main class="content">
+                <div class="breadcrumb">
+                    <i class="fas fa-file-invoice"></i> Reports <i class="fas fa-chevron-right"></i>
+                    <span class="current" id="reportBreadcrumb">Goods-In Report</span>
+                </div>
+
+                <div id="goodsInReportView">
+                    <div class="filter-card">
+                        <div class="filter-grid">
+                            <div class="form-group">
+                                <label>Company</label>
+                                <select id="filterGoodsCompany">
+                                    <option value="">All</option>
+                                    <option value="LSPL">LSPL</option>
+                                    <option value="GRPL">GRPL</option>
+                                    <option value="GHPL">GHPL</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>PO No.</label>
+                                <input type="text" id="filterGoodsPoNo" placeholder="Search PO...">
+                            </div>
+                            <div class="form-group">
+                                <label>Supplier</label>
+                                <input type="text" id="filterGoodsSupplier" placeholder="Search Supplier...">
+                            </div>
+                            <div class="form-group">
+                                <label>Item ID</label>
+                                <input type="text" id="filterGoodsItemCode" placeholder="Search Item ID...">
+                            </div>
+                            <div class="form-group">
+                                <label>Item Name</label>
+                                <input type="text" id="filterGoodsItemName" placeholder="Search Item Name...">
+                            </div>
+                            <div class="form-group">
+                                <label>Project Name</label>
+                                <input type="text" id="filterGoodsProject" placeholder="Search Project Name...">
+                            </div>
+                        </div>
+                        <div class="filter-actions" style="margin-top: 15px; display: flex; gap: 10px;">
+                            <button type="button" class="btn btn-primary" onclick="renderGoodsInReport()"><i class="fas fa-search"></i> Apply</button>
+                            <button type="button" class="btn btn-secondary" onclick="resetGoodsInFilters()"><i class="fas fa-undo"></i> Reset</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>PO No.</th>
+                                    <th>PO Date</th>
+                                    <th>Item ID</th>
+                                    <th>Item Name</th>
+                                    <th>Req Qty</th>
+                                    <th>Rec Qty</th>
+                                    <th>Balance</th>
+                                    <th>UOM</th>
+                                    <th>Supplier Name</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="goodsInReportTableBody">
+                                <!-- Rows will be injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Finance Report View -->
+                <div id="financeReportView" style="display: none;">
+                    <div class="filter-card">
+                        <div class="filter-grid">
+                            <div class="form-group">
+                                <label>Company</label>
+                                <select id="filterFinanceCompany">
+                                    <option value="">All</option>
+                                    <option value="LSPL">LSPL</option>
+                                    <option value="GRPL">GRPL</option>
+                                    <option value="GHPL">GHPL</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>PO No.</label>
+                                <input type="text" id="filterFinancePoNo" placeholder="Search PO...">
+                            </div>
+                            <div class="form-group">
+                                <label>Payment Status</label>
+                                <select id="filterFinanceStatus">
+                                    <option value="">All Statuses</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Partially Paid">Partially Paid</option>
+                                    <option value="Fully Paid">Fully Paid</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Payment Date</label>
+                                <input type="date" id="filterFinancePayDate">
+                            </div>
+                            <div class="form-group">
+                                <label>PO Start Date</label>
+                                <input type="date" id="filterFinancePoStart">
+                            </div>
+                            <div class="form-group">
+                                <label>PO End Date</label>
+                                <input type="date" id="filterFinancePoEnd">
+                            </div>
+                        </div>
+                        <div class="filter-actions" style="margin-top: 15px; display: flex; gap: 10px;">
+                            <button type="button" class="btn btn-primary" onclick="renderFinanceReport()"><i class="fas fa-search"></i> Apply</button>
+                            <button type="button" class="btn btn-secondary" onclick="resetFinanceFilters()"><i class="fas fa-undo"></i> Reset</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>PO No.</th>
+                                    <th>PO Date</th>
+                                    <th>Supplier</th>
+                                    <th>Total Cost</th>
+                                    <th>Amount Paid</th>
+                                    <th>Balance Due</th>
+                                    <th>Payment Term</th>
+                                    <th>Payment Status</th>
+                                    <th>Due Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="financeReportTableBody">
+                                <!-- Rows will be injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="shared_data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGoodsInReport();
+            renderFinanceReport();
+            if (window.location.hash === '#finance') {
+                switchReportTab('finance');
+            } else {
+                switchReportTab('goods-in');
+            }
+        });
+
+        function switchReportTab(tabName) {
+            const navGoodsIn = document.getElementById('nav-goods-in');
+            const navFinance = document.getElementById('nav-finance');
+            const activeStyle = "color: var(--primary-blue); font-weight: bold; background-color: #f5f9fc;";
+            
+            if (tabName === 'goods-in') {
+                document.getElementById('goodsInReportView').style.display = 'block';
+                document.getElementById('financeReportView').style.display = 'none';
+                
+                navGoodsIn.classList.add('active');
+                navGoodsIn.style.cssText = activeStyle;
+                navFinance.classList.remove('active');
+                navFinance.style.cssText = "";
+                
+                document.getElementById('reportBreadcrumb').textContent = "Goods-In Report";
+            } else {
+                document.getElementById('goodsInReportView').style.display = 'none';
+                document.getElementById('financeReportView').style.display = 'block';
+                
+                navGoodsIn.classList.remove('active');
+                navGoodsIn.style.cssText = "";
+                navFinance.classList.add('active');
+                navFinance.style.cssText = activeStyle;
+                
+                document.getElementById('reportBreadcrumb').textContent = "Finance Report";
+            }
+        }
+
+        function resetGoodsInFilters() {
+            document.getElementById('filterGoodsCompany').value = '';
+            document.getElementById('filterGoodsPoNo').value = '';
+            document.getElementById('filterGoodsSupplier').value = '';
+            document.getElementById('filterGoodsItemName').value = '';
+            document.getElementById('filterGoodsItemCode').value = '';
+            document.getElementById('filterGoodsProject').value = '';
+            renderGoodsInReport();
+        }
+
+        function renderGoodsInReport() {
+            const compSearch = (document.getElementById('filterGoodsCompany').value || '');
+            const poSearch = (document.getElementById('filterGoodsPoNo').value || '').toLowerCase();
+            const supSearch = (document.getElementById('filterGoodsSupplier').value || '').toLowerCase();
+            const itemNameSearch = (document.getElementById('filterGoodsItemName').value || '').toLowerCase();
+            const itemCodeSearch = (document.getElementById('filterGoodsItemCode').value || '').toLowerCase();
+            const projectSearch = (document.getElementById('filterGoodsProject').value || '').toLowerCase();
+            
+            const tbody = document.getElementById('goodsInReportTableBody');
+            
+            const items = window.PurchaseData.getGoodsInLineItems();
+            const filtered = items.filter(i => {
+                const matchComp = compSearch ? (i.company === compSearch) : true;
+                const matchPo = i.poNo.toLowerCase().includes(poSearch);
+                const matchSup = (i.supplierName || '').toLowerCase().includes(supSearch);
+                const matchItemName = (i.itemName || '').toLowerCase().includes(itemNameSearch);
+                const matchItemCode = (i.itemKey || '').toLowerCase().includes(itemCodeSearch);
+                const matchProject = projectSearch ? ((i.projectName || '').toLowerCase().includes(projectSearch)) : true;
+                
+                return matchComp && matchPo && matchSup && matchItemName && matchItemCode && matchProject;
+            });
+            
+            tbody.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 20px; color: #64748b;">No data matches filter.</td></tr>';
+                return;
+            }
+            
+            filtered.forEach(i => {
+                const tr = document.createElement('tr');
+                const isRej = (i.userAcceptanceStatus === 'Rejected' || i.status === 'Rejected');
+                const stat = isRej ? 'Rejected' : (i.status === 'Full' ? 'Complete' : i.status);
+                
+                let sClass = 'new';
+                if (stat === 'Complete') sClass = 'complete';
+                else if (stat === 'Partial') sClass = 'partial';
+                else if (stat === 'Rejected') sClass = 'rejected';
+                
+                let bClass = 'zero';
+                if (i.balance > 0) bClass = 'positive';
+                
+                tr.innerHTML = `
+                    <td><strong>${i.poNo}</strong></td>
+                    <td>${i.poDate}</td>
+                    <td><span class="badge open" style="font-size: 10px;">${i.itemKey}</span></td>
+                    <td>${i.itemName}</td>
+                    <td>${i.reqQty}</td>
+                    <td style="color: #16a34a; font-weight: 700;">${i.recQty}</td>
+                    <td><span class="balance-badge ${bClass}">${i.balance}</span></td>
+                    <td>${i.uom}</td>
+                    <td>${i.supplierName}</td>
+                    <td><span class="badge ${sClass}">${stat}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function resetFinanceFilters() {
+            document.getElementById('filterFinanceCompany').value = '';
+            document.getElementById('filterFinancePoNo').value = '';
+            document.getElementById('filterFinanceStatus').value = '';
+            document.getElementById('filterFinancePayDate').value = '';
+            document.getElementById('filterFinancePoStart').value = '';
+            document.getElementById('filterFinancePoEnd').value = '';
+            renderFinanceReport();
+        }
+
+        function renderFinanceReport() {
+            const compSearch = (document.getElementById('filterFinanceCompany').value || '');
+            const poSearch = (document.getElementById('filterFinancePoNo').value || '').toLowerCase();
+            const statusFilter = document.getElementById('filterFinanceStatus').value;
+            const payDate = document.getElementById('filterFinancePayDate').value;
+            const poStart = document.getElementById('filterFinancePoStart').value;
+            const poEnd = document.getElementById('filterFinancePoEnd').value;
+            const tbody = document.getElementById('financeReportTableBody');
+            
+            const pos = window.PurchaseData.getAllPOs();
+            const filtered = pos.filter(p => {
+                const matchComp = compSearch ? (p.company === compSearch) : true;
+                const matchPo = p.poNo.toLowerCase().includes(poSearch);
+                const matchStatus = statusFilter ? p.paymentStatus === statusFilter : true;
+                const matchPayDate = payDate ? (p.paymentDate === payDate) : true;
+                
+                let matchPoStart = true;
+                let matchPoEnd = true;
+                if (poStart) matchPoStart = p.poDate >= poStart;
+                if (poEnd) matchPoEnd = p.poDate <= poEnd;
+                
+                return matchComp && matchPo && matchStatus && matchPayDate && matchPoStart && matchPoEnd;
+            });
+            
+            tbody.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 20px; color: #64748b;">No data matches filter.</td></tr>';
+                return;
+            }
+            
+            filtered.forEach(p => {
+                const tr = document.createElement('tr');
+                const total = Number(p.totalCost) || 0;
+                const paid = Number(p.amountPaid) || 0;
+                const bal = Math.max(0, total - paid);
+                
+                let pClass = 'unpaid';
+                if (p.paymentStatus === 'Fully Paid') pClass = 'paid';
+                else if (p.paymentStatus === 'Partially Paid') pClass = 'partial';
+                
+                tr.innerHTML = `
+                    <td><strong>${p.poNo}</strong></td>
+                    <td>${p.poDate}</td>
+                    <td><strong>${p.supplierName}</strong></td>
+                    <td style="text-align: right; font-weight: 600;">₹${total.toLocaleString('en-IN')}</td>
+                    <td style="text-align: right; color: #16a34a; font-weight: 700;">₹${paid.toLocaleString('en-IN')}</td>
+                    <td style="text-align: right; color: ${bal === 0 ? '#64748b' : '#b45309'}; font-weight: 700;">₹${bal.toLocaleString('en-IN')}</td>
+                    <td>${p.paymentTerm || 'Full Payment'}</td>
+                    <td><span class="badge ${pClass}">${p.paymentStatus || 'Pending'}</span></td>
+                    <td>${p.dueDate || '—'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>
+
