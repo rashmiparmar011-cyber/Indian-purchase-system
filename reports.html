@@ -129,9 +129,14 @@
                                 <input type="text" id="filterGoodsProject" placeholder="Search Project Name...">
                             </div>
                         </div>
-                        <div class="filter-actions" style="margin-top: 15px; display: flex; gap: 10px;">
-                            <button type="button" class="btn btn-primary" onclick="renderGoodsInReport()"><i class="fas fa-search"></i> Apply</button>
-                            <button type="button" class="btn btn-secondary" onclick="resetGoodsInFilters()"><i class="fas fa-undo"></i> Reset</button>
+                        <div class="filter-actions" style="margin-top: 15px; display: flex; gap: 10px; justify-content: space-between;">
+                            <div style="display: flex; gap: 10px;">
+                                <button type="button" class="btn btn-primary" onclick="renderGoodsInReport()"><i class="fas fa-search"></i> Apply</button>
+                                <button type="button" class="btn btn-secondary" onclick="resetGoodsInFilters()"><i class="fas fa-undo"></i> Reset</button>
+                            </div>
+                            <button type="button" class="btn btn-export" onclick="exportGoodsInReport()" style="background: #16a34a; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
+                                <i class="fas fa-file-export"></i> Export
+                            </button>
                         </div>
                     </div>
                     <div class="table-container">
@@ -147,7 +152,12 @@
                                     <th>Balance</th>
                                     <th>UOM</th>
                                     <th>Supplier Name</th>
+                                    <th>Batch Number</th>
+                                    <th>Expiry Date</th>
+                                    <th>Accepted By</th>
+                                    <th>Rejected By</th>
                                     <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody id="goodsInReportTableBody">
@@ -196,9 +206,14 @@
                                 <input type="date" id="filterFinancePoEnd">
                             </div>
                         </div>
-                        <div class="filter-actions" style="margin-top: 15px; display: flex; gap: 10px;">
-                            <button type="button" class="btn btn-primary" onclick="renderFinanceReport()"><i class="fas fa-search"></i> Apply</button>
-                            <button type="button" class="btn btn-secondary" onclick="resetFinanceFilters()"><i class="fas fa-undo"></i> Reset</button>
+                        <div class="filter-actions" style="margin-top: 15px; display: flex; gap: 10px; justify-content: space-between;">
+                            <div style="display: flex; gap: 10px;">
+                                <button type="button" class="btn btn-primary" onclick="renderFinanceReport()"><i class="fas fa-search"></i> Apply</button>
+                                <button type="button" class="btn btn-secondary" onclick="resetFinanceFilters()"><i class="fas fa-undo"></i> Reset</button>
+                            </div>
+                            <button type="button" class="btn btn-export" onclick="exportFinanceReport()" style="background: #16a34a; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
+                                <i class="fas fa-file-export"></i> Export
+                            </button>
                         </div>
                     </div>
                     <div class="table-container">
@@ -214,6 +229,7 @@
                                     <th>Payment Term</th>
                                     <th>Payment Status</th>
                                     <th>Due Date</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody id="financeReportTableBody">
@@ -318,6 +334,11 @@
                 let bClass = 'zero';
                 if (i.balance > 0) bClass = 'positive';
                 
+                const batchNos = (i.batches || []).map(b => b.batchNo).join(', ') || '-';
+                const expiryDates = (i.batches || []).map(b => b.expiryDate).join(', ') || '-';
+                const acceptedBy = i.userAcceptanceStatus === 'Accepted' ? (i.acceptedBy || i.requestedBy || 'System') : '-';
+                const rejectedBy = (i.userAcceptanceStatus === 'Rejected' || i.status === 'Rejected') ? (i.rejectedBy || i.requestedBy || 'System') : '-';
+                
                 tr.innerHTML = `
                     <td><strong>${i.poNo}</strong></td>
                     <td>${i.poDate}</td>
@@ -328,7 +349,16 @@
                     <td><span class="balance-badge ${bClass}">${i.balance}</span></td>
                     <td>${i.uom}</td>
                     <td>${i.supplierName}</td>
+                    <td>${batchNos}</td>
+                    <td>${expiryDates}</td>
+                    <td>${acceptedBy}</td>
+                    <td>${rejectedBy}</td>
                     <td><span class="badge ${sClass}">${stat}</span></td>
+                    <td style="text-align: center;">
+                        <button class="action-btn" style="background: #3b82f6; border-color: #2563eb;" onclick="viewPO('${i.poNo}')" title="View PO">
+                            <i class="fas fa-file-pdf"></i> View PO
+                        </button>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -395,9 +425,72 @@
                     <td>${p.paymentTerm || 'Full Payment'}</td>
                     <td><span class="badge ${pClass}">${p.paymentStatus || 'Pending'}</span></td>
                     <td>${p.dueDate || '—'}</td>
+                    <td style="text-align: center;">
+                        <button class="action-btn" style="background: #3b82f6; border-color: #2563eb;" onclick="viewPO('${p.poNo}')" title="View PO">
+                            <i class="fas fa-file-pdf"></i> View PO
+                        </button>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
+        }
+
+        function exportGoodsInReport() {
+            const table = document.querySelector('#goodsInReportView .data-table');
+            if (!table) return;
+            
+            let csvContent = "";
+            const rows = table.querySelectorAll('tr');
+            
+            rows.forEach(row => {
+                let rowData = [];
+                const cols = row.querySelectorAll('th, td');
+                // Skip the last column (Action)
+                for (let i = 0; i < cols.length - 1; i++) {
+                    let text = cols[i].innerText.replace(/"/g, '""').replace(/\n/g, ' ');
+                    rowData.push(`"${text}"`);
+                }
+                csvContent += rowData.join(',') + "\n";
+            });
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", "Goods_In_Report.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function exportFinanceReport() {
+            const table = document.querySelector('#financeReportView .data-table');
+            if (!table) return;
+            
+            let csvContent = "";
+            const rows = table.querySelectorAll('tr');
+            
+            rows.forEach(row => {
+                let rowData = [];
+                const cols = row.querySelectorAll('th, td');
+                // Skip the last column (Action)
+                for (let i = 0; i < cols.length - 1; i++) {
+                    let text = cols[i].innerText.replace(/"/g, '""').replace(/\n/g, ' ');
+                    rowData.push(`"${text}"`);
+                }
+                csvContent += rowData.join(',') + "\n";
+            });
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", "Finance_Report.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>

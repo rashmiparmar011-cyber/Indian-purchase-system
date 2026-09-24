@@ -318,6 +318,10 @@
                                 <th style="text-align: right;">BALANCE</th>
                                 <th>UOM</th>
                                 <th>SUPPLIER NAME</th>
+                                <th>BATCH NUMBER</th>
+                                <th>EXPIRY DATE</th>
+                                <th>ACCEPTED BY</th>
+                                <th>REJECTED BY</th>
                                 <th>STATUS</th>
                                 <th id="colHeaderRejection">REASON OF REJECTION</th>
                                 <th style="text-align: center;">ACTION</th>
@@ -715,7 +719,7 @@
                 return true;
             });
 
-            const colSpanCount = showRejectionCol ? 12 : 11;
+            const colSpanCount = showRejectionCol ? 16 : 15;
             if (filtered.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="${colSpanCount}" style="text-align: center; padding: 30px; color: #64748b;">
                     <i class="fas fa-inbox" style="font-size: 28px; color: #cbd5e1; display: block; margin-bottom: 6px;"></i>
@@ -745,6 +749,11 @@
                     rejectionCellHtml = `<td>${rejectionReasonContent}</td>`;
                 }
 
+                const batchNos = (item.batches || []).map(b => b.batchNo).join(', ') || '-';
+                const expiryDates = (item.batches || []).map(b => b.expiryDate).join(', ') || '-';
+                const acceptedBy = item.userAcceptanceStatus === 'Accepted' ? (item.acceptedBy || item.requestedBy || 'System') : '-';
+                const rejectedBy = isRejected ? (item.rejectedBy || item.requestedBy || 'System') : '-';
+
                 tr.innerHTML = `
                     <td><strong>${item.poNo}</strong></td>
                     <td>${item.poDate}</td>
@@ -757,12 +766,21 @@
                     </td>
                     <td>${item.uom}</td>
                     <td>${item.supplierName}</td>
+                    <td>${batchNos}</td>
+                    <td>${expiryDates}</td>
+                    <td>${acceptedBy}</td>
+                    <td>${rejectedBy}</td>
                     <td>${statusBadgeHtml}</td>
                     ${rejectionCellHtml}
                     <td style="text-align: center;">
-                        <button class="action-btn action-btn-accept" onclick="openAcceptModal('${item.poNo}', '${item.itemKey}')" title="${isRejected ? 'View Rejected Batches & Re-Receive' : 'Receive & Add Batch'}" style="${isRejected ? 'background: #dc2626; border-color: #b91c1c;' : ''}">
-                            <i class="fas fa-boxes"></i> ${isRejected ? 'Inspect / Re-Receive' : 'Accept'}
-                        </button>
+                        <div style="display: flex; gap: 6px; justify-content: center; align-items: center; flex-wrap: wrap;">
+                            <button class="action-btn action-btn-accept" onclick="openAcceptModal('${item.poNo}', '${item.itemKey}')" title="${isRejected ? 'View Rejected Batches & Re-Receive' : 'Receive & Add Batch'}" style="${isRejected ? 'background: #dc2626; border-color: #b91c1c;' : ''}">
+                                <i class="fas fa-boxes"></i> ${isRejected ? 'Inspect / Re-Receive' : 'Accept'}
+                            </button>
+                            <button class="action-btn" style="background: #3b82f6; border-color: #2563eb;" onclick="viewPO('${item.poNo}')" title="View PO">
+                                <i class="fas fa-file-pdf"></i> View PO
+                            </button>
+                        </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1245,15 +1263,21 @@
         function exportGoodsInData() {
             const data = window.PurchaseData.getGoodsInLineItems();
             const showRejectionCol = (currentTab !== 'New' && currentTab !== 'Partial' && currentTab !== 'Full');
-            const headers = ["PO No", "PO Date", "Item Key", "Item Name", "Req Qty", "Rec Qty", "Balance", "UOM", "Supplier Name", "Status"];
+            const headers = ["PO No", "PO Date", "Item Key", "Item Name", "Req Qty", "Rec Qty", "Balance", "UOM", "Supplier Name", "Batch Number", "Expiry Date", "Accepted By", "Rejected By", "Status"];
             if (showRejectionCol) {
                 headers.push("Reason of Rejection");
             }
             const rows = data.map(i => {
                 const isRej = (i.userAcceptanceStatus === 'Rejected' || i.status === 'Rejected');
                 const stat = isRej ? 'Rejected' : (i.status === 'Full' ? 'Complete' : i.status);
+                
+                const batchNos = (i.batches || []).map(b => b.batchNo).join('; ') || '-';
+                const expiryDates = (i.batches || []).map(b => b.expiryDate).join('; ') || '-';
+                const acceptedBy = i.userAcceptanceStatus === 'Accepted' ? (i.acceptedBy || i.requestedBy || 'System') : '-';
+                const rejectedBy = isRej ? (i.rejectedBy || i.requestedBy || 'System') : '-';
+                
                 const row = [
-                    i.poNo, i.poDate, i.itemKey, `"${i.itemName}"`, i.reqQty, i.recQty, i.balance, i.uom, `"${i.supplierName}"`, stat
+                    i.poNo, i.poDate, i.itemKey, `"${i.itemName}"`, i.reqQty, i.recQty, i.balance, i.uom, `"${i.supplierName}"`, `"${batchNos}"`, `"${expiryDates}"`, `"${acceptedBy}"`, `"${rejectedBy}"`, stat
                 ];
                 if (showRejectionCol) {
                     const reason = (isRej && i.acceptanceRemarks) ? i.acceptanceRemarks.replace(/"/g, '""') : '';

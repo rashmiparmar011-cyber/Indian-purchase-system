@@ -579,5 +579,39 @@ class PurchaseDataManager {
 // Global instance
 window.PurchaseData = new PurchaseDataManager();
 
+// Global PO Preview Modal Injector
+document.addEventListener('DOMContentLoaded', () => {
+    const modalHtml = `
+    <!-- PO Preview Modal -->
+    <div class="modal-overlay" id="poPreviewModal">
+        <div class="modal-box" style="max-width: 800px; width: 90%;">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-invoice"></i> Purchase Order — <span id="poModalTitle"></span></h3>
+                <button class="modal-close-btn" onclick="closePoModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="poModalContent" style="text-align: center; max-height: 70vh; overflow-y: auto; padding: 10px;">
+                <img src="po_document_sample.png" alt="Purchase Order Document" style="max-width: 100%; border: 1px solid #e2e8f0; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-export" onclick="alert('Downloading PO PDF...')">
+                    <i class="fas fa-download"></i> Download PO
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="closePoModal()">Close</button>
+            </div>
+        </div>
+    </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+});
+
+window.viewPO = function(poNo) {
+    document.getElementById('poModalTitle').textContent = poNo;
+    document.getElementById('poPreviewModal').classList.add('active');
+};
+
+window.closePoModal = function() {
+    document.getElementById('poPreviewModal').classList.remove('active');
+};
+
 
 
