@@ -297,15 +297,21 @@
                             <i class="fas fa-ban" style="color: #dc2626;"></i> Rejected <span class="tab-badge"
                                 id="badgeRejected">0</span>
                         </button>
+                        <button type="button" class="status-tab tab-foc" data-status="FOC"
+                            onclick="switchGoodsInTab('FOC')">
+                            <i class="fas fa-gift" style="color: #0ea5e9;"></i> FOC Samples <span class="tab-badge"
+                                id="badgeFoc">0</span>
+                        </button>
                     </div>
                     <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-primary" id="btnRecordFoc" style="display: none;" onclick="openFocModal()"><i class="fas fa-plus"></i> Record FOC Sample</button>
                         <button class="btn btn-export" onclick="exportGoodsInData()"><i class="fas fa-file-export"></i>
                             Export</button>
                     </div>
                 </div>
 
                 <!-- Main Line Item Table -->
-                <div class="table-container">
+                <div class="table-container" id="mainTableContainer">
                     <table class="data-table" id="goodsInTable">
                         <thead>
                             <tr>
@@ -328,6 +334,31 @@
                             </tr>
                         </thead>
                         <tbody id="goodsInTableBody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- FOC Samples Table Container -->
+                <div class="table-container" id="focTableContainer" style="display: none;">
+                    <table class="data-table" id="focTable">
+                        <thead>
+                            <tr>
+                                <th>FOC ENTRY NO.</th>
+                                <th>PO NUMBER</th>
+                                <th>ENTRY DATE</th>
+                                <th>SUPPLIER</th>
+                                <th>PRODUCT NAME</th>
+                                <th>QTY</th>
+                                <th>UOM</th>
+                                <th>BATCH NO.</th>
+                                <th>MFG DATE</th>
+                                <th>EXPIRY DATE</th>
+                                <th>PURPOSE</th>
+                                <th style="text-align: center;">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody id="focTableBody">
                             <!-- Populated dynamically -->
                         </tbody>
                     </table>
@@ -618,9 +649,264 @@
         </div>
     </div>
 
+    <!-- FOC Sample Entry Modal -->
+    <style>
+        .foc-form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .foc-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .foc-form-group label {
+            font-weight: 600;
+            font-size: 12px;
+            color: #475569;
+            margin: 0;
+            padding: 0;
+            border: none;
+            background: none;
+            text-align: left;
+            width: auto;
+        }
+        .foc-form-group input, .foc-form-group select, .foc-form-group textarea {
+            padding: 8px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-size: 13px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .foc-form-group input:focus, .foc-form-group select:focus, .foc-form-group textarea:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+        .foc-form-group input:disabled {
+            background-color: #f1f5f9;
+            color: #94a3b8;
+        }
+        @media (max-width: 768px) {
+            .foc-form-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 480px) {
+            .foc-form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <div class="modal-overlay" id="focModal">
+        <div class="modal-box" style="max-width: 800px; width: 95%;">
+            <div class="modal-header">
+                <h3><i class="fas fa-gift"></i> Record FOC Sample</h3>
+                <button class="modal-close-btn" onclick="closeFocModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="focForm">
+                    <div class="foc-form-grid">
+                        <div class="foc-form-group">
+                            <label>PO Number</label>
+                            <input type="text" id="focPoNumber" placeholder="PO Number (Optional)">
+                        </div>
+                        <div class="foc-form-group">
+                            <label>Supplier <span style="color:red">*</span></label>
+                            <input type="text" id="focSupplier" required placeholder="Supplier Name">
+                        </div>
+                        
+                        <div class="foc-form-group">
+                            <label>Received By <span style="color:red">*</span></label>
+                            <input type="text" id="focReceivedBy" required placeholder="Receiver Name">
+                        </div>
+                        <div class="foc-form-group">
+                            <label>Product Code</label>
+                            <input type="text" id="focProductCode" placeholder="Code">
+                        </div>
+                        <div class="foc-form-group">
+                            <label>Product Name <span style="color:red">*</span></label>
+                            <input type="text" id="focProductName" required placeholder="Name">
+                        </div>
+
+                        <div class="foc-form-group">
+                            <label>Quantity <span style="color:red">*</span></label>
+                            <input type="number" id="focQuantity" required min="1">
+                        </div>
+                        <div class="foc-form-group">
+                            <label>UOM <span style="color:red">*</span></label>
+                            <input type="text" id="focUom" required placeholder="e.g. Piece, Vial">
+                        </div>
+                        <div class="foc-form-group">
+                            <label>Batch/Lot Number <span style="color:red">*</span></label>
+                            <input type="text" id="focBatchNo" required placeholder="Batch No">
+                        </div>
+                        
+                        <div class="foc-form-group">
+                            <label>Entry Date <span style="color:red">*</span></label>
+                            <input type="date" id="focEntryDate" required>
+                        </div>
+
+                        <div class="foc-form-group">
+                            <label>Manufacturing Date</label>
+                            <input type="date" id="focMfgDate">
+                        </div>
+                        <div class="foc-form-group">
+                            <label>Expiry Date</label>
+                            <input type="date" id="focExpiryDate">
+                        </div>
+                        <div class="foc-form-group">
+                            <label>Storage Location <span style="color:red">*</span></label>
+                            <input type="text" id="focLocation" required placeholder="Location">
+                        </div>
+
+                        <div class="foc-form-group">
+                            <label>Sample Purpose <span style="color:red">*</span></label>
+                            <select id="focPurpose" required>
+                                <option value="Evaluation">Evaluation</option>
+                                <option value="Testing">Testing</option>
+                                <option value="Development">Development</option>
+                                <option value="Quality Checks">Quality Checks</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="foc-form-group">
+                            <label>Unit Cost</label>
+                            <input type="number" value="0" disabled>
+                        </div>
+                        <div class="foc-form-group">
+                            <label>Total Cost</label>
+                            <input type="number" value="0" disabled>
+                        </div>
+                    </div>
+                    <div class="foc-form-group">
+                        <label>Reason for Sample</label>
+                        <textarea id="focReason" rows="2" placeholder="Provide detailed reason..."></textarea>
+                    </div>
+                    <div class="foc-form-grid" style="margin-top: 16px;">
+                        <div class="foc-form-group">
+                            <label>PO Attachment</label>
+                            <input type="file" id="focPoAttachment" style="padding: 6px; background-color: #fff;">
+                        </div>
+                        <div class="foc-form-group">
+                            <label>Invoice/Challan Attachment <span style="color:red">*</span></label>
+                            <input type="file" id="focAttachment" required style="padding: 6px; background-color: #fff;">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="submitFocSample()">Save FOC Entry</button>
+                <button type="button" class="btn btn-secondary" onclick="closeFocModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="shared_data.js"></script>
     <script>
+        function openFocModal() {
+            document.getElementById('focForm').reset();
+            document.getElementById('focEntryDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('focModal').classList.add('active');
+        }
+
+        function closeFocModal() {
+            document.getElementById('focModal').classList.remove('active');
+        }
+
+        function submitFocSample() {
+            const form = document.getElementById('focForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const sample = {
+                poNumber: document.getElementById('focPoNumber').value || 'N/A',
+                entryDate: document.getElementById('focEntryDate').value,
+                supplier: document.getElementById('focSupplier').value,
+                receivedBy: document.getElementById('focReceivedBy').value,
+                productCode: document.getElementById('focProductCode').value,
+                productName: document.getElementById('focProductName').value,
+                quantity: document.getElementById('focQuantity').value,
+                uom: document.getElementById('focUom').value,
+                batchNo: document.getElementById('focBatchNo').value,
+                mfgDate: document.getElementById('focMfgDate').value,
+                expiryDate: document.getElementById('focExpiryDate').value,
+                location: document.getElementById('focLocation').value,
+                purpose: document.getElementById('focPurpose').value,
+                reason: document.getElementById('focReason').value,
+                attachment: document.getElementById('focAttachment').files.length > 0 ? document.getElementById('focAttachment').files[0].name : '',
+                poAttachment: document.getElementById('focPoAttachment').files.length > 0 ? document.getElementById('focPoAttachment').files[0].name : ''
+            };
+
+            const entryNo = window.PurchaseData.addFocSample(sample);
+            alert(`FOC Sample recorded successfully! Entry No: ${entryNo}`);
+            closeFocModal();
+            renderFocTable();
+        }
+
+        function renderFocTable() {
+            const tbody = document.getElementById('focTableBody');
+            tbody.innerHTML = '';
+            
+            const allItems = window.PurchaseData.focData || [];
+            document.getElementById('badgeFoc').textContent = allItems.length;
+
+            const fCompany = (document.getElementById('filterCompany').value || '').trim();
+            const fSupplier = document.getElementById('filterSupplier').value.trim().toLowerCase();
+            const fItem = document.getElementById('filterItemName').value.trim().toLowerCase();
+
+            const filtered = allItems.filter(item => {
+                if (fSupplier && !item.supplier.toLowerCase().includes(fSupplier)) return false;
+                if (fItem && !item.productName.toLowerCase().includes(fItem)) return false;
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="11" style="text-align: center; padding: 30px; color: #64748b;">
+                    <i class="fas fa-inbox" style="font-size: 28px; color: #cbd5e1; display: block; margin-bottom: 6px;"></i>
+                    No FOC samples found.
+                </td></tr>`;
+                document.getElementById('goodsInPaginationInfo').textContent = 'Showing 0 to 0 of 0 records';
+                return;
+            }
+
+            filtered.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${item.focEntryNo}</strong></td>
+                    <td>${item.poNumber || 'N/A'}</td>
+                    <td>${item.entryDate}</td>
+                    <td>${item.supplier}</td>
+                    <td><strong>${item.productName}</strong><br><span style="font-size: 10px; color: #64748b;">${item.productCode}</span></td>
+                    <td style="text-align: right; font-weight: 600;">${item.quantity}</td>
+                    <td>${item.uom}</td>
+                    <td>${item.batchNo}</td>
+                    <td>${item.mfgDate || '-'}</td>
+                    <td>${item.expiryDate || '-'}</td>
+                    <td><span class="badge new">${item.purpose}</span></td>
+                    <td style="text-align: center;">
+                        <div style="display: flex; gap: 4px; justify-content: center; flex-wrap: wrap;">
+                            <button class="action-btn" style="background: #3b82f6; border-color: #2563eb;" title="View Invoice" onclick="alert('Viewing Invoice: ${item.attachment}')">
+                                <i class="fas fa-file-invoice"></i>
+                            </button>
+                            <button class="action-btn" style="background: #8b5cf6; border-color: #7c3aed;" title="View PO" onclick="viewPO('${item.poNumber && item.poNumber !== 'N/A' ? item.poNumber : item.focEntryNo}')">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('goodsInPaginationInfo').textContent = `Showing 1 to ${filtered.length} of ${filtered.length} records`;
+        }
+
         let currentTab = 'All';
         let currentPoNo = null;
         let currentItemKey = null;
@@ -642,9 +928,24 @@
             });
             const statusDropdown = document.getElementById('filterStatus');
             if (statusDropdown) {
-                statusDropdown.value = (status === 'All') ? '' : status;
+                statusDropdown.value = (status === 'All' || status === 'FOC') ? '' : status;
             }
-            renderGoodsInTable();
+            
+            const mainTable = document.getElementById('mainTableContainer');
+            const focTable = document.getElementById('focTableContainer');
+            const btnRecordFoc = document.getElementById('btnRecordFoc');
+            
+            if (status === 'FOC') {
+                mainTable.style.display = 'none';
+                focTable.style.display = 'block';
+                btnRecordFoc.style.display = 'inline-flex';
+                renderFocTable();
+            } else {
+                mainTable.style.display = 'block';
+                focTable.style.display = 'none';
+                btnRecordFoc.style.display = 'none';
+                renderGoodsInTable();
+            }
         }
 
         function onStatusFilterDropdownChange() {
@@ -653,7 +954,11 @@
         }
 
         function applyGoodsInFilters() {
-            renderGoodsInTable();
+            if (currentTab === 'FOC') {
+                renderFocTable();
+            } else {
+                renderGoodsInTable();
+            }
         }
 
         function clearGoodsInFilters() {
@@ -683,12 +988,15 @@
             const countRejected = allItems.filter(i => (i.userAcceptanceStatus === 'Rejected' || i.status === 'Rejected')).length;
             const countPending = allItems.filter(i => (i.status === 'New' || i.status === 'Partial') && i.userAcceptanceStatus !== 'Rejected').length;
             const countComplete = allItems.filter(i => i.status === 'Full' && i.userAcceptanceStatus !== 'Rejected').length;
+            const countFoc = window.PurchaseData.focData ? window.PurchaseData.focData.length : 0;
 
             document.getElementById('badgeAll').textContent = countAll;
             document.getElementById('badgePending').textContent = countPending;
             document.getElementById('badgeComplete').textContent = countComplete;
             const badgeRej = document.getElementById('badgeRejected');
             if (badgeRej) badgeRej.textContent = countRejected;
+            const badgeFoc = document.getElementById('badgeFoc');
+            if (badgeFoc) badgeFoc.textContent = countFoc;
 
             // Filter
             const fCompany = (document.getElementById('filterCompany').value || '').trim();

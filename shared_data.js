@@ -283,6 +283,76 @@ const DEFAULT_PURCHASE_DATA = [
 class PurchaseDataManager {
     constructor() {
         this.data = this.loadData();
+        this.focData = this.loadFocData();
+    }
+
+    loadFocData() {
+        try {
+            const raw = localStorage.getItem('PurchaseData_FOC');
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (parsed && parsed.length > 0) {
+                    return parsed;
+                }
+            }
+        } catch (e) {
+            console.error("Error loading FOC data:", e);
+        }
+
+        const defaultSamples = [
+            {
+                focEntryNo: "FOC-389102",
+                poNumber: "N/A",
+                entryDate: "2026-09-25",
+                supplier: "Biochem Labs",
+                receivedBy: "Anish Patel",
+                productCode: "SMPL-01",
+                productName: "Ascorbic Acid Standard",
+                quantity: "2",
+                uom: "Vial",
+                batchNo: "BX-9901",
+                mfgDate: "2026-08-01",
+                expiryDate: "2027-08-01",
+                location: "Lab Shelf A",
+                purpose: "Testing",
+                reason: "For method validation testing.",
+                attachment: "challan_389102.pdf",
+                poAttachment: ""
+            },
+            {
+                focEntryNo: "FOC-411209",
+                poNumber: "PO-DUMMY-99",
+                entryDate: "2026-09-23",
+                supplier: "Apex Hardware Systems",
+                receivedBy: "John Doe",
+                productCode: "T-045",
+                productName: "Safety Goggles (Demo)",
+                quantity: "5",
+                uom: "Piece",
+                batchNo: "DEMO-01",
+                mfgDate: "",
+                expiryDate: "",
+                location: "Warehouse QC Desk",
+                purpose: "Evaluation",
+                reason: "Evaluating new vendor safety goggles before bulk order.",
+                attachment: "challan_411209.pdf",
+                poAttachment: "dummy_po_99.pdf"
+            }
+        ];
+        
+        localStorage.setItem('PurchaseData_FOC', JSON.stringify(defaultSamples));
+        return defaultSamples;
+    }
+
+    saveFocData() {
+        localStorage.setItem('PurchaseData_FOC', JSON.stringify(this.focData));
+    }
+
+    addFocSample(sample) {
+        sample.focEntryNo = 'FOC-' + Math.floor(100000 + Math.random() * 900000);
+        this.focData.push(sample);
+        this.saveFocData();
+        return sample.focEntryNo;
     }
 
     loadData() {
