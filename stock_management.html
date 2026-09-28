@@ -221,18 +221,7 @@
                                 <option value="GHPL">GHPL</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="filterPoNo">PO No.</label>
-                            <input type="text" id="filterPoNo" list="poDatalist"
-                                placeholder="Search PO No (e.g. PO01)..." oninput="applyGoodsInFilters()">
-                            <datalist id="poDatalist">
-                                <option value="PO01">
-                                <option value="PO02">
-                                <option value="PO03">
-                                <option value="PO04">
-                                <option value="PO05">
-                            </datalist>
-                        </div>
+
                         <div class="form-group">
                             <label for="filterItemId">Item ID</label>
                             <input type="text" id="filterItemId" placeholder="Search Item ID..." oninput="applyGoodsInFilters()">
@@ -252,15 +241,7 @@
                                 <option value="Industrial Digital Calipers">
                             </datalist>
                         </div>
-                        <div class="form-group">
-                            <label for="filterStatus">Status</label>
-                            <select id="filterStatus" onchange="onStatusFilterDropdownChange()">
-                                <option value="">All Statuses</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Full">Full / Complete</option>
-                                <option value="Rejected">Rejected</option>
-                            </select>
-                        </div>
+
                         <div class="form-group">
                             <label for="filterSupplier">Supplier</label>
                             <input type="text" id="filterSupplier" placeholder="Search Supplier..."
@@ -715,39 +696,39 @@
                             <input type="text" id="focPoNumber" placeholder="PO Number (Optional)">
                         </div>
                         <div class="foc-form-group">
-                            <label>Supplier <span style="color:red">*</span></label>
-                            <input type="text" id="focSupplier" required placeholder="Supplier Name">
+                            <label>Supplier</label>
+                            <input type="text" id="focSupplier" placeholder="Supplier Name">
                         </div>
                         
                         <div class="foc-form-group">
-                            <label>Received By <span style="color:red">*</span></label>
-                            <input type="text" id="focReceivedBy" required placeholder="Receiver Name">
+                            <label>Received By</label>
+                            <input type="text" id="focReceivedBy" placeholder="Receiver Name">
                         </div>
                         <div class="foc-form-group">
                             <label>Product Code</label>
                             <input type="text" id="focProductCode" placeholder="Code">
                         </div>
                         <div class="foc-form-group">
-                            <label>Product Name <span style="color:red">*</span></label>
-                            <input type="text" id="focProductName" required placeholder="Name">
+                            <label>Product Name</label>
+                            <input type="text" id="focProductName" placeholder="Name">
                         </div>
 
                         <div class="foc-form-group">
-                            <label>Quantity <span style="color:red">*</span></label>
-                            <input type="number" id="focQuantity" required min="1">
+                            <label>Quantity</label>
+                            <input type="number" id="focQuantity" min="1">
                         </div>
                         <div class="foc-form-group">
-                            <label>UOM <span style="color:red">*</span></label>
-                            <input type="text" id="focUom" required placeholder="e.g. Piece, Vial">
+                            <label>UOM</label>
+                            <input type="text" id="focUom" placeholder="e.g. Piece, Vial">
                         </div>
                         <div class="foc-form-group">
-                            <label>Batch/Lot Number <span style="color:red">*</span></label>
-                            <input type="text" id="focBatchNo" required placeholder="Batch No">
+                            <label>Batch/Lot Number</label>
+                            <input type="text" id="focBatchNo" placeholder="Batch No">
                         </div>
                         
                         <div class="foc-form-group">
-                            <label>Entry Date <span style="color:red">*</span></label>
-                            <input type="date" id="focEntryDate" required>
+                            <label>Entry Date</label>
+                            <input type="date" id="focEntryDate">
                         </div>
 
                         <div class="foc-form-group">
@@ -759,13 +740,13 @@
                             <input type="date" id="focExpiryDate">
                         </div>
                         <div class="foc-form-group">
-                            <label>Storage Location <span style="color:red">*</span></label>
-                            <input type="text" id="focLocation" required placeholder="Location">
+                            <label>Storage Location</label>
+                            <input type="text" id="focLocation" placeholder="Location">
                         </div>
 
                         <div class="foc-form-group">
-                            <label>Sample Purpose <span style="color:red">*</span></label>
-                            <select id="focPurpose" required>
+                            <label>Sample Purpose</label>
+                            <select id="focPurpose">
                                 <option value="Evaluation">Evaluation</option>
                                 <option value="Testing">Testing</option>
                                 <option value="Development">Development</option>
@@ -773,14 +754,7 @@
                                 <option value="Other">Other</option>
                             </select>
                         </div>
-                        <div class="foc-form-group">
-                            <label>Unit Cost</label>
-                            <input type="number" value="0" disabled>
-                        </div>
-                        <div class="foc-form-group">
-                            <label>Total Cost</label>
-                            <input type="number" value="0" disabled>
-                        </div>
+
                     </div>
                     <div class="foc-form-group">
                         <label>Reason for Sample</label>
@@ -792,8 +766,8 @@
                             <input type="file" id="focPoAttachment" style="padding: 6px; background-color: #fff;">
                         </div>
                         <div class="foc-form-group">
-                            <label>Invoice/Challan Attachment <span style="color:red">*</span></label>
-                            <input type="file" id="focAttachment" required style="padding: 6px; background-color: #fff;">
+                            <label>Invoice/Challan Attachment</label>
+                            <input type="file" id="focAttachment" style="padding: 6px; background-color: #fff;">
                         </div>
                     </div>
                 </form>
@@ -962,11 +936,13 @@
         }
 
         function clearGoodsInFilters() {
-            document.getElementById('filterPoNo').value = '';
+            const poNoEl = document.getElementById('filterPoNo');
+            if (poNoEl) poNoEl.value = '';
             document.getElementById('filterItemId').value = '';
             document.getElementById('filterItemName').value = '';
             document.getElementById('filterSupplier').value = '';
-            document.getElementById('filterStatus').value = '';
+            const statusEl = document.getElementById('filterStatus');
+            if (statusEl) statusEl.value = '';
             switchGoodsInTab('All');
         }
 
@@ -1000,11 +976,13 @@
 
             // Filter
             const fCompany = (document.getElementById('filterCompany').value || '').trim();
-            const fPo = document.getElementById('filterPoNo').value.trim().toLowerCase();
+            const fPoEl = document.getElementById('filterPoNo');
+            const fPo = fPoEl ? fPoEl.value.trim().toLowerCase() : '';
             const fItemId = document.getElementById('filterItemId').value.trim().toLowerCase();
             const fItem = document.getElementById('filterItemName').value.trim().toLowerCase();
             const fSupplier = document.getElementById('filterSupplier').value.trim().toLowerCase();
-            const fStatus = currentTab !== 'All' ? currentTab : document.getElementById('filterStatus').value;
+            const fStatusEl = document.getElementById('filterStatus');
+            const fStatus = currentTab !== 'All' ? currentTab : (fStatusEl ? fStatusEl.value : '');
 
             const filtered = allItems.filter(item => {
                 if (fCompany && item.company !== fCompany) return false;
