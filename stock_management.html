@@ -1038,9 +1038,9 @@
                     rejectionCellHtml = `<td>${rejectionReasonContent}</td>`;
                 }
 
-                const batchNos = (item.batches || []).map(b => b.batchNo).join(', ') || '-';
-                const expiryDates = (item.batches || []).map(b => b.expiryDate).join(', ') || '-';
-                const recDates = (item.batches || []).map(b => b.recDate).join(', ') || '-';
+                const batchNos = (item.batches && item.batches.length > 0) ? item.batches[0].batchNo : '-';
+                const expiryDates = (item.batches && item.batches.length > 0) ? item.batches[0].expiryDate : '-';
+                const recDates = (item.batches && item.batches.length > 0) ? item.batches[0].recDate : '-';
                 const acceptedBy = item.userAcceptanceStatus === 'Accepted' ? (item.acceptedBy || item.requestedBy || 'System') : '-';
                 const rejectedBy = isRejected ? (item.rejectedBy || item.requestedBy || 'System') : '-';
 

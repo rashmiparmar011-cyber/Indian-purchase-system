@@ -345,9 +345,9 @@
                 let bClass = 'zero';
                 if (i.balance > 0) bClass = 'positive';
                 
-                const batchNos = (i.batches || []).map(b => b.batchNo).join(', ') || '-';
-                const expiryDates = (i.batches || []).map(b => b.expiryDate).join(', ') || '-';
-                const recDates = (i.batches || []).map(b => b.recDate).join(', ') || '-';
+                const batchNos = (i.batches && i.batches.length > 0) ? i.batches[0].batchNo : '-';
+                const expiryDates = (i.batches && i.batches.length > 0) ? i.batches[0].expiryDate : '-';
+                const recDates = (i.batches && i.batches.length > 0) ? i.batches[0].recDate : '-';
                 const acceptedBy = i.userAcceptanceStatus === 'Accepted' ? (i.acceptedBy || i.requestedBy || 'System') : '-';
                 const rejectedBy = (i.userAcceptanceStatus === 'Rejected' || i.status === 'Rejected') ? (i.rejectedBy || i.requestedBy || 'System') : '-';
                 
