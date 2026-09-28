@@ -150,7 +150,8 @@
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="fas fa-file-invoice"></i> Purchase Reports <i class="fas fa-chevron-down arrow"></i>
+                                <i class="fas fa-file-invoice"></i> Purchase Reports <i
+                                    class="fas fa-chevron-down arrow"></i>
                             </a>
                             <ul class="sub-nav-list">
                                 <li><a href="reports.html#goods-in" class="sub-nav-link">Goods-In Report</a></li>
@@ -200,15 +201,18 @@
                         </div>
                         <div class="form-group">
                             <label for="filterFinPoNo">PO No.</label>
-                            <input type="text" id="filterFinPoNo" placeholder="Search PO No (e.g. PO01)..." oninput="applyFinanceFilters()">
+                            <input type="text" id="filterFinPoNo" placeholder="Search PO No (e.g. PO01)..."
+                                oninput="applyFinanceFilters()">
                         </div>
                         <div class="form-group">
                             <label for="filterFinRequester">Requested By</label>
-                            <input type="text" id="filterFinRequester" placeholder="Search Requester..." oninput="applyFinanceFilters()">
+                            <input type="text" id="filterFinRequester" placeholder="Search Requester..."
+                                oninput="applyFinanceFilters()">
                         </div>
                         <div class="form-group">
                             <label for="filterFinSupplier">Supplier</label>
-                            <input type="text" id="filterFinSupplier" placeholder="Search Supplier..." oninput="applyFinanceFilters()">
+                            <input type="text" id="filterFinSupplier" placeholder="Search Supplier..."
+                                oninput="applyFinanceFilters()">
                         </div>
                         <div class="form-group">
                             <label for="filterFinPoDateStart">PO Start Date</label>
@@ -219,12 +223,23 @@
                             <input type="date" id="filterFinPoDateEnd" onchange="applyFinanceFilters()">
                         </div>
                         <div class="form-group">
-                            <label for="filterFinPayDate">Payment Date</label>
-                            <input type="date" id="filterFinPayDate" onchange="applyFinanceFilters()">
+                            <label for="filterFinPayDateStart">Payment Start Date</label>
+                            <input type="date" id="filterFinPayDateStart" onchange="applyFinanceFilters()">
+                        </div>
+                        <div class="form-group">
+                            <label for="filterFinPayDateEnd">Payment End Date</label>
+                            <input type="date" id="filterFinPayDateEnd" onchange="applyFinanceFilters()">
+                        </div>
+                        <div class="form-group">
+                            <label for="filterFinInvoiceNo">Invoice / Challan No.</label>
+                            <input type="text" id="filterFinInvoiceNo" placeholder="Search Invoice..."
+                                oninput="applyFinanceFilters()">
                         </div>
                         <div class="filter-actions">
-                            <button type="button" class="btn btn-primary" onclick="applyFinanceFilters()"><i class="fas fa-search"></i> Apply</button>
-                            <button type="button" class="btn btn-secondary" onclick="clearFinanceFilters()"><i class="fas fa-undo"></i> Reset</button>
+                            <button type="button" class="btn btn-primary" onclick="applyFinanceFilters()"><i
+                                    class="fas fa-search"></i> Apply</button>
+                            <button type="button" class="btn btn-secondary" onclick="clearFinanceFilters()"><i
+                                    class="fas fa-undo"></i> Reset</button>
                         </div>
                     </div>
                 </div>
@@ -261,8 +276,12 @@
                                 <th>PO DATE</th>
                                 <th>REQUESTED BY</th>
                                 <th>SUPPLIER NAME</th>
+                                <th>INVOICE NO.</th>
                                 <th style="text-align: right;">TOTAL COST (₹)</th>
+                                <th style="text-align: right;">TOTAL VALUE (₹)</th>
                                 <th style="text-align: right;">AMOUNT PAID (₹)</th>
+                                <th>PAYMENT START DATE</th>
+                                <th>PAYMENT END DATE</th>
                                 <th>PAYMENT STATUS</th>
                                 <th style="text-align: center;">ACTION</th>
                             </tr>
@@ -297,7 +316,7 @@
                 <div class="summary-card">
                     <div class="summary-card-title"><i class="fas fa-file-invoice-dollar"></i> Purchase Order Summary
                     </div>
-                    <div class="summary-grid-5">
+                    <div class="summary-grid-4">
                         <div class="summary-item">
                             <span class="label">PO Number</span>
                             <span class="value highlight" id="finSumPoNo">-</span>
@@ -314,13 +333,9 @@
                             <span class="label">Supplier Name</span>
                             <span class="value" id="finSumSupplier">-</span>
                         </div>
-                        <div class="summary-item">
-                            <span class="label">Total Value</span>
-                            <span class="value highlight" id="finSumTotalCost">-</span>
-                        </div>
                     </div>
-                    <div class="summary-grid-4"
-                        style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed #cbd5e1;">
+                    <div class="summary-grid-5"
+                        style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed #cbd5e1; display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px;">
                         <div class="summary-item">
                             <span class="label">Payment Term</span>
                             <span class="value" id="finSumPayTerm">-</span>
@@ -332,6 +347,14 @@
                         <div class="summary-item">
                             <span class="label">Amount Paid</span>
                             <span class="value success" id="finSumAmountPaid">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Total Value</span>
+                            <span class="value" id="finSumTotalValue" style="color: #0284c7; font-weight: 700;">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Total PO Cost</span>
+                            <span class="value highlight" id="finSumTotalCost">-</span>
                         </div>
                         <div class="summary-item">
                             <span class="label">Remaining Balance</span>
@@ -370,6 +393,32 @@
                         </table>
                     </div>
 
+                    <!-- Payment History Section -->
+                    <div style="margin-top: 16px; margin-bottom: 0px; border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden; display: none;"
+                        id="finPaymentHistoryContainer">
+                        <div
+                            style="background: #f8fafc; padding: 10px 12px; border-bottom: 1px solid #e2e8f0; color: #0f172a; font-weight: 600; font-size: 12px;">
+                            <i class="fas fa-history"></i> Payment History
+                        </div>
+                        <div class="table-container"
+                            style="margin: 0; box-shadow: none; max-height: 150px; overflow-y: auto;">
+                            <table class="data-table" id="finPaymentHistoryTable" style="margin: 0;">
+                                <thead>
+                                    <tr>
+                                        <th>DATE</th>
+                                        <th style="text-align: right;">PAID AMOUNT (₹)</th>
+                                        <th>MODE</th>
+                                        <th>REFERENCE</th>
+                                        <th>REMARKS</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="finPaymentHistoryBody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                     <!-- 3. Record Payment & Approval Section -->
                     <div class="payment-record-box">
                         <h5 style="font-size: 12px; font-weight: 700; color: #1e40af; margin-bottom: 10px;">
@@ -400,12 +449,17 @@
                                 <label>Reference / UTR No</label>
                                 <input type="text" id="finPayRef" placeholder="e.g. UTR-9827361">
                             </div>
-                            <div class="payment-action-col" style="display: flex; flex-direction: column; justify-content: flex-end; min-width: 140px;">
-                                <label style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; display: block; height: auto; pointer-events: none;">Action</label>
+                            <div class="payment-action-col"
+                                style="display: flex; flex-direction: column; justify-content: flex-end; min-width: 140px;">
+                                <label
+                                    style="font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; display: block; height: auto; pointer-events: none;">Action</label>
                                 <div style="height: 34px;">
-                                    <button type="button" id="btnApprovePay" class="btn btn-primary" onclick="handleRecordPayment()"
+                                    <button type="button" id="btnApprovePay" class="btn btn-primary"
+                                        onclick="handleRecordPayment()"
                                         style="white-space: nowrap; height: 34px; padding: 0 16px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px; width: 100%; cursor: pointer; position: relative; z-index: 10;">
-                                        <i class="fas fa-check-circle" id="btnApprovePayIcon" style="pointer-events: none;"></i> <span id="btnApprovePayText" style="pointer-events: none;">Pay</span>
+                                        <i class="fas fa-check-circle" id="btnApprovePayIcon"
+                                            style="pointer-events: none;"></i> <span id="btnApprovePayText"
+                                            style="pointer-events: none;">Pay</span>
                                     </button>
                                 </div>
                             </div>
@@ -479,7 +533,14 @@
             document.getElementById('filterFinPoNo').value = '';
             document.getElementById('filterFinRequester').value = '';
             document.getElementById('filterFinSupplier').value = '';
-            document.getElementById('filterFinStatus').value = '';
+            const st = document.getElementById('filterFinStatus');
+            if (st) st.value = '';
+            document.getElementById('filterFinCompany').value = '';
+            document.getElementById('filterFinPoDateStart').value = '';
+            document.getElementById('filterFinPoDateEnd').value = '';
+            document.getElementById('filterFinPayDateStart').value = '';
+            document.getElementById('filterFinPayDateEnd').value = '';
+            document.getElementById('filterFinInvoiceNo').value = '';
             switchFinanceTab('All');
         }
 
@@ -503,11 +564,13 @@
             const fPo = document.getElementById('filterFinPoNo').value.trim().toLowerCase();
             const fReq = document.getElementById('filterFinRequester').value.trim().toLowerCase();
             const fSup = document.getElementById('filterFinSupplier').value.trim().toLowerCase();
-            
+
             const fPoStart = document.getElementById('filterFinPoDateStart').value;
             const fPoEnd = document.getElementById('filterFinPoDateEnd').value;
-            const fPayDate = document.getElementById('filterFinPayDate').value;
-            
+            const fPayStart = document.getElementById('filterFinPayDateStart').value;
+            const fPayEnd = document.getElementById('filterFinPayDateEnd').value;
+            const fInvoice = (document.getElementById('filterFinInvoiceNo').value || '').trim().toLowerCase();
+
             const fStatus = currentFinTab !== 'All' ? currentFinTab : '';
 
             const filtered = pos.filter(p => {
@@ -515,22 +578,39 @@
                 if (fPo && !p.poNo.toLowerCase().includes(fPo)) return false;
                 if (fReq && !p.requestedBy.toLowerCase().includes(fReq)) return false;
                 if (fSup && !p.supplierName.toLowerCase().includes(fSup)) return false;
-                
+
                 if (fPoStart && p.poDate < fPoStart) return false;
                 if (fPoEnd && p.poDate > fPoEnd) return false;
-                if (fPayDate && p.paymentDate !== fPayDate) return false;
-                
+                if (fPayStart && p.paymentDate && p.paymentDate < fPayStart) return false;
+                if (fPayEnd && p.paymentDate && p.paymentDate > fPayEnd) return false;
+
+                if (fInvoice) {
+                    let hasInvoice = false;
+                    if (p.lineItems) {
+                        p.lineItems.forEach(li => {
+                            if (li.batches) {
+                                li.batches.forEach(b => {
+                                    if (b.invoiceNo && b.invoiceNo.toLowerCase().includes(fInvoice)) {
+                                        hasInvoice = true;
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    if (!hasInvoice) return false;
+                }
+
                 if (fStatus === 'New') {
                     if (p.status !== 'New' && p.status !== 'Partial') return false;
                 } else if (fStatus && p.status.toLowerCase() !== fStatus.toLowerCase()) {
                     return false;
                 }
-                
+
                 return true;
             });
 
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 30px; color: #64748b;">
+                tbody.innerHTML = `<tr><td colspan="12" style="text-align: center; padding: 30px; color: #64748b;">
                     <i class="fas fa-inbox" style="font-size: 28px; color: #cbd5e1; display: block; margin-bottom: 6px;"></i>
                     No purchase orders found matching the filter criteria.
                 </td></tr>`;
@@ -545,13 +625,39 @@
                 const formattedCost = '₹' + Number(p.totalCost).toLocaleString('en-IN');
                 const formattedPaid = '₹' + Number(p.amountPaid || 0).toLocaleString('en-IN');
 
+                const invoices = [];
+                let calculatedTotalValue = 0;
+                if (p.lineItems) {
+                    p.lineItems.forEach(li => {
+                        if (li.batches) {
+                            li.batches.forEach(b => {
+                                if (b.invoiceNo && b.invoiceNo !== 'N/A' && !invoices.includes(b.invoiceNo)) {
+                                    invoices.push(b.invoiceNo);
+                                }
+                            });
+                        }
+                        const cost = Number(li.cost) || 0;
+                        const gstRate = Number(li.gstRate) || 0;
+                        const gstAmt = (li.gstAmount !== undefined && li.gstAmount !== null && li.gstAmount !== '') ? Number(li.gstAmount) : (cost * gstRate / 100);
+                        const totalVal = (li.totalValue !== undefined && li.totalValue !== null && li.totalValue !== '') ? Number(li.totalValue) : (cost + gstAmt);
+                        calculatedTotalValue += (totalVal * (Number(li.reqQty) || 0));
+                    });
+                }
+                const formattedTotalValue = '₹' + Number(calculatedTotalValue || p.totalCost).toLocaleString('en-IN');
+                const invoiceStr = invoices.join(', ') || '-';
+                const payDateStr = p.paymentDate || '-';
+
                 tr.innerHTML = `
                     <td><strong>${p.poNo}</strong></td>
                     <td>${p.poDate}</td>
                     <td>${p.requestedBy}</td>
                     <td>${p.supplierName}</td>
+                    <td><span class="table-value-pill" style="font-size: 11px;">${invoiceStr}</span></td>
                     <td style="text-align: right; font-weight: 700;">${formattedCost}</td>
+                    <td style="text-align: right; font-weight: 700; color: #0284c7;">${formattedTotalValue}</td>
                     <td style="text-align: right; color: #16a34a; font-weight: 600;">${formattedPaid}</td>
+                    <td>${p.paymentDate || '-'}</td>
+                    <td>${p.dueDate || '-'}</td>
                     <td><span class="badge ${payStatusClass}">${p.paymentStatus || 'Pending'}</span></td>
                     <td style="text-align: center;">
                         <button class="action-btn action-btn-view" onclick="openFinanceModal('${p.poNo}')" title="View PO Details & Invoices">
@@ -576,7 +682,7 @@
             const po = window.PurchaseData.getPO(poNo);
             if (!po) return;
 
-            document.getElementById('finModalHeaderPo').textContent = `${po.poNo} — ${po.supplierName}`;
+            document.getElementById('finModalHeaderPo').textContent = `${po.poNo}`;
             document.getElementById('finSumPoNo').textContent = po.poNo;
             document.getElementById('finSumPoDate').textContent = po.poDate;
             document.getElementById('finSumRequester').textContent = po.requestedBy;
@@ -587,8 +693,41 @@
             document.getElementById('finSumPayStatus').innerHTML = `<span class="badge ${(po.paymentStatus || 'pending').toLowerCase().replace(/\s+/g, '-')}">${po.paymentStatus || 'Pending'}</span>`;
             document.getElementById('finSumAmountPaid').textContent = '₹' + Number(po.amountPaid || 0).toLocaleString('en-IN');
 
+            let calculatedTotalValue = 0;
+            if (po.lineItems) {
+                po.lineItems.forEach(li => {
+                    const cost = Number(li.cost) || 0;
+                    const gstRate = Number(li.gstRate) || 0;
+                    const gstAmt = (li.gstAmount !== undefined && li.gstAmount !== null && li.gstAmount !== '') ? Number(li.gstAmount) : (cost * gstRate / 100);
+                    const totalVal = (li.totalValue !== undefined && li.totalValue !== null && li.totalValue !== '') ? Number(li.totalValue) : (cost + gstAmt);
+                    calculatedTotalValue += (totalVal * (Number(li.reqQty) || 0));
+                });
+            }
+            document.getElementById('finSumTotalValue').textContent = '₹' + Number(calculatedTotalValue || po.totalCost).toLocaleString('en-IN');
+
             const remaining = Math.max(0, po.totalCost - (po.amountPaid || 0));
             document.getElementById('finSumRemaining').textContent = '₹' + Number(remaining).toLocaleString('en-IN');
+
+            // Render Payment History
+            const phBody = document.getElementById('finPaymentHistoryBody');
+            const phContainer = document.getElementById('finPaymentHistoryContainer');
+            if (po.paymentHistory && po.paymentHistory.length > 0) {
+                phContainer.style.display = 'block';
+                phBody.innerHTML = '';
+                po.paymentHistory.forEach(ph => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${ph.date}</td>
+                        <td style="text-align: right; font-weight: 600;">₹${Number(ph.amount).toLocaleString('en-IN')}</td>
+                        <td>${ph.mode || '-'}</td>
+                        <td>${ph.reference || '-'}</td>
+                        <td>${ph.remarks || '-'}</td>
+                    `;
+                    phBody.appendChild(tr);
+                });
+            } else {
+                phContainer.style.display = 'none';
+            }
 
             // Prefill payment amount with remaining, or handle fully paid state
             const payInput = document.getElementById('finPayAmount');
@@ -636,6 +775,9 @@
             tbody.innerHTML = '';
 
             po.lineItems.forEach(li => {
+                // Hide specific item from Finance view as requested
+                if (li.itemKey === 'Item002') return;
+
                 const tr = document.createElement('tr');
                 const lineStatusClass = li.status.toLowerCase();
 
@@ -737,7 +879,7 @@
                 li.gstRate = Number(document.getElementById(`editGstRate_${itemKey}`).value) || 0;
                 li.gstAmount = Number(document.getElementById(`editGstAmt_${itemKey}`).value) || 0;
                 li.totalValue = Number(document.getElementById(`editTotalVal_${itemKey}`).value) || 0;
-                
+
                 // po.totalCost = newPoTotal; // Do not update total PO cost per user request
                 window.PurchaseData.saveData(window.PurchaseData.data);
             }
@@ -757,7 +899,9 @@
             const amtVal = document.getElementById('finPayAmount').value.trim();
             const amt = Number(amtVal);
             const term = document.getElementById('finPayTerm').value;
+            const mode = document.getElementById('finPayMode').value;
             const ref = document.getElementById('finPayRef').value.trim() || `UTR-${Date.now().toString().slice(-6)}`;
+            const remarks = document.getElementById('finPayComment') ? document.getElementById('finPayComment').value.trim() : '';
 
             // Case A: PO is already fully paid (remaining === 0)
             if (remaining === 0) {
@@ -766,6 +910,14 @@
                 po.status = 'Complete';
                 if (amt && !isNaN(amt) && amt > 0) {
                     po.amountPaid = (po.amountPaid || 0) + amt;
+                    if (!po.paymentHistory) po.paymentHistory = [];
+                    po.paymentHistory.push({
+                        date: new Date().toISOString().split('T')[0],
+                        amount: amt,
+                        mode: mode,
+                        reference: ref,
+                        remarks: remarks
+                    });
                 }
                 window.PurchaseData.saveData(window.PurchaseData.data);
                 alert(`Finance Approval recorded successfully for ${currentFinPoNo}! All invoices verified and marked complete.`);
@@ -778,6 +930,14 @@
             const res = window.PurchaseData.recordPayment(currentFinPoNo, paymentAmount, term, ref);
             if (res.success) {
                 po.financeApprovalStatus = 'Approved';
+                if (!po.paymentHistory) po.paymentHistory = [];
+                po.paymentHistory.push({
+                    date: new Date().toISOString().split('T')[0],
+                    amount: paymentAmount,
+                    mode: mode,
+                    reference: ref,
+                    remarks: remarks
+                });
                 window.PurchaseData.saveData(window.PurchaseData.data);
                 alert(`Payment of ₹${paymentAmount.toLocaleString('en-IN')} approved & recorded successfully against ${currentFinPoNo}!`);
                 openFinanceModal(currentFinPoNo);
@@ -821,11 +981,43 @@
 
         function exportFinanceData() {
             const pos = window.PurchaseData.getAllPOs();
-            const headers = ["PO No", "PO Date", "Requested By", "Supplier Name", "Total Cost", "Amount Paid", "Status", "Payment Status"];
-            const rows = pos.map(p => [
-                p.poNo, p.poDate, `"${p.requestedBy}"`, `"${p.supplierName}"`, p.totalCost, p.amountPaid || 0, p.status, `"${p.paymentStatus || 'Pending'}"`
-            ]);
-            let csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+            const headers = ["PO No", "PO Date", "Requested By", "Supplier Name", "Invoice No", "Total Cost", "Total Value", "Amount Paid", "Payment Start Date", "Payment End Date", "Status", "Payment Status"];
+            const rows = pos.map(p => {
+                const invoices = [];
+                let calculatedTotalValue = 0;
+                if (p.lineItems) {
+                    p.lineItems.forEach(li => {
+                        if (li.batches) {
+                            li.batches.forEach(b => {
+                                if (b.invoiceNo && b.invoiceNo !== 'N/A' && !invoices.includes(b.invoiceNo)) {
+                                    invoices.push(b.invoiceNo);
+                                }
+                            });
+                        }
+                        const cost = Number(li.cost) || 0;
+                        const gstRate = Number(li.gstRate) || 0;
+                        const gstAmt = (li.gstAmount !== undefined && li.gstAmount !== null && li.gstAmount !== '') ? Number(li.gstAmount) : (cost * gstRate / 100);
+                        const totalVal = (li.totalValue !== undefined && li.totalValue !== null && li.totalValue !== '') ? Number(li.totalValue) : (cost + gstAmt);
+                        calculatedTotalValue += (totalVal * (Number(li.reqQty) || 0));
+                    });
+                }
+                const invoiceStr = invoices.join(', ') || '-';
+                return [
+                    p.poNo,
+                    p.poDate,
+                    `"${p.requestedBy}"`,
+                    `"${p.supplierName}"`,
+                    `"${invoiceStr}"`,
+                    Number(p.totalCost) || 0,
+                    calculatedTotalValue || Number(p.totalCost) || 0,
+                    Number(p.amountPaid) || 0,
+                    `"${p.paymentDate || '-'}"`,
+                    `"${p.dueDate || '-'}"`,
+                    `"${p.status}"`,
+                    `"${p.paymentStatus || 'Pending'}"`
+                ];
+            });
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
@@ -838,4 +1030,3 @@
 </body>
 
 </html>
-

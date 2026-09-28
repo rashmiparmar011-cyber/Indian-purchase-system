@@ -147,6 +147,7 @@
                                     <th>PO Date</th>
                                     <th>Item ID</th>
                                     <th>Item Name</th>
+                                    <th>Received Date</th>
                                     <th>Req Qty</th>
                                     <th>Rec Qty</th>
                                     <th>Balance</th>
@@ -194,8 +195,16 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Payment Date</label>
-                                <input type="date" id="filterFinancePayDate">
+                                <label>Payment Start Date</label>
+                                <input type="date" id="filterFinancePayStartDate">
+                            </div>
+                            <div class="form-group">
+                                <label>Payment End Date</label>
+                                <input type="date" id="filterFinancePayEndDate">
+                            </div>
+                            <div class="form-group">
+                                <label>Invoice/Challan No.</label>
+                                <input type="text" id="filterFinanceInvoice" placeholder="Search Invoice/Challan...">
                             </div>
                             <div class="form-group">
                                 <label>PO Start Date</label>
@@ -223,9 +232,11 @@
                                     <th>PO No.</th>
                                     <th>PO Date</th>
                                     <th>Supplier</th>
+                                    <th>Invoice/Challan No.</th>
                                     <th>Total Cost</th>
                                     <th>Amount Paid</th>
                                     <th>Balance Due</th>
+                                    <th>Payment Date</th>
                                     <th>Payment Term</th>
                                     <th>Payment Status</th>
                                     <th>Due Date</th>
@@ -336,6 +347,7 @@
                 
                 const batchNos = (i.batches || []).map(b => b.batchNo).join(', ') || '-';
                 const expiryDates = (i.batches || []).map(b => b.expiryDate).join(', ') || '-';
+                const recDates = (i.batches || []).map(b => b.recDate).join(', ') || '-';
                 const acceptedBy = i.userAcceptanceStatus === 'Accepted' ? (i.acceptedBy || i.requestedBy || 'System') : '-';
                 const rejectedBy = (i.userAcceptanceStatus === 'Rejected' || i.status === 'Rejected') ? (i.rejectedBy || i.requestedBy || 'System') : '-';
                 
@@ -344,6 +356,7 @@
                     <td>${i.poDate}</td>
                     <td><span class="badge open" style="font-size: 10px;">${i.itemKey}</span></td>
                     <td>${i.itemName}</td>
+                    <td>${recDates}</td>
                     <td>${i.reqQty}</td>
                     <td style="color: #16a34a; font-weight: 700;">${i.recQty}</td>
                     <td><span class="balance-badge ${bClass}">${i.balance}</span></td>
@@ -368,7 +381,9 @@
             document.getElementById('filterFinanceCompany').value = '';
             document.getElementById('filterFinancePoNo').value = '';
             document.getElementById('filterFinanceStatus').value = '';
-            document.getElementById('filterFinancePayDate').value = '';
+            document.getElementById('filterFinancePayStartDate').value = '';
+            document.getElementById('filterFinancePayEndDate').value = '';
+            document.getElementById('filterFinanceInvoice').value = '';
             document.getElementById('filterFinancePoStart').value = '';
             document.getElementById('filterFinancePoEnd').value = '';
             renderFinanceReport();
@@ -378,7 +393,9 @@
             const compSearch = (document.getElementById('filterFinanceCompany').value || '');
             const poSearch = (document.getElementById('filterFinancePoNo').value || '').toLowerCase();
             const statusFilter = document.getElementById('filterFinanceStatus').value;
-            const payDate = document.getElementById('filterFinancePayDate').value;
+            const payStartDate = document.getElementById('filterFinancePayStartDate').value;
+            const payEndDate = document.getElementById('filterFinancePayEndDate').value;
+            const invoiceSearch = (document.getElementById('filterFinanceInvoice').value || '').toLowerCase();
             const poStart = document.getElementById('filterFinancePoStart').value;
             const poEnd = document.getElementById('filterFinancePoEnd').value;
             const tbody = document.getElementById('financeReportTableBody');
@@ -388,14 +405,18 @@
                 const matchComp = compSearch ? (p.company === compSearch) : true;
                 const matchPo = p.poNo.toLowerCase().includes(poSearch);
                 const matchStatus = statusFilter ? p.paymentStatus === statusFilter : true;
-                const matchPayDate = payDate ? (p.paymentDate === payDate) : true;
+                const matchInvoice = (p.invoiceNo || '').toLowerCase().includes(invoiceSearch);
+                
+                let matchPayDate = true;
+                if (payStartDate && (!p.paymentDate || p.paymentDate < payStartDate)) matchPayDate = false;
+                if (payEndDate && (!p.paymentDate || p.paymentDate > payEndDate)) matchPayDate = false;
                 
                 let matchPoStart = true;
                 let matchPoEnd = true;
                 if (poStart) matchPoStart = p.poDate >= poStart;
                 if (poEnd) matchPoEnd = p.poDate <= poEnd;
                 
-                return matchComp && matchPo && matchStatus && matchPayDate && matchPoStart && matchPoEnd;
+                return matchComp && matchPo && matchStatus && matchPayDate && matchPoStart && matchPoEnd && matchInvoice;
             });
             
             tbody.innerHTML = '';
@@ -419,15 +440,20 @@
                     <td><strong>${p.poNo}</strong></td>
                     <td>${p.poDate}</td>
                     <td><strong>${p.supplierName}</strong></td>
+                    <td>${p.invoiceNo || '—'}</td>
                     <td style="text-align: right; font-weight: 600;">₹${total.toLocaleString('en-IN')}</td>
                     <td style="text-align: right; color: #16a34a; font-weight: 700;">₹${paid.toLocaleString('en-IN')}</td>
                     <td style="text-align: right; color: ${bal === 0 ? '#64748b' : '#b45309'}; font-weight: 700;">₹${bal.toLocaleString('en-IN')}</td>
+                    <td>${p.paymentDate || '—'}</td>
                     <td>${p.paymentTerm || 'Full Payment'}</td>
                     <td><span class="badge ${pClass}">${p.paymentStatus || 'Pending'}</span></td>
                     <td>${p.dueDate || '—'}</td>
-                    <td style="text-align: center;">
+                    <td style="text-align: center; white-space: nowrap;">
                         <button class="action-btn" style="background: #3b82f6; border-color: #2563eb;" onclick="viewPO('${p.poNo}')" title="View PO">
                             <i class="fas fa-file-pdf"></i> View PO
+                        </button>
+                        <button class="action-btn" style="background: #8b5cf6; border-color: #7c3aed; margin-left: 4px;" onclick="viewInvoice('${p.poNo}')" title="View Invoice">
+                            <i class="fas fa-file-invoice"></i> View Invoice
                         </button>
                     </td>
                 `;
@@ -453,7 +479,7 @@
                 csvContent += rowData.join(',') + "\n";
             });
             
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.setAttribute("href", url);
@@ -482,7 +508,7 @@
                 csvContent += rowData.join(',') + "\n";
             });
             
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.setAttribute("href", url);
@@ -491,6 +517,10 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+        }
+
+        function viewInvoice(poNo) {
+            alert('View Invoice for ' + poNo);
         }
     </script>
 </body>

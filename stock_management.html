@@ -300,6 +300,7 @@
                                 <th>PO DATE</th>
                                 <th>ITEM ID</th>
                                 <th>ITEM NAME</th>
+                                <th>RECEIVED DATE</th>
                                 <th style="text-align: right;">REQ QTY</th>
                                 <th style="text-align: right;">REC QTY</th>
                                 <th style="text-align: right;">BALANCE</th>
@@ -330,6 +331,7 @@
                                 <th>ENTRY DATE</th>
                                 <th>SUPPLIER</th>
                                 <th>PRODUCT NAME</th>
+                                <th>RECEIVED DATE</th>
                                 <th>QTY</th>
                                 <th>UOM</th>
                                 <th>BATCH NO.</th>
@@ -858,6 +860,7 @@
                     <td>${item.entryDate}</td>
                     <td>${item.supplier}</td>
                     <td><strong>${item.productName}</strong><br><span style="font-size: 10px; color: #64748b;">${item.productCode}</span></td>
+                    <td>${item.receivedDate || item.entryDate}</td>
                     <td style="text-align: right; font-weight: 600;">${item.quantity}</td>
                     <td>${item.uom}</td>
                     <td>${item.batchNo}</td>
@@ -1005,7 +1008,7 @@
                 return true;
             });
 
-            const colSpanCount = showRejectionCol ? 16 : 15;
+            const colSpanCount = showRejectionCol ? 17 : 16;
             if (filtered.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="${colSpanCount}" style="text-align: center; padding: 30px; color: #64748b;">
                     <i class="fas fa-inbox" style="font-size: 28px; color: #cbd5e1; display: block; margin-bottom: 6px;"></i>
@@ -1037,6 +1040,7 @@
 
                 const batchNos = (item.batches || []).map(b => b.batchNo).join(', ') || '-';
                 const expiryDates = (item.batches || []).map(b => b.expiryDate).join(', ') || '-';
+                const recDates = (item.batches || []).map(b => b.recDate).join(', ') || '-';
                 const acceptedBy = item.userAcceptanceStatus === 'Accepted' ? (item.acceptedBy || item.requestedBy || 'System') : '-';
                 const rejectedBy = isRejected ? (item.rejectedBy || item.requestedBy || 'System') : '-';
 
@@ -1045,6 +1049,7 @@
                     <td>${item.poDate}</td>
                     <td><span class="badge open" style="font-size: 10px;">${item.itemKey}</span></td>
                     <td><strong>${item.itemName}</strong></td>
+                    <td>${recDates}</td>
                     <td style="text-align: right; font-weight: 600;">${item.reqQty}</td>
                     <td style="text-align: right; color: ${isRejected ? '#dc2626' : '#16a34a'}; font-weight: 600;">${item.recQty}</td>
                     <td style="text-align: right;">

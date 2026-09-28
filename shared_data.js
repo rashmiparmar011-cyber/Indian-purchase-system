@@ -25,6 +25,15 @@ const DEFAULT_PURCHASE_DATA = [
         paymentTerm: "50% Payment",
         amountPaid: 15000,
         dueDate: "2026-09-30",
+        paymentHistory: [
+            {
+                date: "2026-09-15",
+                amount: 15000,
+                mode: "Bank Transfer (NEFT/RTGS)",
+                reference: "UTR-594906",
+                remarks: "Initial 50% advance payment"
+            }
+        ],
         lineItems: [
             {
                 itemKey: "Item001",
@@ -52,8 +61,8 @@ const DEFAULT_PURCHASE_DATA = [
                         recDate: "2026-09-16",
                         recQty: 5,
                         expiryDate: "2027-09-13",
-                        invoiceNo: "Inv002",
-                        attachment: "inv002_macbook_b2.pdf"
+                        invoiceNo: "Inv001",
+                        attachment: "inv001_macbook_b2.pdf"
                     }
                 ]
             },
@@ -98,6 +107,15 @@ const DEFAULT_PURCHASE_DATA = [
         paymentTerm: "Full Payment",
         amountPaid: 100000,
         dueDate: "2026-10-15",
+        paymentHistory: [
+            {
+                date: "2026-09-12",
+                amount: 100000,
+                mode: "Bank Transfer (NEFT/RTGS)",
+                reference: "UTR-982112",
+                remarks: "Full payment completed"
+            }
+        ],
         lineItems: [
             {
                 itemKey: "Item003",
@@ -339,7 +357,7 @@ class PurchaseDataManager {
                 poAttachment: "dummy_po_99.pdf"
             }
         ];
-        
+
         localStorage.setItem('PurchaseData_FOC', JSON.stringify(defaultSamples));
         return defaultSamples;
     }
@@ -384,6 +402,53 @@ class PurchaseDataManager {
                             needsSave = true;
                         }
                     }
+
+                    // Migrate: change Inv002 to Inv001 for Item001 B002
+                    parsed.forEach(po => {
+                        if (po.poNo === 'PO01' && po.lineItems) {
+                            po.lineItems.forEach(li => {
+                                if (li.itemKey === 'Item001' && li.batches) {
+                                    li.batches.forEach(b => {
+                                        if (b.batchNo === 'B002' && b.invoiceNo === 'Inv002') {
+                                            b.invoiceNo = 'Inv001';
+                                            needsSave = true;
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                        
+                        // Migrate: Initialize payment history
+                        if (!po.paymentHistory) {
+                            po.paymentHistory = [];
+                            if (po.amountPaid && po.amountPaid > 0) {
+                                po.paymentHistory.push({
+                                    date: po.paymentDate || '2026-09-15',
+                                    amount: po.amountPaid,
+                                    mode: 'Bank Transfer (NEFT/RTGS)',
+                                    reference: 'Migrated Payment',
+                                    remarks: 'Payment migrated from legacy system'
+                                });
+                            }
+                            needsSave = true;
+                        }
+                        
+                        // Migrate: Fix string concatenation corruption
+                        if (po.lineItems) {
+                            po.lineItems.forEach(li => {
+                                const cost = Number(li.cost) || 0;
+                                const gstRate = Number(li.gstRate) || 0;
+                                const correctGstAmt = cost * gstRate / 100;
+                                const correctTotal = cost + correctGstAmt;
+                                
+                                if (Number(li.totalValue) > correctTotal * 10 || Number(li.gstAmount) > correctGstAmt * 10) {
+                                    li.gstAmount = correctGstAmt;
+                                    li.totalValue = correctTotal;
+                                    needsSave = true;
+                                }
+                            });
+                        }
+                    });
 
                     if (needsSave) {
                         this.saveData(parsed);
@@ -674,12 +739,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.insertAdjacentHTML('beforeend', modalHtml);
 });
 
-window.viewPO = function(poNo) {
+window.viewPO = function (poNo) {
     document.getElementById('poModalTitle').textContent = poNo;
     document.getElementById('poPreviewModal').classList.add('active');
 };
 
-window.closePoModal = function() {
+window.closePoModal = function () {
     document.getElementById('poPreviewModal').classList.remove('active');
 };
 
