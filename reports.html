@@ -128,6 +128,14 @@
                                 <label>Project Name</label>
                                 <input type="text" id="filterGoodsProject" placeholder="Search Project Name...">
                             </div>
+                            <div class="form-group">
+                                <label>Received Date</label>
+                                <input type="date" id="filterGoodsRecDate">
+                            </div>
+                            <div class="form-group">
+                                <label>Expiry Date</label>
+                                <input type="date" id="filterGoodsExpDate">
+                            </div>
                         </div>
                         <div class="filter-actions" style="margin-top: 15px; display: flex; gap: 10px; justify-content: space-between;">
                             <div style="display: flex; gap: 10px;">
@@ -300,6 +308,8 @@
             document.getElementById('filterGoodsItemName').value = '';
             document.getElementById('filterGoodsItemCode').value = '';
             document.getElementById('filterGoodsProject').value = '';
+            document.getElementById('filterGoodsRecDate').value = '';
+            document.getElementById('filterGoodsExpDate').value = '';
             renderGoodsInReport();
         }
 
@@ -310,19 +320,26 @@
             const itemNameSearch = (document.getElementById('filterGoodsItemName').value || '').toLowerCase();
             const itemCodeSearch = (document.getElementById('filterGoodsItemCode').value || '').toLowerCase();
             const projectSearch = (document.getElementById('filterGoodsProject').value || '').toLowerCase();
+            const recDateSearch = (document.getElementById('filterGoodsRecDate').value || '');
+            const expDateSearch = (document.getElementById('filterGoodsExpDate').value || '');
             
             const tbody = document.getElementById('goodsInReportTableBody');
             
             const items = window.PurchaseData.getGoodsInLineItems();
             const filtered = items.filter(i => {
+                const recDate = (i.batches && i.batches.length > 0) ? i.batches[0].recDate : '-';
+                const expDate = (i.batches && i.batches.length > 0) ? i.batches[0].expiryDate : '-';
+
                 const matchComp = compSearch ? (i.company === compSearch) : true;
                 const matchPo = i.poNo.toLowerCase().includes(poSearch);
                 const matchSup = (i.supplierName || '').toLowerCase().includes(supSearch);
                 const matchItemName = (i.itemName || '').toLowerCase().includes(itemNameSearch);
                 const matchItemCode = (i.itemKey || '').toLowerCase().includes(itemCodeSearch);
                 const matchProject = projectSearch ? ((i.projectName || '').toLowerCase().includes(projectSearch)) : true;
+                const matchRecDate = recDateSearch ? (recDate === recDateSearch) : true;
+                const matchExpDate = expDateSearch ? (expDate === expDateSearch) : true;
                 
-                return matchComp && matchPo && matchSup && matchItemName && matchItemCode && matchProject;
+                return matchComp && matchPo && matchSup && matchItemName && matchItemCode && matchProject && matchRecDate && matchExpDate;
             });
             
             tbody.innerHTML = '';

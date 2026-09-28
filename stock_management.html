@@ -247,6 +247,14 @@
                             <input type="text" id="filterSupplier" placeholder="Search Supplier..."
                                 oninput="applyGoodsInFilters()">
                         </div>
+                        <div class="form-group">
+                            <label for="filterRecDate">Received Date</label>
+                            <input type="date" id="filterRecDate" oninput="applyGoodsInFilters()">
+                        </div>
+                        <div class="form-group">
+                            <label for="filterExpDate">Expiry Date</label>
+                            <input type="date" id="filterExpDate" oninput="applyGoodsInFilters()">
+                        </div>
                         <div class="filter-actions">
                             <button type="button" class="btn btn-primary" onclick="applyGoodsInFilters()"><i
                                     class="fas fa-search"></i> Apply</button>
@@ -944,6 +952,8 @@
             document.getElementById('filterItemId').value = '';
             document.getElementById('filterItemName').value = '';
             document.getElementById('filterSupplier').value = '';
+            if (document.getElementById('filterRecDate')) document.getElementById('filterRecDate').value = '';
+            if (document.getElementById('filterExpDate')) document.getElementById('filterExpDate').value = '';
             const statusEl = document.getElementById('filterStatus');
             if (statusEl) statusEl.value = '';
             switchGoodsInTab('All');
@@ -984,15 +994,22 @@
             const fItemId = document.getElementById('filterItemId').value.trim().toLowerCase();
             const fItem = document.getElementById('filterItemName').value.trim().toLowerCase();
             const fSupplier = document.getElementById('filterSupplier').value.trim().toLowerCase();
+            const fRecDate = document.getElementById('filterRecDate') ? document.getElementById('filterRecDate').value : '';
+            const fExpDate = document.getElementById('filterExpDate') ? document.getElementById('filterExpDate').value : '';
             const fStatusEl = document.getElementById('filterStatus');
             const fStatus = currentTab !== 'All' ? currentTab : (fStatusEl ? fStatusEl.value : '');
 
             const filtered = allItems.filter(item => {
+                const bRecDate = (item.batches && item.batches.length > 0) ? item.batches[0].recDate : '-';
+                const bExpDate = (item.batches && item.batches.length > 0) ? item.batches[0].expiryDate : '-';
+
                 if (fCompany && item.company !== fCompany) return false;
                 if (fPo && !item.poNo.toLowerCase().includes(fPo)) return false;
                 if (fItemId && !item.itemKey.toLowerCase().includes(fItemId)) return false;
                 if (fItem && !item.itemName.toLowerCase().includes(fItem)) return false;
                 if (fSupplier && !item.supplierName.toLowerCase().includes(fSupplier)) return false;
+                if (fRecDate && bRecDate !== fRecDate) return false;
+                if (fExpDate && bExpDate !== fExpDate) return false;
                 if (fStatus) {
                     const isRej = (item.userAcceptanceStatus === 'Rejected' || item.status === 'Rejected');
                     if (fStatus === 'Rejected') {
