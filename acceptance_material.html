@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>India Purchase System - User Acceptance Material</title>
+    <title>India Purchase System - User Acceptance</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -147,12 +147,12 @@
                         </li>
                         <li class="nav-item active">
                             <a href="acceptance_material.html" class="nav-link active">
-                                <i class="fas fa-clipboard-check"></i> User Acceptance Material
+                                <i class="fas fa-clipboard-check"></i> User Acceptance
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="finance_management.html" class="nav-link">
-                                <i class="fas fa-coins"></i> Finance Approval
+                                <i class="fas fa-coins"></i> Finance
                             </a>
                         </li>
                     </ul>
@@ -165,7 +165,7 @@
             <!-- Content Area -->
             <main class="content">
                 <div class="breadcrumb">
-                    <i class="fas fa-home"></i> User Acceptance Material <i class="fas fa-chevron-right"></i>
+                    <i class="fas fa-home"></i> User Acceptance <i class="fas fa-chevron-right"></i>
                     <span class="current">Desk User Verification</span>
                 </div>
 
@@ -372,6 +372,11 @@
                     style="width: 100%; padding: 8px; font-size: 12px; border: 1px solid #cbd5e1; border-radius: 4px;"
                     placeholder="Optional remarks..."></textarea>
             </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">ATTACH EVIDENCE (OPTIONAL)</label>
+                <input type="file" id="confirmAttachment" accept="image/*,.pdf,.doc,.docx" style="width: 100%; padding: 6px; font-size: 11px; border: 1px dashed #cbd5e1; border-radius: 4px; background: #f8fafc; color: #64748b; cursor: pointer;">
+            </div>
 
             <div style="display: flex; justify-content: flex-end; gap: 8px;">
                 <button type="button" class="btn btn-secondary" onclick="closeConfirmModal()">Cancel</button>
@@ -542,6 +547,8 @@
             const remarksInput = document.getElementById('confirmRemarks');
 
             remarksInput.value = '';
+            const attachmentInput = document.getElementById('confirmAttachment');
+            if (attachmentInput) attachmentInput.value = '';
 
             if (actionType === 'Accept') {
                 modalHeader.className = 'confirm-modal-header accept';
@@ -552,7 +559,10 @@
                 submitBtn.textContent = 'Accept Material';
                 submitBtn.onclick = () => {
                     const remarks = remarksInput.value.trim() || 'Accepted by user at desk.';
-                    window.PurchaseData.updateUserAcceptance(poNo, itemKey, 'Accepted', remarks, li.recQty);
+                    const attachmentInput = document.getElementById('confirmAttachment');
+                    const attachmentName = attachmentInput && attachmentInput.files.length > 0 ? ` (Attachment: ${attachmentInput.files[0].name})` : '';
+                    const fullRemarks = remarks + attachmentName;
+                    window.PurchaseData.updateUserAcceptance(poNo, itemKey, 'Accepted', fullRemarks, li.recQty);
                     closeConfirmModal();
                     renderAcceptanceTable();
                 };
@@ -567,7 +577,9 @@
                 submitBtn.onclick = () => {
                     const reason = document.getElementById('confirmRejectReason').value;
                     const remarks = remarksInput.value.trim();
-                    const fullReason = reason + (remarks ? ` — ${remarks}` : '');
+                    const attachmentInput = document.getElementById('confirmAttachment');
+                    const attachmentName = attachmentInput && attachmentInput.files.length > 0 ? ` (Evidence: ${attachmentInput.files[0].name})` : '';
+                    const fullReason = reason + (remarks ? ` — ${remarks}` : '') + attachmentName;
                     window.PurchaseData.updateUserAcceptance(poNo, itemKey, 'Rejected', fullReason, 0);
                     closeConfirmModal();
                     renderAcceptanceTable();

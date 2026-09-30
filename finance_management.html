@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>India Purchase System - Finance Approval</title>
+    <title>India Purchase System - Finance</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -165,12 +165,12 @@
                         </li>
                         <li class="nav-item">
                             <a href="acceptance_material.html" class="nav-link">
-                                <i class="fas fa-clipboard-check"></i> User Acceptance Material
+                                <i class="fas fa-clipboard-check"></i> User Acceptance
                             </a>
                         </li>
                         <li class="nav-item active">
                             <a href="finance_management.html" class="nav-link active">
-                                <i class="fas fa-coins"></i> Finance Approval
+                                <i class="fas fa-coins"></i> Finance
                             </a>
                         </li>
                     </ul>
@@ -184,7 +184,7 @@
             <main class="content">
                 <div class="breadcrumb">
                     <i class="fas fa-home"></i> Finance <i class="fas fa-chevron-right"></i>
-                    <span class="current">Finance Approval &amp; Invoices</span>
+                    <span class="current">Finance &amp; Invoices</span>
                 </div>
 
                 <!-- Filters Card -->
@@ -920,7 +920,7 @@
                     });
                 }
                 window.PurchaseData.saveData(window.PurchaseData.data);
-                alert(`Finance Approval recorded successfully for ${currentFinPoNo}! All invoices verified and marked complete.`);
+                alert(`Finance recorded successfully for ${currentFinPoNo}! All invoices verified and marked complete.`);
                 openFinanceModal(currentFinPoNo);
                 return;
             }
